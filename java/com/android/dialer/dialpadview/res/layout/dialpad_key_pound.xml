@@ -25,7 +25,8 @@
       style="@style/DialpadKeyInternalLayoutStyle">
 
     <com.android.dialer.dialpadview.DialpadTextView
-        android:id="@id/dialpad_key_number"
-        style="@style/DialpadKeyPoundStyle"/>
+        android:id="@+id/dialpad_key_number"
+        style="@style/DialpadKeyPoundStyle"
+        android:background="@drawable/dialpad_key_circle"/>
   </LinearLayout>
 </com.android.dialer.dialpadview.DialpadKeyButton>

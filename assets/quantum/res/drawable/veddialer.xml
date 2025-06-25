@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="9.86dp" android:viewportHeight="58" android:viewportWidth="42" android:width="6.38dp">
+      
+    <path android:fillColor="#ffffff" android:pathData="M5.5,16L5.5,16A5.5,5.5 0,0 1,11 21.5L11,21.5A5.5,5.5 0,0 1,5.5 27L5.5,27A5.5,5.5 0,0 1,0 21.5L0,21.5A5.5,5.5 0,0 1,5.5 16z"/>
+      
+    <path android:fillColor="#ffffff" android:pathData="M21.5,16L21.5,16A5.5,5.5 0,0 1,27 21.5L27,21.5A5.5,5.5 0,0 1,21.5 27L21.5,27A5.5,5.5 0,0 1,16 21.5L16,21.5A5.5,5.5 0,0 1,21.5 16z"/>
+      
+    <path android:fillColor="#ffffff" android:pathData="M36.5,16L36.5,16A5.5,5.5 0,0 1,42 21.5L42,21.5A5.5,5.5 0,0 1,36.5 27L36.5,27A5.5,5.5 0,0 1,31 21.5L31,21.5A5.5,5.5 0,0 1,36.5 16z"/>
+      
+    <path android:fillColor="#ffffff" android:pathData="M0,5.5C0,2.462 2.462,0 5.5,0C8.538,0 11,2.462 11,5.5C11,8.538 8.538,11 5.5,11C2.462,11 0,8.538 0,5.5Z"/>
+      
+    <path android:fillColor="#ffffff" android:pathData="M21.5,0L21.5,0A5.5,5.5 0,0 1,27 5.5L27,5.5A5.5,5.5 0,0 1,21.5 11L21.5,11A5.5,5.5 0,0 1,16 5.5L16,5.5A5.5,5.5 0,0 1,21.5 0z"/>
+      
+    <path android:fillColor="#ffffff" android:pathData="M36.5,0L36.5,0A5.5,5.5 0,0 1,42 5.5L42,5.5A5.5,5.5 0,0 1,36.5 11L36.5,11A5.5,5.5 0,0 1,31 5.5L31,5.5A5.5,5.5 0,0 1,36.5 0z"/>
+      
+    <path android:fillColor="#ffffff" android:pathData="M5.5,31L5.5,31A5.5,5.5 0,0 1,11 36.5L11,36.5A5.5,5.5 0,0 1,5.5 42L5.5,42A5.5,5.5 0,0 1,0 36.5L0,36.5A5.5,5.5 0,0 1,5.5 31z"/>
+      
+    <path android:fillColor="#ffffff" android:pathData="M21.5,31L21.5,31A5.5,5.5 0,0 1,27 36.5L27,36.5A5.5,5.5 0,0 1,21.5 42L21.5,42A5.5,5.5 0,0 1,16 36.5L16,36.5A5.5,5.5 0,0 1,21.5 31z"/>
+      
+    <path android:fillColor="#ffffff" android:pathData="M36.5,31L36.5,31A5.5,5.5 0,0 1,42 36.5L42,36.5A5.5,5.5 0,0 1,36.5 42L36.5,42A5.5,5.5 0,0 1,31 36.5L31,36.5A5.5,5.5 0,0 1,36.5 31z"/>
+      
+    <path android:fillColor="#ffffff" android:pathData="M21.5,47L21.5,47A5.5,5.5 0,0 1,27 52.5L27,52.5A5.5,5.5 0,0 1,21.5 58L21.5,58A5.5,5.5 0,0 1,16 52.5L16,52.5A5.5,5.5 0,0 1,21.5 47z"/>
+    
+</vector>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="rectangle">
+    <!--
+    This color is a semi-transparent version of the main background.
+    The first two characters "B3" control the transparency (around 70% opaque).
+    You can adjust this value.
+    -->
+    <solid android:color="#B3000000" /> <!-- Example for a dark theme -->
+</shape>

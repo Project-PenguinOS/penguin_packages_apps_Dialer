@@ -224,7 +224,12 @@ public class MainSearchController implements SearchBarListener {
     fab.show();
     toolbar.slideDown(animate, fragmentContainer);
     toolbar.transferQueryFromDialpad(dialpadFragment.getQuery());
-    activity.setTitle(R.string.main_activity_label);
+
+    if (bottomNav.getSelectedTab() == BottomNavBar.TabIndex.CONTACTS) {
+      activity.setTitle(R.string.contacts_title);
+    } else {
+      activity.setTitle(R.string.dialer_title);
+    }
 
     dialpadFragment.setAnimate(animate);
     dialpadFragment.slideDown(
@@ -304,6 +309,11 @@ public class MainSearchController implements SearchBarListener {
     } else if (isSearchVisible()) {
       LogUtil.i("MainSearchController.onBackPressed", "Search is visible");
       closeSearch(true);
+      if (bottomNav.getSelectedTab() == BottomNavBar.TabIndex.CONTACTS) {
+        activity.setTitle(R.string.contacts_title);
+      } else {
+        activity.setTitle(R.string.dialer_title);
+      }
       return true;
     } else {
       return false;

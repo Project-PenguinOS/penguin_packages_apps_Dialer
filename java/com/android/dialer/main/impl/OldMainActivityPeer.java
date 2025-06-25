@@ -169,7 +169,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
   @Override
   public void onActivityCreate(Bundle savedInstanceState) {
     LogUtil.enterBlock("OldMainActivityPeer.onActivityCreate");
-    setTheme();
+    //setTheme();
     activity.setContentView(R.layout.main_activity);
     initUiListeners();
     initLayout(savedInstanceState);
@@ -179,6 +179,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
   }
 
   /** should be called before {@link AppCompatActivity#setContentView(int)}. */
+  /*
   private void setTheme() {
     @Theme.Type int theme = ThemeComponent.get(activity).theme().getTheme();
     switch (theme) {
@@ -194,7 +195,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
         throw new IllegalArgumentException("Invalid theme.");
     }
   }
-
+*/
   private void initUiListeners() {
     getLastOutgoingCallListener =
         DialerExecutorComponent.get(activity)
@@ -236,9 +237,9 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
             bottomSheet);
     bottomNav.addOnTabSelectedListener(bottomNavTabListener);
     // TODO(uabdullah): Handle case of when a sim is inserted/removed while the activity is open.
-    boolean showVoicemailTab = canVoicemailTabBeShown(activity);
-    bottomNav.showVoicemail(showVoicemailTab);
-
+    boolean showVoicemailTab = false;
+    bottomNav.showVoicemail(false);
+    bottomNav.showSpeedDial(false);
     missedCallCountObserver =
         new MissedCallCountObserver(
             activity.getApplicationContext(), bottomNav, missedCallObserverUiListener);
@@ -292,21 +293,6 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
    *     for the carrier.
    */
   private static boolean canVoicemailTabBeShown(Context context) {
-    PhoneAccountHandle defaultUserSelectedAccount =
-        TelecomUtil.getDefaultOutgoingPhoneAccount(context, PhoneAccount.SCHEME_VOICEMAIL);
-
-    if (!isVoicemailAvailable(context, defaultUserSelectedAccount)) {
-      LogUtil.i("OldMainActivityPeer.canVoicemailTabBeShown", "Voicemail is not available");
-      return false;
-    }
-
-    if (VoicemailComponent.get(context)
-        .getVoicemailClient()
-        .isVoicemailEnabled(context, defaultUserSelectedAccount)) {
-      LogUtil.i("OldMainActivityPeer.canVoicemailTabBeShown", "Voicemail is enabled");
-      return true;
-    }
-    LogUtil.i("OldMainActivityPeer.canVoicemailTabBeShown", "returning false");
     return false;
   }
 
@@ -970,6 +956,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       }
       selectedTab = TabIndex.SPEED_DIAL;
 
+      activity.setTitle(R.string.dialer_title);
       Fragment fragment = fragmentManager.findFragmentByTag(SPEED_DIAL_TAG);
       showFragment(fragment == null ? SpeedDialFragment.newInstance() : fragment, SPEED_DIAL_TAG);
 
@@ -984,6 +971,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       }
       selectedTab = TabIndex.CALL_LOG;
 
+      activity.setTitle(R.string.dialer_title);
       Fragment fragment = fragmentManager.findFragmentByTag(CALL_LOG_TAG);
       showFragment(fragment == null ? new CallLogFragment() : fragment, CALL_LOG_TAG);
 
@@ -1028,6 +1016,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
         return;
       }
       selectedTab = TabIndex.CONTACTS;
+      activity.setTitle(R.string.contacts_title);
       Fragment fragment = fragmentManager.findFragmentByTag(CONTACTS_TAG);
       showFragment(
           fragment == null ? ContactsFragment.newInstance(Header.ADD_CONTACT) : fragment,
@@ -1043,6 +1032,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       }
       selectedTab = TabIndex.VOICEMAIL;
 
+      activity.setTitle(R.string.dialer_title);
       VisualVoicemailCallLogFragment fragment =
           (VisualVoicemailCallLogFragment) fragmentManager.findFragmentByTag(VOICEMAIL_TAG);
       if (fragment == null) {

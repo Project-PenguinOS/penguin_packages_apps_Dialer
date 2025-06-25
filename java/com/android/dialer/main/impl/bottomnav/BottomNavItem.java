@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,6 +33,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 
 import com.android.dialer.R;
 import com.android.dialer.common.Assert;
@@ -41,7 +42,6 @@ import com.android.dialer.util.DialerUtils;
 import com.android.incallui.answer.impl.utils.Interpolators;
 
 import com.google.android.material.navigation.NavigationBarItemView;
-
 /** Navigation item in a bottom nav. */
 final class BottomNavItem extends LinearLayout {
 
@@ -76,10 +76,14 @@ final class BottomNavItem extends LinearLayout {
   @Override
   public void setSelected(boolean selected) {
     super.setSelected(selected);
+
+
     int colorId = selected
-            ? DialerUtils.resolveColor(getContext(), android.R.attr.textColorPrimary)
-            : DialerUtils.resolveColor(getContext(), android.R.attr.textColorSecondary);
+            ? DialerUtils.resolveColor(getContext(), android.R.attr.textColorPrimaryInverse)
+            : DialerUtils.resolveColor(getContext(), android.R.attr.textColorPrimary);
+
     image.setImageResource(selected ? drawableResSelected : drawableRes);
+   // image.setImageResource(drawableRes);
     image.setImageTintList(ColorStateList.valueOf(colorId));
     text.setTextColor(colorId);
 
@@ -88,18 +92,18 @@ final class BottomNavItem extends LinearLayout {
   }
 
   private void setActiveIndicatorProgress(
-          @FloatRange(from = 0F, to = 1F) float progress, float target) {
+      @FloatRange(from = 0F, to = 1F) float progress, float target) {
     if (activeIndicatorView != null) {
       activeIndicatorTransform.updateForProgress(progress, target, activeIndicatorView);
     }
     activeIndicatorProgress = progress;
   }
 
-  /** If the active indicator is enabled, animate from it's current state to it's new state. */
+  /** If the active indicator is enabled, animate from its current state to its new state. */
   private void maybeAnimateActiveIndicatorToProgress(
-          @FloatRange(from = 0F, to = 1F) final float newProgress) {
+      @FloatRange(from = 0F, to = 1F) final float newProgress) {
     // If the active indicator is disabled or this view is in the process of being initialized,
-    // jump the active indicator to it's final state.
+    // jump the active indicator to its final state.
     if (!initialized || activeIndicatorView == null || !activeIndicatorView.isAttachedToWindow()) {
       setActiveIndicatorProgress(newProgress, newProgress);
       return;
@@ -120,7 +124,7 @@ final class BottomNavItem extends LinearLayout {
   }
 
   void setup(@StringRes int stringRes, @DrawableRes int drawableRes,
-             @DrawableRes int drawableResSelected) {
+      @DrawableRes int drawableResSelected) {
     this.drawableRes = drawableRes;
     this.drawableResSelected = drawableResSelected;
     text.setText(stringRes);

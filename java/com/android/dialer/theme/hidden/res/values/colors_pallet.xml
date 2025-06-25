@@ -32,4 +32,7 @@
   <color name="google_grey_200">#E8EAED</color>
   <color name="google_grey_100">#F1F3F4</color>
   <color name="google_grey_50">#F8F9FA</color>
+
+  <color name="color_ved_white">#FFF8F8F8</color>
+  <color name="color_ved_black">#FF212121</color>
 </resources>

@@ -20,6 +20,9 @@
   android:layout_height="match_parent"
   android:clipChildren="false"
   android:clipToPadding="false"
+  android:padding="24dp"
+  android:layout_above="@id/dialpad_floating_action_button"
+  android:layout_marginBottom="48dp"
   android:theme="?attr/dialpad_style">
   <include layout="@layout/dialpad_view_unthemed"/>
 </FrameLayout>

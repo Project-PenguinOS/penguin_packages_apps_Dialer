@@ -78,11 +78,25 @@ public final class BottomNavBar extends LinearLayout {
     speedDial.setup(R.string.tab_title_speed_dial, R.drawable.quantum_ic_star_outline_vd_theme_24,
             R.drawable.quantum_ic_star_vd_theme_24);
     callLog.setup(R.string.tab_title_call_history, R.drawable.quantum_ic_access_time_vd_theme_24,
-            R.drawable.quantum_ic_clock_filled_vd_theme_24);
-    contacts.setup(R.string.tab_all_contacts, R.drawable.quantum_ic_people_outline_vd_theme_24,
+            R.drawable.quantum_ic_access_time_vd_theme_24);
+    contacts.setup(R.string.tab_all_contacts, R.drawable.quantum_ic_people_vd_theme_24,
             R.drawable.quantum_ic_people_vd_theme_24);
     voicemail.setup(R.string.tab_title_voicemail, R.drawable.quantum_ic_voicemail_vd_theme_24,
             R.drawable.quantum_ic_voicemail_vd_theme_24);
+
+
+    /*
+
+    speedDial.setup(R.string.tab_title_speed_dial, R.drawable.quantum_ic_star_outline_vd_theme_24,
+            R.drawable.quantum_ic_star_vd_theme_24);
+    callLog.setup(R.string.tab_title_call_history, R.drawable.vedrecents,
+            R.drawable.vedrecents);
+    contacts.setup(R.string.tab_all_contacts, R.drawable.vedcontacts,
+            R.drawable.vedcontacts);
+    voicemail.setup(R.string.tab_title_voicemail, R.drawable.quantum_ic_voicemail_vd_theme_24,
+            R.drawable.quantum_ic_voicemail_vd_theme_24);
+
+*/
 
     speedDial.setOnClickListener(v -> selectTab(TabIndex.SPEED_DIAL));
     callLog.setOnClickListener(v -> selectTab(TabIndex.CALL_LOG));
@@ -133,16 +147,31 @@ public final class BottomNavBar extends LinearLayout {
   public void showVoicemail(boolean showTab) {
     LogUtil.i("OldMainActivityPeer.showVoicemail", "showing Tab:%b", showTab);
     int voicemailpreviousVisibility = voicemail.getVisibility();
-    voicemail.setVisibility(showTab ? View.VISIBLE : View.GONE);
+    voicemail.setVisibility(View.GONE);
     int voicemailcurrentVisibility = voicemail.getVisibility();
 
     if (voicemailpreviousVisibility != voicemailcurrentVisibility
         && voicemailpreviousVisibility == View.VISIBLE
         && getSelectedTab() == TabIndex.VOICEMAIL) {
       LogUtil.i("OldMainActivityPeer.showVoicemail", "hid VM tab and moved to speed dial tab");
-      selectTab(TabIndex.SPEED_DIAL);
+      selectTab(TabIndex.CALL_LOG);
     }
   }
+
+  public void showSpeedDial(boolean showTab) {
+    LogUtil.i("OldMainActivityPeer.showSpeedDial", "showing Tab:%b", showTab);
+    int speedDialPreviousVisibility = speedDial.getVisibility();
+    speedDial.setVisibility(showTab ? View.VISIBLE : View.GONE);
+    int speedDialCurrentVisibility = speedDial.getVisibility();
+
+    if (speedDialPreviousVisibility != speedDialCurrentVisibility
+        && speedDialPreviousVisibility == View.VISIBLE
+        && getSelectedTab() == TabIndex.SPEED_DIAL) {
+      LogUtil.i("OldMainActivityPeer.showSpeedDial", "hid SD tab and moved to call log tab");
+      selectTab(TabIndex.CALL_LOG);  // or any fallback tab
+    }
+}
+
 
   public void setNotificationCount(@TabIndex int tab, int count) {
     if (tab == TabIndex.SPEED_DIAL) {

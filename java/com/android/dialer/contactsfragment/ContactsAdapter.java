@@ -140,6 +140,21 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // the same sublists.
     boolean showHeader = position == 0 || !header.equals(getHeaderString(position - 1));
     contactViewHolder.bind(header, name, contactUri, getContactId(cursor), showHeader);
+
+    boolean isFirstInGroup = showHeader;
+    boolean isLastInGroup = position == getItemCount() - 1 || !header.equals(getHeaderString(position + 1));
+
+    int drawableId;
+    if (isFirstInGroup && isLastInGroup) {
+        drawableId = R.drawable.call_log_card_background_single;
+    } else if (isFirstInGroup) {
+        drawableId = R.drawable.call_log_card_background_top;
+    } else if (isLastInGroup) {
+        drawableId = R.drawable.call_log_card_background_bottom;
+    } else {
+        drawableId = R.drawable.call_log_card_background_middle;
+    }
+    contactViewHolder.itemView.findViewById(R.id.contact_row).setBackgroundResource(drawableId);
   }
 
   /**

@@ -1,0 +1,10 @@
+<!-- Inside your colors.xml -->
+<resources>
+    <!-- Your specified black, white, and grey theme colors -->
+    <color name="theme_black">#000000</color>
+    <color name="theme_white">#FFFFFF</color>
+    <color name="theme_dark_grey">#212121</color>
+    <color name="theme_light_grey">#BDBDBD</color> <!-- For secondary text on a black background -->
+      <color name="theme_ved_black">#FF212121</color>
+        <color name="theme_ved_pill">#212121</color>
+</resources>

@@ -26,6 +26,7 @@
 
     <com.android.dialer.dialpadview.DialpadTextView
         android:id="@+id/dialpad_key_number"
-        style="@style/DialpadKeyStarStyle"/>
+        style="@style/DialpadKeyStarStyle"
+        android:background="@drawable/dialpad_key_circle"/>
   </LinearLayout>
 </com.android.dialer.dialpadview.DialpadKeyButton>
