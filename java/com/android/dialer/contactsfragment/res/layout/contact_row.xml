@@ -38,6 +38,7 @@
         android:paddingTop="@dimen/row_top_bottom_padding"
         android:paddingBottom="@dimen/row_top_bottom_padding"
         android:paddingStart="@dimen/row_start_padding"
+        android:paddingEnd="@dimen/row_start_padding"
         android:gravity="center_vertical"
         android:background="?android:attr/selectableItemBackground">
 
@@ -48,9 +49,10 @@
           android:clickable="false"
           android:forceDarkAllowed="false" />
 
-      <com.lava.dialer.widget.BidiTextView
+      <com.android.dialer.widget.BidiTextView
           android:id="@+id/contact_name"
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
+          android:layout_weight="1"
           android:layout_height="match_parent"
           android:paddingStart="@dimen/text_padding_start"
           android:paddingEnd="@dimen/text_padding_end"
@@ -60,6 +62,15 @@
           android:textSize="@dimen/text_size"
           android:textColor="?android:attr/textColorPrimary"
           android:fontFamily="@*android:string/config_bodyFontFamily"/>
+
+      <ImageView
+          android:id="@+id/call_action_icon"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:src="@drawable/quantum_ic_call_vd_theme_24"
+          android:tint="?attr/colorIcon"
+          android:visibility="visible"/>
     </LinearLayout>
   </androidx.cardview.widget.CardView>
 </FrameLayout>

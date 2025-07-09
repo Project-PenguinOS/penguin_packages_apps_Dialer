@@ -1122,11 +1122,11 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       @TabIndex int tabIndex =
           StorageComponent.get(context)
               .unencryptedSharedPrefs()
-              .getInt(KEY_LAST_TAB, TabIndex.SPEED_DIAL);
+              .getInt(KEY_LAST_TAB, TabIndex.CALL_LOG);
 
       // If the voicemail tab cannot be shown, default to showing speed dial
       if (tabIndex == TabIndex.VOICEMAIL && !canShowVoicemailTab) {
-        tabIndex = TabIndex.SPEED_DIAL;
+        tabIndex = TabIndex.CALL_LOG;
       }
 
       return tabIndex;
