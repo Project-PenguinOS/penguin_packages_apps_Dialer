@@ -35,4 +35,6 @@
 
   <color name="color_ved_white">#FFF8F8F8</color>
   <color name="color_ved_black">#FF212121</color>
-</resources>
+
+  <color name="color_cope">#888888</color>
+  </resources>
