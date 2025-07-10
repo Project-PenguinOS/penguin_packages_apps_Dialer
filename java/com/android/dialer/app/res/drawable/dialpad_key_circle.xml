@@ -10,7 +10,4 @@ SPDX-License-Identifier: Apache-2.0
 
     <corners android:radius="24dp" />
 
-    <size
-        android:width="32dp"
-        android:height="32dp" />
 </shape>
