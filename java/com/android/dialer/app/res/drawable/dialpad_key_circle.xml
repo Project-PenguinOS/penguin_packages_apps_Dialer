@@ -8,9 +8,9 @@ SPDX-License-Identifier: Apache-2.0
 
     <solid android:color="@color/dialpad_circle_color"/>
 
-    <corners android:radius="128dp" />
+    <corners android:radius="24dp" />
 
     <size
-        android:width="64dp"
-        android:height="64dp" />
+        android:width="32dp"
+        android:height="32dp" />
 </shape>
