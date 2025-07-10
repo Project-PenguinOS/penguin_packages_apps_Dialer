@@ -18,19 +18,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
-  <androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="16dp"
-    app:cardBackgroundColor="?android:attr/colorBackgroundFloating"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <FrameLayout
       android:id="@+id/main"
       android:layout_width="match_parent"
       android:layout_height="match_parent"/>
 
-  </androidx.cardview.widget.CardView>
+
 
   <View
     android:id="@+id/psuedo_black_screen_overlay"

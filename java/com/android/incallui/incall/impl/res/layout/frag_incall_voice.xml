@@ -37,22 +37,23 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="42dp">
+
       <ImageView
           android:id="@id/contactgrid_avatar"
           android:layout_width="@dimen/incall_avatar_size"
           android:layout_height="@dimen/incall_avatar_size"
           android:layout_marginBottom="8dp"
+          android:layout_marginLeft="98dp"
           android:elevation="2dp"/>
 
-      <include
-          layout="@layout/incall_contactgrid_top_row"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/incall_window_margin_horizontal"
-          android:layout_marginEnd="@dimen/incall_window_margin_horizontal"/>
+      </RelativeLayout>
 
       <!-- We have to keep deprecated singleLine to allow long text being truncated with ellipses.
-                 a bug -->
+      a bug -->
       <com.android.incallui.autoresizetext.AutoResizeTextView
           android:id="@id/contactgrid_contact_name"
           android:layout_width="wrap_content"
@@ -65,6 +66,18 @@
           app:autoResizeText_minTextSize="28sp"
           tools:ignore="Deprecated"
           tools:text="Jake Peralta"/>
+
+
+
+      <include
+          layout="@layout/incall_contactgrid_top_row"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/incall_window_margin_horizontal"
+          android:layout_marginEnd="@dimen/incall_window_margin_horizontal"/>
+
+
+
 
       <include
           layout="@layout/incall_contactgrid_bottom_row"

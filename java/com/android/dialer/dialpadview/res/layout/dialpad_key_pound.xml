@@ -24,9 +24,17 @@
       android:id="@+id/dialpad_key_layout"
       style="@style/DialpadKeyInternalLayoutStyle">
 
-    <com.android.dialer.dialpadview.DialpadTextView
-        android:id="@+id/dialpad_key_number"
-        style="@style/DialpadKeyPoundStyle"
-        android:background="@drawable/dialpad_key_circle"/>
+    <FrameLayout
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/dialpad_key_circle">
+
+        <com.android.dialer.dialpadview.DialpadTextView
+            android:id="@+id/dialpad_key_number"
+            style="@style/DialpadKeyPoundStyle"
+            android:layout_gravity="center"
+            android:background="@null"/>
+
+    </FrameLayout>
   </LinearLayout>
 </com.android.dialer.dialpadview.DialpadKeyButton>

@@ -24,8 +24,8 @@
       style="@style/DialpadKeyInternalLayoutStyle">
 
     <FrameLayout
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/dialpad_key_circle">
 
         <com.android.dialer.dialpadview.DialpadTextView
