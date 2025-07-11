@@ -60,7 +60,7 @@
           android:layout_centerHorizontal="true"
           android:layout_toEndOf="@id/contactgrid_avatar"
           android:layout_marginStart="24dp"
-          android:layout_marginTop="8dp"
+          android:layout_marginTop="12dp"
           android:textAppearance="@style/Dialer.Incall.TextAppearance.Large"
           app:autoResizeText_minTextSize="28sp"
           tools:ignore="Deprecated"

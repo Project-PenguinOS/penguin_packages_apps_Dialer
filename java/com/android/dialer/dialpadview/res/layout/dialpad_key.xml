@@ -26,7 +26,8 @@
     <FrameLayout
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="@drawable/dialpad_key_circle">
+        android:background="@drawable/dialpad_key_background"
+        android:padding="4dp">
 
         <com.android.dialer.dialpadview.DialpadTextView
             android:id="@+id/dialpad_key_number"
