@@ -25,11 +25,10 @@
   <LinearLayout
       android:id="@+id/dialpad_key_layout"
       style="@style/DialpadKeyInternalLayoutStyle">
-
+<!--
     <FrameLayout
         android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="@drawable/dialpad_key_background">
+        android:layout_height="32dp">
 
         <com.android.dialer.dialpadview.DialpadTextView
             android:id="@+id/dialpad_key_number"
@@ -38,6 +37,21 @@
             android:background="@null"/>
 
     </FrameLayout>
+    -->
+    <androidx.cardview.widget.CardView
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      app:cardBackgroundColor="@color/dialpad_color"
+      app:cardElevation="0dp"
+      android:padding="4dp"
+      app:cardCornerRadius="24dp">
+      <com.android.dialer.dialpadview.DialpadTextView
+        android:id="@+id/dialpad_key_number"
+        style="@style/DialpadKeyNumberStyle"
+        android:layout_gravity="center"
+        android:background="@null"/>
+
+      </androidx.cardview.widget.CardView>
 
     <LinearLayout
         android:id="@+id/dialpad_key_icon_or_letters_layout"
@@ -46,16 +60,17 @@
       <!--
           A placeholder to make the horizontal center line of the voice mail icon lined up with
           those of the other buttons in the same row
-      -->
+
       <View
           android:layout_width="match_parent"
           android:layout_height="1dp"/>
-
+      -->
       <ImageView
           android:id="@+id/dialpad_key_voicemail"
           android:layout_width="wrap_content"
           android:layout_height="@dimen/dialpad_voicemail_icon_size"
           android:scaleType="fitCenter"
+          android:visibility="gone"
           android:src="@drawable/quantum_ic_voicemail_vd_theme_24"
           app:tint="?attr/dialpad_text_color_secondary"/>
     </LinearLayout>

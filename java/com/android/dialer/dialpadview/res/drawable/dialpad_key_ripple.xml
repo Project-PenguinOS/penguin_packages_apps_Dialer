@@ -15,10 +15,10 @@
      limitations under the License.
 -->
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:insetLeft="6dp"
-    android:insetTop="6dp"
-    android:insetRight="6dp"
-    android:insetBottom="6dp">
+    android:insetLeft="2dp"
+    android:insetTop="2dp"
+    android:insetRight="2dp"
+    android:insetBottom="2dp">
     <ripple android:color="?android:attr/colorControlHighlight">
         <item android:drawable="@drawable/dialpad_key_circle" />
     </ripple>

@@ -26,6 +26,8 @@
   <color name="dialer_pill_color">#FF212121</color>
   <color name="dialer_fab_icon_color">#FF212121</color>
   <color name="dialpad_circle_color">#F8F8F8</color>
+  <color name="dialpad_color">#EDEDED</color>
+
   <!-- Material next state on color-->
   <color name="state_on_color">@android:color/system_accent3_100</color>
 

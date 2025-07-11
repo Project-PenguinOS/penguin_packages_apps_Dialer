@@ -12,11 +12,23 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
+     <FrameLayout
+     android:layout_width="48dp"
+     android:layout_height="48dp">
+
+     <com.android.dialer.dialpadview.DialpadTextView
+     android:id="@+id/dialpad_key_number"
+     style="@style/DialpadKeyStarStyle"
+     android:layout_gravity="center"
+     android:background="@null"/>
+
+     </FrameLayout>
 -->
 
 <!-- A layout representing key "*" in the dialpad -->
 <com.android.dialer.dialpadview.DialpadKeyButton
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/star"
     style="@style/DialpadKeyButtonStyle">
 
@@ -24,17 +36,22 @@
       android:id="@+id/dialpad_key_layout"
       style="@style/DialpadKeyInternalLayoutStyle">
 
-    <FrameLayout
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@drawable/dialpad_key_background">
+    <androidx.cardview.widget.CardView
+      android:layout_width="64dp"
+      android:layout_height="48dp"
+      app:cardBackgroundColor="@color/dialpad_color"
+      app:cardElevation="0dp"
+      android:padding="4dp"
+      app:cardCornerRadius="24dp">
+      <com.android.dialer.dialpadview.DialpadTextView
+        android:id="@+id/dialpad_key_number"
+        style="@style/DialpadKeyStarStyle"
+        android:layout_gravity="center"
+        android:translationY="12dp"
+        android:background="@null"/>
 
-        <com.android.dialer.dialpadview.DialpadTextView
-            android:id="@+id/dialpad_key_number"
-            style="@style/DialpadKeyStarStyle"
-            android:layout_gravity="center"
-            android:background="@null"/>
+      </androidx.cardview.widget.CardView>
 
-    </FrameLayout>
+
   </LinearLayout>
 </com.android.dialer.dialpadview.DialpadKeyButton>
