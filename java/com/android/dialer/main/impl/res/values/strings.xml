@@ -17,7 +17,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!-- Name of the main activity. -->
   <string name="main_activity_label" tools:ignore="UnusedResources">Phone</string>
-  <string name="dialer_title">Dialer</string>
+  <string name="dialer_title">Recents</string>
   <string name="contacts_title">Contacts</string>
 
   <!-- Title for the activity that dials the phone, when launched directly into the dialpad -->

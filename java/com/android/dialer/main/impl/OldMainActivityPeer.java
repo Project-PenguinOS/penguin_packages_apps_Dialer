@@ -234,7 +234,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
             activity,
             activity.getSupportFragmentManager(),
             fab,
-            bottomSheet);
+            bottomSheet,
+            toolbar);
     bottomNav.addOnTabSelectedListener(bottomNavTabListener);
     // TODO(uabdullah): Handle case of when a sim is inserted/removed while the activity is open.
     boolean showVoicemailTab = false;
@@ -934,6 +935,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
     private final FragmentManager fragmentManager;
     private final FloatingActionButton fab;
     private final View bottomSheet;
+    private final MainToolbar toolbar;
 
     @TabIndex private int selectedTab = TabIndex.NONE;
 
@@ -941,11 +943,13 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
         TransactionSafeActivity activity,
         FragmentManager fragmentManager,
         FloatingActionButton fab,
-        View bottomSheet) {
+        View bottomSheet,
+        MainToolbar toolbar) {
       this.activity = activity;
       this.fragmentManager = fragmentManager;
       this.fab = fab;
       this.bottomSheet = bottomSheet;
+      this.toolbar = toolbar;
     }
 
     @Override

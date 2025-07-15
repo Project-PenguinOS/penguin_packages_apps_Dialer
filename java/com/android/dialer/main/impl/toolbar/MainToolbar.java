@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -45,6 +46,7 @@ public final class MainToolbar extends Toolbar implements PopupMenu.OnMenuItemCl
       new AccelerateDecelerateInterpolator();
 
   private SearchBarView searchBar;
+  private TextView titleView;
   private SearchBarListener listener;
   private MainToolbarMenu overflowMenu;
   private boolean hasGlobalLayoutListener;
@@ -64,6 +66,7 @@ public final class MainToolbar extends Toolbar implements PopupMenu.OnMenuItemCl
     optionsMenuButton.setOnTouchListener(overflowMenu.getDragToOpenListener());
 
     searchBar = findViewById(R.id.search_view_container);
+    titleView = findViewById(R.id.toolbar_title);
   }
 
   @Override
@@ -74,6 +77,10 @@ public final class MainToolbar extends Toolbar implements PopupMenu.OnMenuItemCl
   public void setSearchBarListener(@NonNull SearchBarListener listener) {
     this.listener = Assert.isNotNull(listener);
     searchBar.setSearchBarListener(listener);
+  }
+
+  public void setTitle(CharSequence title) {
+    titleView.setText(title);
   }
 
   /** Slides the toolbar up and off the screen. */
