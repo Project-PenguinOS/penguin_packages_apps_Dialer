@@ -54,13 +54,13 @@ app:cardCornerRadius="24dp">
             app:cardCornerRadius="24dp"
             app:cardElevation="0dp">
 
-            <com.android.contacts.common.list.ViewPagerTabs
+            <com.android.contacts.common.list.ViewPagerTabStrip
                 android:id="@+id/new_viewpager_header"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:fadingEdge="horizontal"
                 android:fadingEdgeLength="24dip"
-                app:tabIndicatorColor="@color/dialer_pill_color"/>
+                android:background="@color/dialer_pill_color"/>
 
         </androidx.cardview.widget.CardView>
 

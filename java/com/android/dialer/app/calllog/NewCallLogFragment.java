@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,7 +26,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.android.contacts.common.list.ViewPagerTabs;
+import com.android.contacts.common.list.ViewPagerTabStrip;
 import com.android.dialer.R;
 import com.android.dialer.database.CallLogQueryHandler;
 
@@ -37,7 +37,7 @@ public class NewCallLogFragment extends Fragment {
     private static final int TAB_INDEX_COUNT = 2;
 
     private ViewPager viewPager;
-    private ViewPagerTabs viewPagerTabs;
+    private ViewPagerTabStrip viewPagerTabStrip;
     private ViewPagerAdapter viewPagerAdapter;
     private String[] tabTitles;
 
@@ -49,13 +49,17 @@ public class NewCallLogFragment extends Fragment {
         tabTitles[0] = getString(R.string.call_log_all_title);
         tabTitles[1] = getString(R.string.call_log_missed_title);
 
+        // 1. Find both of your views
         viewPager = view.findViewById(R.id.new_call_log_pager);
+        viewPagerTabStrip = view.findViewById(R.id.new_viewpager_header);
+
+        // 2. Set up the adapter for the ViewPager
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOffscreenPageLimit(1);
 
-        viewPagerTabs = view.findViewById(R.id.new_viewpager_header);
-        viewPagerTabs.setViewPager(viewPager);
+        // 3. Connect the tab strip to the pager. This one line now handles everything.
+        viewPagerTabStrip.setViewPager(viewPager);
 
         return view;
     }
@@ -63,7 +67,7 @@ public class NewCallLogFragment extends Fragment {
     public class ViewPagerAdapter extends FragmentPagerAdapter {
 
         public ViewPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @Override
