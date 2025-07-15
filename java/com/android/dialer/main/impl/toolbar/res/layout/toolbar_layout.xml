@@ -26,7 +26,7 @@
   <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent">
-  
+
   <com.android.dialer.main.impl.toolbar.SearchBarView
         android:id="@+id/search_view_container"
         android:layout_width="match_parent"
@@ -34,7 +34,17 @@
         android:layout_margin="@dimen/search_bar_margin"
         android:background="@android:color/transparent"
         android:elevation="0dp"
+        android:clickable="false"
         android:minHeight="@dimen/collapsed_search_bar_height">
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@android:color/transparent"
+      android:clickable="true"
+      android:elevation="0dp"
+      android:visibility="visible"
+      android:minHeight="@dimen/collapsed_search_bar_height"/>
 
       <RelativeLayout
           android:id="@+id/search_box_collapsed"
@@ -47,9 +57,11 @@
             android:id="@+id/search_background"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_centerVertical="true"
+          android:visibility="gone"
+          android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/main_options_menu_button"
             app:tint="@color/searchbar_icon_color"
+
             android:background="@drawable/icon_background_circle" />
 
         <ImageView
@@ -60,6 +72,7 @@
             android:layout_centerVertical="true"
             android:importantForAccessibility="no"
             android:scaleType="center"
+            android:visibility="gone"
             android:src="@drawable/quantum_ic_search_vd_theme_24"
             app:tint="@color/searchbar_icon_color" />
 
@@ -70,7 +83,6 @@
           android:layout_marginTop="8dp"
           android:paddingLeft="16dp"
           android:scaleType="center"
-          android:text="@string/dialer_activity_label"
           android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <TextView
