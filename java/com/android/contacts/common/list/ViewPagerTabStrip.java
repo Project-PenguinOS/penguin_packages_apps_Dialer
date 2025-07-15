@@ -20,7 +20,9 @@ package com.android.contacts.common.list;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -31,7 +33,6 @@ import com.android.dialer.theme.base.ThemeComponent;
 public class ViewPagerTabStrip extends LinearLayout {
 
   private final Paint mSelectedUnderlinePaint;
-  private final int mSelectedUnderlineThickness;
   private int mIndexForSelection;
   private float mSelectionOffset;
 
@@ -42,16 +43,13 @@ public class ViewPagerTabStrip extends LinearLayout {
   public ViewPagerTabStrip(Context context, AttributeSet attrs) {
     super(context, attrs);
 
-    final Resources res = context.getResources();
-
-    mSelectedUnderlineThickness = res.getDimensionPixelSize(R.dimen.tab_selected_underline_height);
     int underlineColor = ThemeComponent.get(context).theme().getColorAccent();
-    int backgroundColor = ThemeComponent.get(context).theme().getColorPrimary();
 
     mSelectedUnderlinePaint = new Paint();
+    mSelectedUnderlinePaint.setAntiAlias(true);
     mSelectedUnderlinePaint.setColor(underlineColor);
 
-    setBackgroundColor(backgroundColor);
+    setBackgroundColor(Color.TRANSPARENT);
     setWillNotDraw(false);
   }
 
@@ -69,7 +67,7 @@ public class ViewPagerTabStrip extends LinearLayout {
   protected void onDraw(Canvas canvas) {
     int childCount = getChildCount();
 
-    // Thick colored underline below the current selection
+    // Pill background behind the current selection
     if (childCount > 0) {
       View selectedTitle = getChildAt(mIndexForSelection);
 
@@ -97,11 +95,13 @@ public class ViewPagerTabStrip extends LinearLayout {
       }
 
       int height = getHeight();
-      canvas.drawRect(
-          selectedLeft,
-          height - mSelectedUnderlineThickness,
-          selectedRight,
-          height,
+      int padding = (int) (4 * getResources().getDisplayMetrics().density);
+      RectF rect = new RectF(selectedLeft + padding, padding, selectedRight - padding, height - padding);
+      float cornerRadius = height / 2f;
+      canvas.drawRoundRect(
+          rect,
+          cornerRadius,
+          cornerRadius,
           mSelectedUnderlinePaint);
     }
   }

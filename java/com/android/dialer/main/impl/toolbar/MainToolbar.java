@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -50,6 +51,8 @@ public final class MainToolbar extends Toolbar implements PopupMenu.OnMenuItemCl
   private SearchBarListener listener;
   private MainToolbarMenu overflowMenu;
   private boolean hasGlobalLayoutListener;
+  private ImageView searchBackground;
+  private ImageView searchMagnifyingGlass;
 
   public MainToolbar(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -67,6 +70,8 @@ public final class MainToolbar extends Toolbar implements PopupMenu.OnMenuItemCl
 
     searchBar = findViewById(R.id.search_view_container);
     titleView = findViewById(R.id.toolbar_title);
+    searchBackground = findViewById(R.id.search_background);
+    searchMagnifyingGlass = findViewById(R.id.search_magnifying_glass);
   }
 
   @Override

@@ -108,4 +108,38 @@
         android:importantForAccessibility="no"
         android:visibility="gone"/>
   </FrameLayout>
+
+  <ImageView
+      android:id="@+id/search_background"
+      android:layout_width="42dp"
+      android:layout_height="42dp"
+      android:layout_gravity="bottom|end"
+      android:layout_marginEnd="24dp"
+      android:layout_marginBottom="74dp"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentEnd="true"
+      app:layout_anchor="@id/bottom_nav_bar"
+      android:background="@drawable/icon_background_circle"
+      android:visibility="visible"
+      android:translationX="-10dp"
+      app:tint="@color/searchbar_icon_color"
+    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
+
+  <ImageView
+      android:id="@+id/search_magnifying_glass"
+      android:layout_width="42dp"
+      android:layout_height="42dp"
+      android:layout_gravity="bottom|end"
+      android:layout_marginEnd="24dp"
+      android:layout_marginBottom="74dp"
+      app:layout_anchor="@id/bottom_nav_bar"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentEnd="true"
+      android:importantForAccessibility="no"
+      android:scaleType="center"
+      android:src="@drawable/quantum_ic_search_vd_theme_24"
+      android:visibility="visible"
+      android:translationX="-10dp"
+      app:tint="@color/searchbar_icon_color"
+    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
 </RelativeLayout>

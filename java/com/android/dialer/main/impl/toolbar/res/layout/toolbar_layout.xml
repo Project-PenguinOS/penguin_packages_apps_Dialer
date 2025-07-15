@@ -14,6 +14,7 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
+           android:layout_marginRight="116dp"
 -->
 <com.android.dialer.main.impl.toolbar.MainToolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -40,10 +41,12 @@
     <View
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+
       android:background="@android:color/transparent"
       android:clickable="true"
       android:elevation="0dp"
       android:visibility="visible"
+                  android:layout_toStartOf="@+id/search_background"
       android:minHeight="@dimen/collapsed_search_bar_height"/>
 
       <RelativeLayout
