@@ -109,7 +109,7 @@
         android:visibility="gone"/>
   </FrameLayout>
 
-  <ImageView
+  <ImageButton
       android:id="@+id/search_background"
       android:layout_width="42dp"
       android:layout_height="42dp"
@@ -120,12 +120,11 @@
       android:layout_alignParentEnd="true"
       app:layout_anchor="@id/bottom_nav_bar"
       android:background="@drawable/icon_background_circle"
-      android:visibility="visible"
       android:translationX="-10dp"
       app:tint="@color/searchbar_icon_color"
-    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
+      app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
 
-  <ImageView
+  <ImageButton
       android:id="@+id/search_magnifying_glass"
       android:layout_width="42dp"
       android:layout_height="42dp"
@@ -138,8 +137,8 @@
       android:importantForAccessibility="no"
       android:scaleType="center"
       android:src="@drawable/quantum_ic_search_vd_theme_24"
-      android:visibility="visible"
       android:translationX="-10dp"
       app:tint="@color/searchbar_icon_color"
-    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
+      android:onClick="onSearchClick"
+      app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
 </RelativeLayout>
