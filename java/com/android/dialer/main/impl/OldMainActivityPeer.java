@@ -53,6 +53,7 @@ import com.android.dialer.R;
 import com.android.dialer.app.MainComponent;
 import com.android.dialer.app.calllog.CallLogAdapter;
 import com.android.dialer.app.calllog.CallLogFragment;
+import com.android.dialer.app.calllog.NewCallLogFragment;
 import com.android.dialer.app.calllog.CallLogFragment.CallLogFragmentListener;
 import com.android.dialer.app.calllog.CallLogNotificationsService;
 import com.android.dialer.app.calllog.VisualVoicemailCallLogFragment;
@@ -977,7 +978,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
 
       activity.setTitle(R.string.dialer_title);
       Fragment fragment = fragmentManager.findFragmentByTag(CALL_LOG_TAG);
-      showFragment(fragment == null ? new CallLogFragment() : fragment, CALL_LOG_TAG);
+      showFragment(fragment == null ? new NewCallLogFragment() : fragment, CALL_LOG_TAG);
 
       fab.show();
       showPromotionBottomSheet(activity, bottomSheet);
