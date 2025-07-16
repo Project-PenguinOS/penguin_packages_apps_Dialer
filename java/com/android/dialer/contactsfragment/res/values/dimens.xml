@@ -15,7 +15,7 @@
   ~ limitations under the License
   -->
 <resources>
-  <dimen name="photo_size">40dp</dimen>
+  <dimen name="photo_size">36dp</dimen>
   <dimen name="header_width">56dp</dimen>
   <dimen name="row_height">56dp</dimen>
   <dimen name="row_start_padding">16dp</dimen>
