@@ -238,6 +238,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
             bottomSheet,
             toolbar);
     bottomNav.addOnTabSelectedListener(bottomNavTabListener);
+    bottomNavTabListener.setSearchIcon(activity.findViewById(R.id.search_background_main),
+        activity.findViewById(R.id.search_magnifying_glass_main));
     // TODO(uabdullah): Handle case of when a sim is inserted/removed while the activity is open.
     boolean showVoicemailTab = false;
     bottomNav.showVoicemail(false);
@@ -251,7 +253,9 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
             activity, activity.getContentResolver(), bottomNav, toolbar, bottomNavTabListener);
     bottomNav.addOnTabSelectedListener(callLogFragmentListener);
 
-    searchController = getNewMainSearchController(bottomNav, fab, toolbar, snackbarContainer);
+    searchController = getNewMainSearchController(bottomNav, fab, toolbar, snackbarContainer,
+        activity.findViewById(R.id.search_background_main),
+        activity.findViewById(R.id.search_magnifying_glass_main));
     toolbar.setSearchBarListener(searchController);
 
     onDialpadQueryChangedListener = getNewOnDialpadQueryChangedListener(searchController);
@@ -497,9 +501,11 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       BottomNavBar bottomNavBar,
       FloatingActionButton fab,
       MainToolbar mainToolbar,
-      View fragmentContainer) {
+      View fragmentContainer,
+      View searchBackground,
+      View searchMagnifyingGlass) {
     return new MainSearchController(
-        activity, bottomNavBar, fab, mainToolbar, fragmentContainer);
+        activity, bottomNavBar, fab, mainToolbar, fragmentContainer, searchBackground, searchMagnifyingGlass);
   }
 
   public MainOnDialpadQueryChangedListener getNewOnDialpadQueryChangedListener(
@@ -937,6 +943,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
     private final FloatingActionButton fab;
     private final View bottomSheet;
     private final MainToolbar toolbar;
+    private View searchBackground;
+    private View searchMagnifyingGlass;
 
     @TabIndex private int selectedTab = TabIndex.NONE;
 
@@ -953,6 +961,11 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       this.toolbar = toolbar;
     }
 
+    public void setSearchIcon(View searchBackground, View searchMagnifyingGlass) {
+      this.searchBackground = searchBackground;
+      this.searchMagnifyingGlass = searchMagnifyingGlass;
+    }
+
     @Override
     public void onSpeedDialSelected() {
       LogUtil.enterBlock("MainBottomNavBarBottomNavTabListener.onSpeedDialSelected");
@@ -966,6 +979,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       showFragment(fragment == null ? SpeedDialFragment.newInstance() : fragment, SPEED_DIAL_TAG);
 
       fab.show();
+      searchBackground.setVisibility(View.GONE);
+      searchMagnifyingGlass.setVisibility(View.GONE);
     }
 
     @Override
@@ -981,6 +996,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       showFragment(fragment == null ? new NewCallLogFragment() : fragment, CALL_LOG_TAG);
 
       fab.show();
+      searchBackground.setVisibility(View.VISIBLE);
+      searchMagnifyingGlass.setVisibility(View.VISIBLE);
       showPromotionBottomSheet(activity, bottomSheet);
     }
 
@@ -1027,6 +1044,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
           fragment == null ? ContactsFragment.newInstance(Header.ADD_CONTACT) : fragment,
           CONTACTS_TAG);
       fab.show();
+      searchBackground.setVisibility(View.VISIBLE);
+      searchMagnifyingGlass.setVisibility(View.VISIBLE);
     }
 
     @Override

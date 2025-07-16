@@ -110,7 +110,7 @@
   </FrameLayout>
 
   <ImageButton
-      android:id="@+id/search_background"
+      android:id="@+id/search_background_main"
       android:layout_width="42dp"
       android:layout_height="42dp"
       android:layout_gravity="bottom|end"
@@ -121,11 +121,12 @@
       app:layout_anchor="@id/bottom_nav_bar"
       android:background="@drawable/icon_background_circle"
       android:translationX="-10dp"
+      android:visibility="gone"
       app:tint="@color/searchbar_icon_color"
       app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
 
   <ImageButton
-      android:id="@+id/search_magnifying_glass"
+      android:id="@+id/search_magnifying_glass_main"
       android:layout_width="42dp"
       android:layout_height="42dp"
       android:layout_gravity="bottom|end"
@@ -135,6 +136,7 @@
       android:layout_alignParentBottom="true"
       android:layout_alignParentEnd="true"
       android:importantForAccessibility="no"
+      android:visibility="gone"
       android:background="@null"
       android:scaleType="center"
       android:src="@drawable/quantum_ic_search_vd_theme_24"
