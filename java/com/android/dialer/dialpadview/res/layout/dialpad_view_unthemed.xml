@@ -22,8 +22,7 @@
     android:id="@+id/dialpad_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="bottom"
-    android:background="?attr/dialpad_background"
+    android:background="@android:color/transparent"
     android:clickable="true"
     android:elevation="?attr/dialpad_elevation"
     android:layoutDirection="ltr"
@@ -69,6 +68,15 @@
 
   <!-- Text field and possibly soft menu button above the keypad where
    the digits are displayed. -->
+
+  <androidx.cardview.widget.CardView
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      app:cardCornerRadius="24dp"
+      app:cardElevation="24dp">
   <LinearLayout
       android:id="@+id/digits_container"
       android:layout_width="match_parent"
@@ -152,10 +160,10 @@
           android:tintMode="src_in"
           app:tint="@color/dialer_theme_color_light" />
   </LinearLayout>
-
+</androidx.cardview.widget.CardView>
   <View
       android:layout_width="match_parent"
-      android:layout_height="1dp"
+      android:layout_height="8dp"
       android:background="@android:color/transparent"/>
 
   <Space
@@ -163,10 +171,11 @@
       android:layout_height="@dimen/dialpad_space_above_keys"/>
 
   <include layout="@layout/dialpad"/>
+
   <LinearLayout
       android:id="@+id/digits_container"
       android:layout_width="match_parent"
-      android:layout_height="?attr/dialpad_digits_adjustable_height"
+      android:layout_height="48dp"
       android:orientation="horizontal"
       android:gravity="end">
 
