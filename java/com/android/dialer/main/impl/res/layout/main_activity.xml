@@ -135,6 +135,7 @@
       android:layout_alignParentBottom="true"
       android:layout_alignParentEnd="true"
       android:importantForAccessibility="no"
+      android:background="@null"
       android:scaleType="center"
       android:src="@drawable/quantum_ic_search_vd_theme_24"
       android:translationX="-10dp"
