@@ -257,6 +257,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
         activity.findViewById(R.id.search_background_main),
         activity.findViewById(R.id.search_magnifying_glass_main));
     toolbar.setSearchBarListener(searchController);
+    activity.findViewById(R.id.search_magnifying_glass_main).setOnClickListener(v -> searchController.onSearchBarClicked());
 
     onDialpadQueryChangedListener = getNewOnDialpadQueryChangedListener(searchController);
     dialpadListener =

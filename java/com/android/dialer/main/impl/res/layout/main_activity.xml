@@ -142,6 +142,5 @@
       android:src="@drawable/quantum_ic_search_vd_theme_24"
       android:translationX="-10dp"
       app:tint="@color/searchbar_icon_color"
-      android:onClick="onSearchClick"
       app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
 </RelativeLayout>
