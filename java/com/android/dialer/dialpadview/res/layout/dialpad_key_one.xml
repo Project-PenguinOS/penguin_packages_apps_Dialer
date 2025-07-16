@@ -39,7 +39,7 @@
     </FrameLayout>
     -->
     <androidx.cardview.widget.CardView
-      android:layout_width="48dp"
+      android:layout_width="64dp"
       android:layout_height="48dp"
       app:cardBackgroundColor="@color/dialpad_color"
       app:cardElevation="0dp"

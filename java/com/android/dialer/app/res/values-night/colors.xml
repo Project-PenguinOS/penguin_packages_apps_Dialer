@@ -20,6 +20,6 @@
     <color name="dialpad_circle_color">#212121</color>
   <color name="dialer_fab_icon_color">#F8F8F8</color>
   <color name="theme_ved_pill">@android:color/holo_red_light</color>
-  <color name="dialpad_color">#121212</color>
+  <color name="dialpad_color">#292929</color>
 
 </resources>

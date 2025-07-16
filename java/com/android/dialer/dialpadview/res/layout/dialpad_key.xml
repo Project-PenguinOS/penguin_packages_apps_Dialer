@@ -37,7 +37,7 @@
       style="@style/DialpadKeyInternalLayoutStyle">
 
     <androidx.cardview.widget.CardView
-      android:layout_width="48dp"
+      android:layout_width="64dp"
       android:layout_height="48dp"
       android:padding="4dp"
       app:cardBackgroundColor="@color/dialpad_color"
