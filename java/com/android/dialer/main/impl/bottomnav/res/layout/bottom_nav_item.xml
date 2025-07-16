@@ -12,7 +12,6 @@
   ~ distributed under the License is distributed on an "AS IS" BASIS,
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
-  ~ limitations under the License
   -->
 <com.android.dialer.main.impl.bottomnav.BottomNavItem
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,31 +20,36 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:minWidth="80dp"
-    android:minHeight="56dp"
+    android:minHeight="46dp"
     android:gravity="center">
 
   <FrameLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
+      android:layout_width="114dp"
+      android:layout_height="46dp">
 
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp">
+        android:layout_width="114dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp">
 
     <View
         android:id="@+id/active_indicator"
-        android:layout_width="64dp"
-        android:layout_height="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_gravity="center"
         android:background="@drawable/pill"
         android:gravity="center"
         android:visibility="visible"/>
 
     <ImageView
         android:id="@+id/bottom_nav_item_image"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layout_gravity="center"
@@ -79,5 +83,6 @@
       android:gravity="center_horizontal"
       android:textSize="12sp"
       style="@style/Dialer.TextAppearance.OVERLINE"
-      android:textColor="?android:attr/textColorPrimary"/>
+      android:textColor="?android:attr/textColorPrimary"
+      android:visibility="gone" />
 </com.android.dialer.main.impl.bottomnav.BottomNavItem>

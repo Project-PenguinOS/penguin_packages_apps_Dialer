@@ -1,0 +1,7 @@
+<resources>
+    <color name="theme_white">#FFFFFF</color>
+    <color name="theme_black">#000000</color>
+    <color name="theme_light_grey">#F5F5F5</color>
+    <color name="theme_dark_grey">#757575</color>
+    <color name="theme_ved_pill">#212121</color>
+</resources>

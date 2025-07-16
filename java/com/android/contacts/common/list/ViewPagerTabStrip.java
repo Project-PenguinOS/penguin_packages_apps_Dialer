@@ -6,7 +6,6 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,95 +17,113 @@
 package com.android.contacts.common.list;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.dialer.R;
-import com.android.dialer.theme.base.ThemeComponent;
 
-public class ViewPagerTabStrip extends LinearLayout {
+public class ViewPagerTabStrip extends LinearLayout implements ViewPager.OnPageChangeListener {
 
-  private final Paint mSelectedUnderlinePaint;
-  private final int mSelectedUnderlineThickness;
-  private int mIndexForSelection;
-  private float mSelectionOffset;
+    private final Paint mSelectedUnderlinePaint;
+    private int mIndexForSelection;
+    private float mSelectionOffset;
+    private ViewPager mViewPager;
 
-  public ViewPagerTabStrip(Context context) {
-    this(context, null);
-  }
-
-  public ViewPagerTabStrip(Context context, AttributeSet attrs) {
-    super(context, attrs);
-
-    final Resources res = context.getResources();
-
-    mSelectedUnderlineThickness = res.getDimensionPixelSize(R.dimen.tab_selected_underline_height);
-    int underlineColor = ThemeComponent.get(context).theme().getColorAccent();
-    int backgroundColor = ThemeComponent.get(context).theme().getColorPrimary();
-
-    mSelectedUnderlinePaint = new Paint();
-    mSelectedUnderlinePaint.setColor(underlineColor);
-
-    setBackgroundColor(backgroundColor);
-    setWillNotDraw(false);
-  }
-
-  /**
-   * Notifies this view that view pager has been scrolled. We save the tab index and selection
-   * offset for interpolating the position and width of selection underline.
-   */
-  void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    mIndexForSelection = position;
-    mSelectionOffset = positionOffset;
-    invalidate();
-  }
-
-  @Override
-  protected void onDraw(Canvas canvas) {
-    int childCount = getChildCount();
-
-    // Thick colored underline below the current selection
-    if (childCount > 0) {
-      View selectedTitle = getChildAt(mIndexForSelection);
-
-      if (selectedTitle == null) {
-        // The view pager's tab count changed but we weren't notified yet. Ignore this draw
-        // pass, when we get a new selection we will update and draw the selection strip in
-        // the correct place.
-        return;
-      }
-      int selectedLeft = selectedTitle.getLeft();
-      int selectedRight = selectedTitle.getRight();
-      final boolean isRtl = isRtl();
-      final boolean hasNextTab =
-          isRtl ? mIndexForSelection > 0 : (mIndexForSelection < (getChildCount() - 1));
-      if ((mSelectionOffset > 0.0f) && hasNextTab) {
-        // Draw the selection partway between the tabs
-        View nextTitle = getChildAt(mIndexForSelection + (isRtl ? -1 : 1));
-        int nextLeft = nextTitle.getLeft();
-        int nextRight = nextTitle.getRight();
-
-        selectedLeft =
-            (int) (mSelectionOffset * nextLeft + (1.0f - mSelectionOffset) * selectedLeft);
-        selectedRight =
-            (int) (mSelectionOffset * nextRight + (1.0f - mSelectionOffset) * selectedRight);
-      }
-
-      int height = getHeight();
-      canvas.drawRect(
-          selectedLeft,
-          height - mSelectedUnderlineThickness,
-          selectedRight,
-          height,
-          mSelectedUnderlinePaint);
+    public ViewPagerTabStrip(Context context) {
+        this(context, null);
     }
-  }
 
-  private boolean isRtl() {
-    return getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
-  }
+    public ViewPagerTabStrip(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        int underlineColor = context.getResources().getColor(R.color.dialer_pill_color);
+
+        mSelectedUnderlinePaint = new Paint();
+        mSelectedUnderlinePaint.setAntiAlias(true);
+        mSelectedUnderlinePaint.setColor(underlineColor);
+
+        setBackgroundColor(Color.TRANSPARENT);
+        setWillNotDraw(false);
+    }
+
+    public void setViewPager(ViewPager viewPager) {
+        mViewPager = viewPager;
+        if (viewPager != null) {
+            viewPager.addOnPageChangeListener(this);
+        }
+        populateTabs();
+    }
+
+    private void populateTabs() {
+        final PagerAdapter adapter = mViewPager.getAdapter();
+        removeAllViews(); // Clear any old tabs
+        final int count = adapter.getCount();
+        for (int i = 0; i < count; i++) {
+            final CharSequence title = adapter.getPageTitle(i);
+            final TextView textView = new TextView(getContext());
+            textView.setText(title);
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            textView.setTextColor(Color.BLACK); // Set a visible color
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    0, LayoutParams.MATCH_PARENT, 1);
+            textView.setLayoutParams(layoutParams);
+
+            final int position = i;
+            textView.setOnClickListener(v -> mViewPager.setCurrentItem(position));
+            addView(textView);
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        mIndexForSelection = position;
+        mSelectionOffset = positionOffset;
+        invalidate(); // Redraw the pill
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        int childCount = getChildCount();
+        if (childCount > 0) {
+            View selectedTitle = getChildAt(mIndexForSelection);
+            if (selectedTitle == null) return;
+
+            int selectedLeft = selectedTitle.getLeft();
+            int selectedRight = selectedTitle.getRight();
+
+            if (mSelectionOffset > 0.0f && mIndexForSelection < (getChildCount() - 1)) {
+                View nextTitle = getChildAt(mIndexForSelection + 1);
+                selectedLeft = (int) (mSelectionOffset * nextTitle.getLeft() +
+                        (1.0f - mSelectionOffset) * selectedLeft);
+                selectedRight = (int) (mSelectionOffset * nextTitle.getRight() +
+                        (1.0f - mSelectionOffset) * selectedRight);
+            }
+
+            int height = getHeight();
+            int padding = (int) (4 * getResources().getDisplayMetrics().density);
+            RectF rect = new RectF(selectedLeft + padding, padding, selectedRight - padding, height - padding);
+            float cornerRadius = height / 2f; // Use half the height for a perfect pill
+            canvas.drawRoundRect(rect, cornerRadius, cornerRadius, mSelectedUnderlinePaint);
+        }
+    }
 }

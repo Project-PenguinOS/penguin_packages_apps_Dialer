@@ -34,6 +34,7 @@
   <!-- Hint displayed in dialer search box when there is no query that is currently typed.
        [CHAR LIMIT=30] -->
   <string name="dialer_hint_find_contact">Search contacts</string>
+  <string name="dialer_activity_label">Contacts</string>
 
   <!-- Show users their settings [CHAR LIMIT=20] -->
   <string name="settings">Settings</string>

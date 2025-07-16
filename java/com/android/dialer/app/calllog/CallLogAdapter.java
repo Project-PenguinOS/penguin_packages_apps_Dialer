@@ -636,6 +636,27 @@ public class CallLogAdapter extends GroupingListAdapter
         break;
     }
     Trace.endSection();
+
+    if (viewHolder instanceof CallLogListItemViewHolder) {
+        CallLogListItemViewHolder vh = (CallLogListItemViewHolder) viewHolder;
+        int dayGroup = getDayGroup(vh.rowId);
+        int nextDayGroup = getDayGroup(getItemId(position + 1));
+
+        boolean isFirstInGroup = getDayGroup(getItemId(position - 1)) != dayGroup;
+        boolean isLastInGroup = getDayGroup(getItemId(position + 1)) != dayGroup;
+
+        int drawableId;
+        if (isFirstInGroup && isLastInGroup) {
+            drawableId = R.drawable.call_log_card_background_single;
+        } else if (isFirstInGroup) {
+            drawableId = R.drawable.call_log_card_background_top;
+        } else if (isLastInGroup) {
+            drawableId = R.drawable.call_log_card_background_bottom;
+        } else {
+            drawableId = R.drawable.call_log_card_background_middle;
+        }
+        vh.callLogEntryView.setBackgroundResource(drawableId);
+    }
   }
 
   @Override
@@ -688,7 +709,6 @@ public class CallLogAdapter extends GroupingListAdapter
       return;
     } else {
       views.callLogEntryView.setVisibility(View.VISIBLE);
-      // dayGroupHeader will be restored after loadAndRender() if it is needed.
     }
     if (currentlyExpandedRowId == views.rowId) {
       views.inflateActionViewStub();

@@ -22,37 +22,55 @@
 
   <include layout="@layout/header"/>
 
-  <LinearLayout
-      android:id="@+id/click_target"
-      android:orientation="horizontal"
+  <androidx.cardview.widget.CardView
+      android:id="@+id/contact_row"
+      style="@style/CallLogCardStyle"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginStart="@dimen/header_width"
-      android:layout_marginEnd="@dimen/row_end_margin"
-      android:paddingTop="@dimen/row_top_bottom_padding"
-      android:paddingBottom="@dimen/row_top_bottom_padding"
-      android:paddingStart="@dimen/row_start_padding"
-      android:gravity="center_vertical"
-      android:background="?android:attr/selectableItemBackground">
+      android:layout_marginStart="@dimen/call_log_start_margin"
+      android:layout_marginEnd="@dimen/call_log_outer_margin">
 
-    <QuickContactBadge
-        android:id="@+id/photo"
-        android:layout_width="@dimen/photo_size"
-        android:layout_height="@dimen/photo_size"
-        android:clickable="false"
-        android:forceDarkAllowed="false" />
-
-    <com.android.dialer.widget.BidiTextView
-        android:id="@+id/contact_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/click_target"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="@dimen/text_padding_start"
-        android:paddingEnd="@dimen/text_padding_end"
-        android:maxLines="1"
-        android:ellipsize="end"
+        android:paddingTop="@dimen/row_top_bottom_padding"
+        android:paddingBottom="@dimen/row_top_bottom_padding"
+        android:paddingStart="@dimen/row_start_padding"
+        android:paddingEnd="@dimen/row_start_padding"
         android:gravity="center_vertical"
-        android:textSize="@dimen/text_size"
-        android:textColor="?android:attr/textColorPrimary"
-        android:fontFamily="@*android:string/config_bodyFontFamily"/>
-  </LinearLayout>
+        android:background="?android:attr/selectableItemBackground">
+
+      <QuickContactBadge
+          android:id="@+id/photo"
+          android:layout_width="@dimen/photo_size"
+          android:layout_height="@dimen/photo_size"
+          android:clickable="false"
+          android:forceDarkAllowed="false" />
+
+      <com.android.dialer.widget.BidiTextView
+          android:id="@+id/contact_name"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="match_parent"
+          android:paddingStart="@dimen/text_padding_start"
+          android:paddingEnd="@dimen/text_padding_end"
+          android:maxLines="1"
+          android:ellipsize="end"
+          android:gravity="center_vertical"
+          android:textSize="@dimen/text_size"
+          android:textColor="?android:attr/textColorPrimary"
+          android:fontFamily="@*android:string/config_bodyFontFamily"/>
+
+      <ImageView
+          android:id="@+id/call_action_icon"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:src="@drawable/ic_arrow_forward"
+          android:tint="?attr/colorIcon"
+          android:visibility="visible"/>
+    </LinearLayout>
+  </androidx.cardview.widget.CardView>
 </FrameLayout>

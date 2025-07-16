@@ -48,7 +48,6 @@
     <item name="android:layout_width">@dimen/incall_end_call_button_size</item>
     <item name="android:padding">8dp</item>
     <item name="android:src">@drawable/quantum_ic_call_end_vd_theme_36</item>
-    <item name="android:tint">@color/incall_end_call_icon_color</item>
     <item name="android:stateListAnimator">@animator/disabled_alpha</item>
   </style>
 

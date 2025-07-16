@@ -19,8 +19,12 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/rounded_dialpad_bg_color"
-    android:elevation="8dp">
+    android:elevation="8dp"
+
+    android:layout_marginBottom="16dp"
+    android:layout_marginStart="24dp"
+    android:layout_marginEnd="48dp"
+    android:background="@drawable/floating_background">
 
   <include
       android:id="@+id/speed_dial_tab"
@@ -48,5 +52,6 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
+      android:visibility="gone"
       layout="@layout/bottom_nav_item"/>
 </com.android.dialer.main.impl.bottomnav.BottomNavBar>

@@ -19,6 +19,7 @@ package com.android.dialer.main.impl;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -28,6 +29,7 @@ import com.android.dialer.blockreportspam.ShowBlockReportSpamDialogReceiver;
 import com.android.dialer.common.LogUtil;
 import com.android.dialer.main.MainActivityPeer;
 import com.android.dialer.telecom.TelecomUtil;
+import com.android.dialer.main.impl.toolbar.MainToolbar;
 import com.android.dialer.util.TransactionSafeActivity;
 
 /** This is the main activity for dialer. It hosts favorites, call log, search, dialpad, etc... */
@@ -36,6 +38,11 @@ public class MainActivity extends TransactionSafeActivity
     implements MainActivityPeer.PeerSupplier {
 
   private MainActivityPeer activePeer;
+  public void onSearchClick(View view) {
+    MainToolbar toolbar = findViewById(R.id.toolbar);
+    toolbar.expand(true, java.util.Optional.empty(), true);
+    toolbar.showKeyboard();
+  }
 
   /**
    * {@link android.content.BroadcastReceiver} that shows a dialog to block a number and/or report

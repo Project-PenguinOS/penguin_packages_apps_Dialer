@@ -53,6 +53,7 @@ import com.android.dialer.R;
 import com.android.dialer.app.MainComponent;
 import com.android.dialer.app.calllog.CallLogAdapter;
 import com.android.dialer.app.calllog.CallLogFragment;
+import com.android.dialer.app.calllog.NewCallLogFragment;
 import com.android.dialer.app.calllog.CallLogFragment.CallLogFragmentListener;
 import com.android.dialer.app.calllog.CallLogNotificationsService;
 import com.android.dialer.app.calllog.VisualVoicemailCallLogFragment;
@@ -169,7 +170,6 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
   @Override
   public void onActivityCreate(Bundle savedInstanceState) {
     LogUtil.enterBlock("OldMainActivityPeer.onActivityCreate");
-    setTheme();
     activity.setContentView(R.layout.main_activity);
     initUiListeners();
     initLayout(savedInstanceState);
@@ -179,22 +179,6 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
   }
 
   /** should be called before {@link AppCompatActivity#setContentView(int)}. */
-  private void setTheme() {
-    @Theme.Type int theme = ThemeComponent.get(activity).theme().getTheme();
-    switch (theme) {
-      case Theme.DARK:
-        activity.setTheme(R.style.MainActivityTheme_Dark);
-        break;
-      case Theme.LIGHT:
-      case Theme.LIGHT_M2:
-        activity.setTheme(R.style.MainActivityTheme);
-        break;
-      case Theme.UNKNOWN:
-      default:
-        throw new IllegalArgumentException("Invalid theme.");
-    }
-  }
-
   private void initUiListeners() {
     getLastOutgoingCallListener =
         DialerExecutorComponent.get(activity)
@@ -233,12 +217,15 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
             activity,
             activity.getSupportFragmentManager(),
             fab,
-            bottomSheet);
+            bottomSheet,
+            toolbar);
     bottomNav.addOnTabSelectedListener(bottomNavTabListener);
+    bottomNavTabListener.setSearchIcon(activity.findViewById(R.id.search_background_main),
+        activity.findViewById(R.id.search_magnifying_glass_main));
     // TODO(uabdullah): Handle case of when a sim is inserted/removed while the activity is open.
-    boolean showVoicemailTab = canVoicemailTabBeShown(activity);
-    bottomNav.showVoicemail(showVoicemailTab);
-
+    boolean showVoicemailTab = false;
+    bottomNav.showVoicemail(false);
+    bottomNav.showSpeedDial(false);
     missedCallCountObserver =
         new MissedCallCountObserver(
             activity.getApplicationContext(), bottomNav, missedCallObserverUiListener);
@@ -248,8 +235,11 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
             activity, activity.getContentResolver(), bottomNav, toolbar, bottomNavTabListener);
     bottomNav.addOnTabSelectedListener(callLogFragmentListener);
 
-    searchController = getNewMainSearchController(bottomNav, fab, toolbar, snackbarContainer);
+    searchController = getNewMainSearchController(bottomNav, fab, toolbar, snackbarContainer,
+        activity.findViewById(R.id.search_background_main),
+        activity.findViewById(R.id.search_magnifying_glass_main));
     toolbar.setSearchBarListener(searchController);
+    activity.findViewById(R.id.search_magnifying_glass_main).setOnClickListener(v -> searchController.onSearchBarClicked());
 
     onDialpadQueryChangedListener = getNewOnDialpadQueryChangedListener(searchController);
     dialpadListener =
@@ -292,21 +282,6 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
    *     for the carrier.
    */
   private static boolean canVoicemailTabBeShown(Context context) {
-    PhoneAccountHandle defaultUserSelectedAccount =
-        TelecomUtil.getDefaultOutgoingPhoneAccount(context, PhoneAccount.SCHEME_VOICEMAIL);
-
-    if (!isVoicemailAvailable(context, defaultUserSelectedAccount)) {
-      LogUtil.i("OldMainActivityPeer.canVoicemailTabBeShown", "Voicemail is not available");
-      return false;
-    }
-
-    if (VoicemailComponent.get(context)
-        .getVoicemailClient()
-        .isVoicemailEnabled(context, defaultUserSelectedAccount)) {
-      LogUtil.i("OldMainActivityPeer.canVoicemailTabBeShown", "Voicemail is enabled");
-      return true;
-    }
-    LogUtil.i("OldMainActivityPeer.canVoicemailTabBeShown", "returning false");
     return false;
   }
 
@@ -509,9 +484,11 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       BottomNavBar bottomNavBar,
       FloatingActionButton fab,
       MainToolbar mainToolbar,
-      View fragmentContainer) {
+      View fragmentContainer,
+      View searchBackground,
+      View searchMagnifyingGlass) {
     return new MainSearchController(
-        activity, bottomNavBar, fab, mainToolbar, fragmentContainer);
+        activity, bottomNavBar, fab, mainToolbar, fragmentContainer, searchBackground, searchMagnifyingGlass);
   }
 
   public MainOnDialpadQueryChangedListener getNewOnDialpadQueryChangedListener(
@@ -948,6 +925,9 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
     private final FragmentManager fragmentManager;
     private final FloatingActionButton fab;
     private final View bottomSheet;
+    private final MainToolbar toolbar;
+    private View searchBackground;
+    private View searchMagnifyingGlass;
 
     @TabIndex private int selectedTab = TabIndex.NONE;
 
@@ -955,11 +935,18 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
         TransactionSafeActivity activity,
         FragmentManager fragmentManager,
         FloatingActionButton fab,
-        View bottomSheet) {
+        View bottomSheet,
+        MainToolbar toolbar) {
       this.activity = activity;
       this.fragmentManager = fragmentManager;
       this.fab = fab;
       this.bottomSheet = bottomSheet;
+      this.toolbar = toolbar;
+    }
+
+    public void setSearchIcon(View searchBackground, View searchMagnifyingGlass) {
+      this.searchBackground = searchBackground;
+      this.searchMagnifyingGlass = searchMagnifyingGlass;
     }
 
     @Override
@@ -970,10 +957,13 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       }
       selectedTab = TabIndex.SPEED_DIAL;
 
+      activity.setTitle(R.string.dialer_title);
       Fragment fragment = fragmentManager.findFragmentByTag(SPEED_DIAL_TAG);
       showFragment(fragment == null ? SpeedDialFragment.newInstance() : fragment, SPEED_DIAL_TAG);
 
       fab.show();
+      searchBackground.setVisibility(View.GONE);
+      searchMagnifyingGlass.setVisibility(View.GONE);
     }
 
     @Override
@@ -984,10 +974,13 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       }
       selectedTab = TabIndex.CALL_LOG;
 
+      activity.setTitle(R.string.dialer_title);
       Fragment fragment = fragmentManager.findFragmentByTag(CALL_LOG_TAG);
-      showFragment(fragment == null ? new CallLogFragment() : fragment, CALL_LOG_TAG);
+      showFragment(fragment == null ? new NewCallLogFragment() : fragment, CALL_LOG_TAG);
 
       fab.show();
+      searchBackground.setVisibility(View.VISIBLE);
+      searchMagnifyingGlass.setVisibility(View.VISIBLE);
       showPromotionBottomSheet(activity, bottomSheet);
     }
 
@@ -1028,11 +1021,14 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
         return;
       }
       selectedTab = TabIndex.CONTACTS;
+      activity.setTitle(R.string.contacts_title);
       Fragment fragment = fragmentManager.findFragmentByTag(CONTACTS_TAG);
       showFragment(
           fragment == null ? ContactsFragment.newInstance(Header.ADD_CONTACT) : fragment,
           CONTACTS_TAG);
       fab.show();
+      searchBackground.setVisibility(View.VISIBLE);
+      searchMagnifyingGlass.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -1043,6 +1039,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       }
       selectedTab = TabIndex.VOICEMAIL;
 
+      activity.setTitle(R.string.dialer_title);
       VisualVoicemailCallLogFragment fragment =
           (VisualVoicemailCallLogFragment) fragmentManager.findFragmentByTag(VOICEMAIL_TAG);
       if (fragment == null) {
@@ -1132,11 +1129,11 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       @TabIndex int tabIndex =
           StorageComponent.get(context)
               .unencryptedSharedPrefs()
-              .getInt(KEY_LAST_TAB, TabIndex.SPEED_DIAL);
+              .getInt(KEY_LAST_TAB, TabIndex.CALL_LOG);
 
       // If the voicemail tab cannot be shown, default to showing speed dial
       if (tabIndex == TabIndex.VOICEMAIL && !canShowVoicemailTab) {
-        tabIndex = TabIndex.SPEED_DIAL;
+        tabIndex = TabIndex.CALL_LOG;
       }
 
       return tabIndex;

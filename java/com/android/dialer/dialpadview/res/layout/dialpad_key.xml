@@ -17,15 +17,31 @@
 <!-- A layout representing each of keys "2" ~ "9" in the dialpad -->
 <com.android.dialer.dialpadview.DialpadKeyButton
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/DialpadKeyButtonStyle">
 
   <LinearLayout
       android:id="@+id/dialpad_key_layout"
       style="@style/DialpadKeyInternalLayoutStyle">
 
-    <com.android.dialer.dialpadview.DialpadTextView
+    <androidx.cardview.widget.CardView
+      android:layout_width="64dp"
+      android:layout_height="48dp"
+      android:padding="4dp"
+      app:cardBackgroundColor="@color/dialpad_color"
+      app:cardElevation="0dp"
+      app:cardCornerRadius="24dp">
+      <com.android.dialer.dialpadview.DialpadTextView
         android:id="@+id/dialpad_key_number"
-        style="@style/DialpadKeyNumberStyle"/>
+        style="@style/DialpadKeyNumberStyle"
+        android:layout_gravity="center"
+        android:background="@null"/>
+
+      </androidx.cardview.widget.CardView>
+
+
+
+
 
     <LinearLayout
         android:id="@+id/dialpad_key_icon_or_letters_layout"
@@ -33,10 +49,12 @@
 
       <com.android.dialer.dialpadview.DialpadTextView
           android:id="@+id/dialpad_key_letters"
-          style="@style/DialpadKeyLettersStyle"/>
+          style="@style/DialpadKeyLettersStyle"
+          android:visibility="gone"/>
       <com.android.dialer.dialpadview.DialpadTextView
           android:id="@+id/dialpad_key_secondary_letters"
           style="@style/DialpadKeyLettersStyle"
+          android:visibility="gone"
           android:layout_marginTop="2dp"/>
     </LinearLayout>
   </LinearLayout>

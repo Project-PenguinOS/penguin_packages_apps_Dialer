@@ -88,6 +88,8 @@ public class MainSearchController implements SearchBarListener {
   private final BottomNavBar bottomNav;
   private final FloatingActionButton fab;
   private final MainToolbar toolbar;
+  private final View searchBackground;
+  private final View searchMagnifyingGlass;
 
   /** View located underneath the toolbar that needs to animate with it. */
   private final View fragmentContainer;
@@ -113,12 +115,16 @@ public class MainSearchController implements SearchBarListener {
       BottomNavBar bottomNav,
       FloatingActionButton fab,
       MainToolbar toolbar,
-      View fragmentContainer) {
+      View fragmentContainer,
+      View searchBackground,
+      View searchMagnifyingGlass) {
     this.activity = activity;
     this.bottomNav = bottomNav;
     this.fab = fab;
     this.toolbar = toolbar;
     this.fragmentContainer = fragmentContainer;
+    this.searchBackground = searchBackground;
+    this.searchMagnifyingGlass = searchMagnifyingGlass;
 
     dialpadFragment = (DialpadFragment) activity.getSupportFragmentManager()
             .findFragmentByTag(DIALPAD_FRAGMENT_TAG);
@@ -159,6 +165,8 @@ public class MainSearchController implements SearchBarListener {
     }
 
     fab.hide();
+    searchBackground.setVisibility(View.GONE);
+    searchMagnifyingGlass.setVisibility(View.GONE);
     toolbar.slideUp(animate, fragmentContainer);
     toolbar.expand(animate, Optional.empty(), /* requestFocus */ false);
 
@@ -222,9 +230,16 @@ public class MainSearchController implements SearchBarListener {
     }
 
     fab.show();
+    searchBackground.setVisibility(View.VISIBLE);
+    searchMagnifyingGlass.setVisibility(View.VISIBLE);
     toolbar.slideDown(animate, fragmentContainer);
     toolbar.transferQueryFromDialpad(dialpadFragment.getQuery());
-    activity.setTitle(R.string.main_activity_label);
+
+    if (bottomNav.getSelectedTab() == BottomNavBar.TabIndex.CONTACTS) {
+      activity.setTitle(R.string.contacts_title);
+    } else {
+      activity.setTitle(R.string.dialer_title);
+    }
 
     dialpadFragment.setAnimate(animate);
     dialpadFragment.slideDown(
@@ -304,6 +319,11 @@ public class MainSearchController implements SearchBarListener {
     } else if (isSearchVisible()) {
       LogUtil.i("MainSearchController.onBackPressed", "Search is visible");
       closeSearch(true);
+      if (bottomNav.getSelectedTab() == BottomNavBar.TabIndex.CONTACTS) {
+        activity.setTitle(R.string.contacts_title);
+      } else {
+        activity.setTitle(R.string.dialer_title);
+      }
       return true;
     } else {
       return false;
@@ -337,7 +357,6 @@ public class MainSearchController implements SearchBarListener {
     updateStatusBarColor(android.R.attr.statusBarColor);
     toolbar.collapse(animate);
     activity.getSupportFragmentManager().beginTransaction().hide(searchFragment).commit();
-
     // Clear the dialpad so the phone number isn't persisted between search sessions.
     if (dialpadFragment != null) {
       // Temporarily disable accessibility when we clear the dialpad, since it should be

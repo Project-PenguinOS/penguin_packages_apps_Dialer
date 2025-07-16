@@ -13,10 +13,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License
-  -->
-<resources>
-  <array name="letter_tile_colors">
-    <item>@android:color/system_accent1_300</item>
     <item>@android:color/system_accent2_300</item>
     <item>@android:color/system_accent3_300</item>
     <item>@android:color/system_accent1_400</item>
@@ -28,6 +24,10 @@
     <item>@android:color/system_accent1_600</item>
     <item>@android:color/system_accent2_600</item>
     <item>@android:color/system_accent3_600</item>
+  -->
+<resources>
+  <array name="letter_tile_colors">
+    <item>@color/letter_hint</item>
   </array>
 
   <color name="spam_contact_background">#A52714</color>

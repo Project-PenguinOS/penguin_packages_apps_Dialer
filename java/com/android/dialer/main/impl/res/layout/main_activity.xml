@@ -31,8 +31,7 @@
       android:id="@+id/coordinator_layout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@+id/toolbar"
-      android:layout_above="@+id/bottom_nav_bar">
+      android:layout_below="@+id/toolbar">
 
     <!-- Holds SpeedDial, Call Log, Contacts, Voicemail and Search fragments -->
     <FrameLayout
@@ -44,38 +43,48 @@
         android:id="@+id/search_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
     <com.android.dialer.widget.DialerFloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_gravity="end|bottom"
+        android:layout_gravity="right|bottom"
+        android:elevation="0dp"
+        app:fabCustomSize="42dp"
+        android:layout_marginEnd="24dp"
         android:forceDarkAllowed="false"
-        android:src="@drawable/quantum_ic_dialpad_vd_theme_24"
+        android:src="@drawable/veddialer"
         android:tint="@color/dialer_fab_icon_color"
         app:tint="@color/dialer_fab_icon_color"
         android:contentDescription="@string/dialpad_button_content_description"
-        app:backgroundTint="@color/dialer_theme_color_light"/>
+        app:backgroundTint="@color/theme_ved_white"
+        app:layout_anchor="@id/bottom_nav_bar"
+        app:layout_anchorGravity="right"
+        android:translationX="32dp"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
 
     <include android:id="@+id/promotion_bottom_sheet"
         layout="@layout/promotion_bottom_sheet"/>
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-  <!-- BottomNavBar -->
-  <include
-      android:id="@+id/bottom_nav_bar"
-      layout="@layout/bottom_nav_bar_layout"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignParentBottom="true"/>
+    <include
+        android:id="@+id/bottom_nav_bar"
+        layout="@layout/bottom_nav_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|start"
+        android:elevation="0dp"
+        android:layout_marginBottom="14dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="108dp"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
   <!-- Holds Dialpad fragment -->
   <FrameLayout
       android:id="@+id/dialpad_fragment_container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:elevation="10dp"/>
+      android:elevation="0dp"/>
 
   <!-- TODO(calderwoodra): investigate what this is for and why we want it. -->
   <!-- Host container for the contact tile drag shadow -->
@@ -90,4 +99,39 @@
         android:importantForAccessibility="no"
         android:visibility="gone"/>
   </FrameLayout>
+
+  <ImageButton
+      android:id="@+id/search_background_main"
+      android:layout_width="42dp"
+      android:layout_height="42dp"
+      android:layout_gravity="bottom|end"
+      android:layout_marginEnd="24dp"
+      android:layout_marginBottom="74dp"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentEnd="true"
+      app:layout_anchor="@id/bottom_nav_bar"
+      android:background="@drawable/icon_background_circle"
+      android:translationX="-10dp"
+      android:visibility="gone"
+      app:tint="@color/searchbar_icon_color"
+      app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
+
+  <ImageButton
+      android:id="@+id/search_magnifying_glass_main"
+      android:layout_width="42dp"
+      android:layout_height="42dp"
+      android:layout_gravity="bottom|end"
+      android:layout_marginEnd="24dp"
+      android:layout_marginBottom="74dp"
+      app:layout_anchor="@id/bottom_nav_bar"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentEnd="true"
+      android:importantForAccessibility="no"
+      android:visibility="gone"
+      android:background="@null"
+      android:scaleType="center"
+      android:src="@drawable/quantum_ic_search_vd_theme_24"
+      android:translationX="-10dp"
+      app:tint="@color/searchbar_icon_color"
+      app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
 </RelativeLayout>
