@@ -49,24 +49,6 @@
     android:layout_margin="24dp"
     android:layout_marginBottom="20dp"
     -->
-    <com.android.dialer.widget.DialerFloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        android:elevation="0dp"
-        app:fabCustomSize="42dp"
-        android:layout_marginEnd="24dp"
-        android:forceDarkAllowed="false"
-        android:src="@drawable/veddialer"
-        android:tint="@color/dialer_fab_icon_color"
-        app:tint="@color/dialer_fab_icon_color"
-        android:contentDescription="@string/dialpad_button_content_description"
-        app:backgroundTint="@color/theme_ved_white"
-        app:layout_anchor="@id/bottom_nav_bar"
-        app:layout_anchorGravity="right"
-        android:translationX="32dp"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
 
     <include android:id="@+id/promotion_bottom_sheet"
         layout="@layout/promotion_bottom_sheet"/>
@@ -86,6 +68,68 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="108dp"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
+
+    <ImageButton
+        android:id="@+id/search_background_main"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="74dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        app:layout_anchor="@id/bottom_nav_bar"
+        android:background="@drawable/icon_background_circle"
+        android:translationX="32dp"
+        android:elevation="4dp"
+        android:visibility="gone"
+        android:tint="@color/dialer_fab_icon_color"
+        app:tint="@color/dialer_fab_icon_color"
+        app:backgroundTint="@color/theme_ved_white"
+        app:layout_anchorGravity="right"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
+
+    <com.android.dialer.widget.DialerFloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:elevation="0dp"
+        app:fabCustomSize="42dp"
+        android:layout_marginEnd="24dp"
+        android:forceDarkAllowed="false"
+        android:src="@drawable/veddialer"
+        android:tint="@color/dialer_fab_icon_color"
+        app:tint="@color/dialer_fab_icon_color"
+        android:contentDescription="@string/dialpad_button_content_description"
+        app:backgroundTint="@color/theme_ved_white"
+        app:layout_anchor="@id/bottom_nav_bar"
+        app:layout_anchorGravity="right"
+        android:translationX="32dp"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
+
+    <ImageButton
+        android:id="@+id/search_magnifying_glass_main"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="74dp"
+        app:layout_anchor="@id/bottom_nav_bar"
+        android:elevation="4dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:importantForAccessibility="no"
+        android:visibility="gone"
+        android:background="@null"
+        android:scaleType="center"
+        app:layout_anchorGravity="right"
+        android:src="@drawable/quantum_ic_search_vd_theme_24"
+        android:translationX="32dp"
+        android:tint="@color/dialer_fab_icon_color"
+        app:tint="@color/dialer_fab_icon_color"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
+
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
   <!-- Holds Dialpad fragment -->
@@ -109,38 +153,5 @@
         android:visibility="gone"/>
   </FrameLayout>
 
-  <ImageButton
-      android:id="@+id/search_background_main"
-      android:layout_width="42dp"
-      android:layout_height="42dp"
-      android:layout_gravity="bottom|end"
-      android:layout_marginEnd="24dp"
-      android:layout_marginBottom="74dp"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentEnd="true"
-      app:layout_anchor="@id/bottom_nav_bar"
-      android:background="@drawable/icon_background_circle"
-      android:translationX="-10dp"
-      android:visibility="gone"
-      app:tint="@color/searchbar_icon_color"
-      app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
 
-  <ImageButton
-      android:id="@+id/search_magnifying_glass_main"
-      android:layout_width="42dp"
-      android:layout_height="42dp"
-      android:layout_gravity="bottom|end"
-      android:layout_marginEnd="24dp"
-      android:layout_marginBottom="74dp"
-      app:layout_anchor="@id/bottom_nav_bar"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentEnd="true"
-      android:importantForAccessibility="no"
-      android:visibility="gone"
-      android:background="@null"
-      android:scaleType="center"
-      android:src="@drawable/quantum_ic_search_vd_theme_24"
-      android:translationX="-10dp"
-      app:tint="@color/searchbar_icon_color"
-      app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
 </RelativeLayout>
