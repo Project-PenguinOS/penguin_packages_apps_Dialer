@@ -28,7 +28,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.android.dialer.util.DialerUtils;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -57,7 +57,7 @@ public class ViewPagerTabStrip extends LinearLayout implements ViewPager.OnPageC
         setWillNotDraw(false);
     }
 
-    // This new method will create the tabs and set up the listener
+
     public void setViewPager(ViewPager viewPager) {
         mViewPager = viewPager;
         if (viewPager != null) {
@@ -66,40 +66,59 @@ public class ViewPagerTabStrip extends LinearLayout implements ViewPager.OnPageC
         populateTabs();
     }
 
-    // This method creates a TextView for each tab title
-    private void populateTabs() {
-        final PagerAdapter adapter = mViewPager.getAdapter();
-        removeAllViews(); // Clear any old tabs
-        final int count = adapter.getCount();
-        for (int i = 0; i < count; i++) {
-            final CharSequence title = adapter.getPageTitle(i);
-            final TextView textView = new TextView(getContext());
-            textView.setText(title);
-            textView.setGravity(Gravity.CENTER);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-            textView.setTextColor(Color.BLACK); // Set a visible color
+private void populateTabs() {
+    final PagerAdapter adapter = mViewPager.getAdapter();
+    removeAllViews(); // Clear any old tabs
+    final int count = adapter.getCount();
 
-            // Make the tabs evenly spaced
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    0, LayoutParams.MATCH_PARENT, 1);
-            textView.setLayoutParams(layoutParams);
+    for (int i = 0; i < count; i++) {
+        final CharSequence title = adapter.getPageTitle(i);
 
-            final int position = i;
-            textView.setOnClickListener(v -> mViewPager.setCurrentItem(position));
-            addView(textView);
-        }
+        final TextView textView = new TextView(getContext()) {
+            @Override
+            public void setSelected(boolean selected) {
+                super.setSelected(selected);
+                int colorId = selected
+                        ? DialerUtils.resolveColor(getContext(), android.R.attr.textColorPrimaryInverse)
+                        : DialerUtils.resolveColor(getContext(), android.R.attr.textColorPrimary);
+                setTextColor(colorId);
+            }
+        };
+
+        textView.setText(title);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+
+        // Make the tabs evenly spaced
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                0, LayoutParams.MATCH_PARENT, 1);
+        textView.setLayoutParams(layoutParams);
+
+        final int position = i;
+        textView.setOnClickListener(v -> mViewPager.setCurrentItem(position));
+
+        addView(textView);
     }
+
+    // Mark the initially selected tab
+    onPageSelected(mViewPager.getCurrentItem());
+}
+
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         mIndexForSelection = position;
         mSelectionOffset = positionOffset;
-        invalidate(); // Redraw the pill
+        invalidate();
     }
 
-    @Override
-    public void onPageSelected(int position) {
+@Override
+public void onPageSelected(int position) {
+    for (int i = 0; i < getChildCount(); i++) {
+        getChildAt(i).setSelected(i == position);
     }
+}
+
 
     @Override
     public void onPageScrollStateChanged(int state) {
@@ -126,7 +145,7 @@ public class ViewPagerTabStrip extends LinearLayout implements ViewPager.OnPageC
             int height = getHeight();
             int padding = (int) (4 * getResources().getDisplayMetrics().density);
             RectF rect = new RectF(selectedLeft + padding, padding, selectedRight - padding, height - padding);
-            float cornerRadius = height / 2f; // Use half the height for a perfect pill
+            float cornerRadius = height / 2f;
             canvas.drawRoundRect(rect, cornerRadius, cornerRadius, mSelectedUnderlinePaint);
         }
     }
