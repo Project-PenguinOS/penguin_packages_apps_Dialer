@@ -29,6 +29,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.BlockedNumberContract;
 import android.provider.CallLog;
@@ -145,6 +146,7 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
   public View sendVoicemailButtonView;
   public final ImageView workIconView;
   public final ImageView checkBoxView;
+  public Drawable background;
   /**
    * The row Id for the first call associated with the call log entry. Used as a key for the map
    * used to track which call log entries have the action button section expanded.

@@ -1325,6 +1325,10 @@ public class CallLogAdapter extends GroupingListAdapter
     Cursor cursor = (Cursor) getItem(position);
     String number = cursor.getString(CallLogQuery.NUMBER);
     activity.startActivity(new Intent(Intent.ACTION_CALL, CallUtil.getCallUri(number)));
-    notifyItemChanged(position);
+  }
+
+  @Override
+  public void onRestoreInstanceState(ViewHolder viewHolder) {
+    notifyItemChanged(viewHolder.getAdapterPosition());
   }
 }
