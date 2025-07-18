@@ -76,7 +76,10 @@ import com.android.dialer.phonenumbercache.ContactInfo;
 import com.android.dialer.phonenumbercache.ContactInfoHelper;
 import com.android.dialer.phonenumberutil.PhoneNumberHelper;
 import com.android.dialer.telecom.TelecomUtil;
+import android.content.Intent;
 import com.android.dialer.util.PermissionsUtil;
+import com.android.dialer.widget.SwipeAndDragHelper;
+import com.android.dialer.util.CallUtil;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -86,7 +89,7 @@ import java.util.concurrent.Executors;
 
 /** Adapter class to fill in data for the Call Log. */
 public class CallLogAdapter extends GroupingListAdapter
-    implements GroupCreator, OnVoicemailDeletedListener {
+    implements GroupCreator, OnVoicemailDeletedListener, SwipeAndDragHelper.ActionCompletionContract {
 
   // Types of activities the call log adapter is used for
   public static final int ACTIVITY_TYPE_CALL_LOG = 1;
@@ -1315,5 +1318,17 @@ public class CallLogAdapter extends GroupingListAdapter
     void setSelectAllModeToFalse();
 
     void tapSelectAll();
+  }
+
+  @Override
+  public void onViewSwiped(int position) {
+    Cursor cursor = (Cursor) getItem(position);
+    String number = cursor.getString(CallLogQuery.NUMBER);
+    activity.startActivity(new Intent(Intent.ACTION_CALL, CallUtil.getCallUri(number)));
+  }
+
+  @Override
+  public void onRestoreInstanceState(ViewHolder viewHolder) {
+    notifyItemChanged(viewHolder.getAdapterPosition());
   }
 }

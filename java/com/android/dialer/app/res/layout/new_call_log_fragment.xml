@@ -22,6 +22,7 @@
 
             <com.android.contacts.common.list.ViewPagerTabStrip
                 android:id="@+id/new_viewpager_header"
+
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:fadingEdge="horizontal"
@@ -32,6 +33,7 @@
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/new_call_log_pager"
+            android:textColor="?android:attr/textColorPrimaryInverse"
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="1" />

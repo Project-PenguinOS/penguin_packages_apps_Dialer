@@ -69,6 +69,8 @@ import com.android.dialer.phonenumbercache.ContactInfoHelper;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.widget.EmptyContentView;
 import com.android.dialer.widget.EmptyContentView.OnEmptyViewActionButtonClickedListener;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import com.android.dialer.widget.SwipeAndDragHelper;
 
 import java.util.Arrays;
 
@@ -345,6 +347,8 @@ public class CallLogFragment extends Fragment
     if (adapter.getOnScrollListener() != null) {
       recyclerView.addOnScrollListener(adapter.getOnScrollListener());
     }
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeAndDragHelper(adapter));
+    itemTouchHelper.attachToRecyclerView(recyclerView);
     fetchCalls();
   }
 
