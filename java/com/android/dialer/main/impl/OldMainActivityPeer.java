@@ -410,7 +410,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
     boolean forceUpdate =
         !LocaleUtils.getLocale(activity).getISO3Language().equals(savedLanguageCode);
     Database.get(activity).getDatabaseHelper(activity).startSmartDialUpdateThread(forceUpdate);
-    showPostCallPrompt();
+    //showPostCallPrompt();
 
     if (searchController.isInSearch()
         || callLogAdapterOnActionModeStateChangedListener.isActionModeStateEnabled()) {
