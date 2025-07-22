@@ -41,45 +41,39 @@ public class CallLogSwipeHelper extends SwipeAndDragHelper {
         if (viewHolder instanceof CallLogListItemViewHolder) {
             CallLogListItemViewHolder holder = (CallLogListItemViewHolder) viewHolder;
             View itemView = holder.itemView;
-            View cardView = holder.callLogEntryView; // The card to animate
+            View cardView = holder.callLogEntryView;
             Context context = cardView.getContext();
 
-            // --- Key Fix: Calculate bounds based on the card's specific position ---
-            // This prevents drawing over or under the date dividers.
             float cardTop = itemView.getTop() + cardView.getTop();
             float cardBottom = cardTop + cardView.getHeight();
 
-            // Clip the canvas to the card's vertical area to guarantee no spills.
+            // We clip the canvas to prevent drawing from interfering with other list items.
             c.save();
             c.clipRect(itemView.getLeft(), cardTop, itemView.getRight(), cardBottom);
 
-            if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && dX != 0) {
                 boolean isSwipingRight = dX > 0;
-
-                // 1. TRANSPARENCY: Make the card fade to reveal the color underneath.
-                cardView.setAlpha(1.0f - Math.abs(dX) / (float) cardView.getWidth());
-
-                // 2. BACKGROUND: Draw the colored, rounded rectangle within the clipped card area.
-                float cornerRadius = 24 * context.getResources().getDisplayMetrics().density;
                 paint.setColor(ContextCompat.getColor(context, isSwipingRight
-                        ? R.color.dialer_call_green               // Green for right swipe
-                        : R.color.dialer_end_call_button_color)); // Red for left swipe
+                        ? R.color.dialer_call_green
+                        : R.color.dialer_end_call_button_color));
 
-                RectF background;
-                if (isSwipingRight) {
-                    background = new RectF(itemView.getLeft(), cardTop, itemView.getLeft() + dX, cardBottom);
-                } else {
-                    background = new RectF(itemView.getRight() + dX, cardTop, itemView.getRight(), cardBottom);
-                }
+                // --- 1. 4DP PADDING ADDED BACK ---
+                float marginPx = 1* context.getResources().getDisplayMetrics().density;
+                float cornerRadius = 0* context.getResources().getDisplayMetrics().density;
+
+                RectF background = new RectF(
+                        itemView.getLeft() + marginPx,
+                        cardTop,
+                        itemView.getRight() - marginPx,
+                        cardBottom);
                 c.drawRoundRect(background, cornerRadius, cornerRadius, paint);
 
-                // 3. ICON: Draw the icon with theme-aware tinting.
+                // --- 2. ICON DRAWING CHECK ADDED BACK ---
                 Drawable icon = ContextCompat.getDrawable(context, isSwipingRight
                         ? R.drawable.quantum_ic_access_time_new_vd_theme_24
                         : R.drawable.quantum_ic_delete_vd_theme_24);
 
                 if (icon != null) {
-                    // Your requested code for theme-aware tinting
                     TypedValue typedValue = new TypedValue();
                     Resources.Theme theme = context.getTheme();
                     theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
@@ -88,37 +82,37 @@ public class CallLogSwipeHelper extends SwipeAndDragHelper {
 
                     int iconSize = icon.getIntrinsicHeight();
                     int iconMargin = (int) ((cardView.getHeight() - iconSize) / 2);
-                    int top = (int) (cardTop + iconMargin);
-                    int bottom = top + iconSize;
+                    int iconAreaWidth = iconSize + (2 * iconMargin);
 
-                    if (isSwipingRight) {
-                        int left = itemView.getLeft() + iconMargin;
-                        icon.setBounds(left, top, left + iconSize, bottom);
-                    } else {
-                        int right = itemView.getRight() - iconMargin;
-                        icon.setBounds(right - iconSize, top, right, bottom);
+                    // Only draw the icon if the card has moved far enough to reveal it.
+                    if (Math.abs(dX) > iconAreaWidth) {
+                        int top = (int) (cardTop + iconMargin);
+                        int bottom = top + iconSize;
+
+                        if (isSwipingRight) {
+                            int left = itemView.getLeft() + iconMargin;
+                            icon.setBounds(left, top, left + iconSize, bottom);
+                        } else {
+                            int right = itemView.getRight() - iconMargin;
+                            icon.setBounds(right - iconSize, top, right, bottom);
+                        }
+                        icon.draw(c);
                     }
-                    icon.draw(c);
                 }
             }
 
-            // Restore the canvas to remove the clip.
             c.restore();
 
-            // --- Manual Translation ---
-            // We only move the card, leaving the date divider untouched.
+            cardView.setAlpha(1.0f - (Math.abs(dX) / (float) cardView.getWidth()) * 1.5f );
             cardView.setTranslationX(dX);
+
         } else {
-            // Use default behavior for other items.
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     }
-
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         if (viewHolder instanceof CallLogListItemViewHolder) {
-            // --- State Restoration ---
-            // We now correctly reset the state of the card view itself.
             View cardView = ((CallLogListItemViewHolder) viewHolder).callLogEntryView;
             cardView.setTranslationX(0f);
             cardView.setAlpha(1.0f);
