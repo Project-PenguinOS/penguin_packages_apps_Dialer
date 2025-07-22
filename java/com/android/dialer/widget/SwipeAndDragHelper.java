@@ -46,8 +46,13 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
             if (holder.background == null) {
                 holder.background = holder.callLogEntryView.getBackground();
             }
-            holder.callLogEntryView.setBackgroundColor(holder.itemView.getContext().getResources()
-                    .getColor(R.color.dialer_call_green));
+            if (dX > 0) {
+                holder.callLogEntryView.setBackgroundColor(holder.itemView.getContext().getResources()
+                        .getColor(R.color.dialer_call_green));
+            } else if (dX < 0)  {
+                holder.callLogEntryView.setBackgroundColor(holder.itemView.getContext().getResources()
+                        .getColor(R.color.dialer_end_call_button_color));
+            }
             holder.callLogEntryView.setTranslationX(dX);
         } else {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
