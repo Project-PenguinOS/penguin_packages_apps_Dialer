@@ -50,6 +50,8 @@ public class DialerFloatingActionButton extends FloatingActionButton {
   public DialerFloatingActionButton(Context context, AttributeSet attributeSet) {
     super(context, attributeSet);
     setElevation(0);
+    setStateListAnimator(null);
+    setTranslationZ(0);
   }
 
   @Override
