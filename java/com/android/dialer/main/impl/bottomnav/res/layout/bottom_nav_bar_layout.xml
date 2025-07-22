@@ -142,7 +142,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/icon_background_circle"
+        app:backgroundTint="@android:color/transparent"
         android:contentDescription="@string/dialpad_button_content_description"
         android:elevation="0dp"
         android:forceDarkAllowed="false"

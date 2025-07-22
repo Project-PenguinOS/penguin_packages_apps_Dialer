@@ -69,7 +69,7 @@
         android:elevation="8dp"
         android:layout_marginBottom="24dp"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="72dp"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
 
 
@@ -82,12 +82,12 @@
         android:layout_height="42dp"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="94dp"
+        android:layout_marginBottom="24dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         app:layout_anchor="@id/bottom_nav_bar"
         android:background="@drawable/icon_background_circle"
-        android:translationX="0dp"
+        android:translationX="12dp"
         android:elevation="4dp"
         android:visibility="gone"
         android:tint="@color/dialer_fab_icon_color"
@@ -102,7 +102,7 @@
         android:layout_height="42dp"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="94dp"
+        android:layout_marginBottom="24dp"
         app:layout_anchor="@id/bottom_nav_bar"
         android:elevation="4dp"
         android:layout_alignParentBottom="true"
@@ -113,7 +113,7 @@
         android:scaleType="center"
         app:layout_anchorGravity="right"
         android:src="@drawable/quantum_ic_search_vd_theme_24"
-        android:translationX="0dp"
+        android:translationX="12dp"
         android:tint="@color/dialer_fab_icon_color"
         app:tint="@color/dialer_fab_icon_color"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"  />
