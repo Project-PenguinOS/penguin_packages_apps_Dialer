@@ -18,19 +18,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="80dp"
-    android:minHeight="46dp"
     android:gravity="center">
 
   <FrameLayout
-      android:layout_width="114dp"
-      android:layout_height="46dp">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
     <FrameLayout
-        android:layout_width="114dp"
-        android:layout_height="46dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="1dp">
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="rectangle">
+    <!--      <gradient
+    android:type="linear"
+    android:angle="90"
+    android:startColor="@android:color/transparent"
+    android:endColor="?android:attr/colorBackground" />
+    -->
+    <!-- This uses a standard system color for the background. -->
+    <!--<solid android:color="?android:attr/colorBackground" />-->
+    <solid android:color="@color/theme_ved_white" />
+    <!-- This creates the rounded corners. You can adjust the radius. -->
+    <corners android:radius="56dp" />
+</shape>

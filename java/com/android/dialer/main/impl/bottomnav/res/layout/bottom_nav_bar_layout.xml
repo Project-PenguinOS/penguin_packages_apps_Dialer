@@ -18,12 +18,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="8dp"
-
-    android:layout_marginBottom="16dp"
+    android:layout_height="match_parent"
+    android:elevation="24dp"
+    android:layout_marginBottom="24dp"
     android:layout_marginStart="24dp"
-    android:layout_marginEnd="48dp"
+    android:layout_marginEnd="24dp"
+    android:gravity="center"
     android:background="@drawable/floating_background">
 
   <include
@@ -31,6 +31,7 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
+      android:visibility="gone"
       layout="@layout/bottom_nav_item"/>
 
   <include
@@ -40,12 +41,32 @@
       android:layout_weight="1"
       layout="@layout/bottom_nav_item"/>
 
+
+
   <include
       android:id="@+id/contacts_tab"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
       layout="@layout/bottom_nav_item"/>
+
+  <com.android.dialer.widget.DialerFloatingActionButton
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:elevation="0dp"
+      app:fabCustomSize="36dp"
+      android:forceDarkAllowed="false"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:src="@drawable/veddialer"
+      android:tint="@color/dialer_fab_icon_color"
+      app:tint="@color/dialer_fab_icon_color"
+      android:background="@drawable/icon_background_circle"
+      android:contentDescription="@string/dialpad_button_content_description"
+      app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
 
   <include
       android:id="@+id/voicemail_tab"
@@ -54,4 +75,7 @@
       android:layout_weight="1"
       android:visibility="gone"
       layout="@layout/bottom_nav_item"/>
+
+
+
 </com.android.dialer.main.impl.bottomnav.BottomNavBar>
