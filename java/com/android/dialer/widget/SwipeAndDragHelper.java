@@ -30,7 +30,7 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        contract.onViewSwiped(viewHolder.getAdapterPosition());
+        contract.onViewSwiped(viewHolder.getAdapterPosition(), direction);
         contract.onRestoreInstanceState(viewHolder);
     }
 
@@ -72,7 +72,7 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
     }
 
     public interface ActionCompletionContract {
-        void onViewSwiped(int position);
+        void onViewSwiped(int position, int direction);
         void onRestoreInstanceState(RecyclerView.ViewHolder viewHolder);
     }
 }

@@ -347,7 +347,7 @@ public class CallLogFragment extends Fragment
     if (adapter.getOnScrollListener() != null) {
       recyclerView.addOnScrollListener(adapter.getOnScrollListener());
     }
-    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeAndDragHelper(adapter));
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new CallLogSwipeHelper(getContext(), adapter));
     itemTouchHelper.attachToRecyclerView(recyclerView);
     fetchCalls();
   }

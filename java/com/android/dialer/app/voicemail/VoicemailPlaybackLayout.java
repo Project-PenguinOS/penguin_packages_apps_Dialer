@@ -338,6 +338,11 @@ public class VoicemailPlaybackLayout extends LinearLayout
     presenter.onVoicemailDeletedInDatabase();
   }
 
+  @Override
+  public void onDeleteCalls() {
+    // Do nothing
+  }
+
   private String getString(int resId) {
     return context.getString(resId);
   }

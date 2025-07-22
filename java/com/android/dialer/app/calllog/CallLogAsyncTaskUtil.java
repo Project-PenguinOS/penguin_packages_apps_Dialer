@@ -124,16 +124,53 @@ public class CallLogAsyncTaskUtil {
     });
   }
 
+  public static void deleteCalls(
+      @NonNull final Context context,
+      @NonNull final long[] callIds,
+      @Nullable final CallLogAsyncTaskListener callLogAsyncTaskListener) {
+    if (!PermissionsUtil.hasPhonePermissions(context)
+        || !PermissionsUtil.hasCallLogWritePermissions(context)) {
+      return;
+    }
+    if (asyncTaskExecutor == null) {
+      initTaskExecutor();
+    }
+
+    asyncTaskExecutor.submit(Tasks.DELETE_CALL,
+            () -> {
+      StringBuilder where = new StringBuilder();
+      Long[] callIdLongs = new Long[callIds.length];
+      for (int i = 0; i < callIds.length; i++) {
+        callIdLongs[i] = callIds[i];
+      }
+      where
+          .append(CallLog.Calls._ID)
+          .append(" IN (" + TextUtils.join(",", callIdLongs) + ")");
+
+      context
+          .getContentResolver()
+          .delete(CallLog.Calls.CONTENT_URI, where.toString(), null);
+    },
+            () -> {
+      if (callLogAsyncTaskListener != null) {
+        callLogAsyncTaskListener.onDeleteCalls();
+      }
+    });
+  }
+
   /** The enumeration of objects used in this class. */
   public enum Tasks {
     DELETE_VOICEMAIL,
     MARK_VOICEMAIL_READ,
     MARK_CALL_READ,
+    DELETE_CALL,
   }
 
   /** TODO(calderwoodra): documentation */
   public interface CallLogAsyncTaskListener {
     void onDeleteVoicemail();
+
+    void onDeleteCalls();
   }
 
   private static void uploadVoicemailLocalChangesToServer(Context context) {
