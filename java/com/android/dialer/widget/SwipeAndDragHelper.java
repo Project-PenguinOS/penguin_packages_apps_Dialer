@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import com.android.dialer.R;
 import com.android.dialer.app.calllog.CallLogListItemViewHolder;
 
 public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
@@ -17,7 +18,7 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+        int dragFlags = 0;
         int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
         return makeMovementFlags(dragFlags, swipeFlags);
     }
@@ -29,7 +30,7 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        contract.onViewSwiped(viewHolder.getAdapterPosition());
+        contract.onViewSwiped(viewHolder.getAdapterPosition(), direction);
         contract.onRestoreInstanceState(viewHolder);
     }
 
@@ -45,15 +46,24 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
             if (holder.background == null) {
                 holder.background = holder.callLogEntryView.getBackground();
             }
-            holder.callLogEntryView.setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.dialer_call_green));
+            if (dX > 0) {
+                holder.callLogEntryView.setBackgroundColor(holder.itemView.getContext().getResources()
+                        .getColor(R.color.dialer_call_green));
+            } else if (dX < 0)  {
+                holder.callLogEntryView.setBackgroundColor(holder.itemView.getContext().getResources()
+                        .getColor(R.color.dialer_end_call_button_color));
+            }
+            holder.callLogEntryView.setTranslationX(dX);
+        } else {
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
         CallLogListItemViewHolder holder = (CallLogListItemViewHolder) viewHolder;
+        holder.callLogEntryView.setTranslationX(0f);
         if (holder.background != null) {
             holder.callLogEntryView.setBackground(holder.background);
             holder.background = null;
@@ -62,7 +72,7 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
     }
 
     public interface ActionCompletionContract {
-        void onViewSwiped(int position);
+        void onViewSwiped(int position, int direction);
         void onRestoreInstanceState(RecyclerView.ViewHolder viewHolder);
     }
 }

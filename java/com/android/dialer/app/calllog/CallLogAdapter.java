@@ -79,6 +79,7 @@ import com.android.dialer.telecom.TelecomUtil;
 import android.content.Intent;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.widget.SwipeAndDragHelper;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import com.android.dialer.util.CallUtil;
 
 import java.util.ArrayList;
@@ -1320,11 +1321,24 @@ public class CallLogAdapter extends GroupingListAdapter
     void tapSelectAll();
   }
 
-  @Override
-  public void onViewSwiped(int position) {
+  public void onViewSwiped(int position, int direction) {
+    if (direction == ItemTouchHelper.LEFT) {
+        deleteItem(position);
+    } else {
+        Cursor cursor = (Cursor) getItem(position);
+        String number = cursor.getString(CallLogQuery.NUMBER);
+        activity.startActivity(new Intent(Intent.ACTION_CALL, CallUtil.getCallUri(number)));
+    }
+  }
+
+  public void deleteItem(int position) {
     Cursor cursor = (Cursor) getItem(position);
-    String number = cursor.getString(CallLogQuery.NUMBER);
-    activity.startActivity(new Intent(Intent.ACTION_CALL, CallUtil.getCallUri(number)));
+    if (cursor == null) {
+        return;
+    }
+
+    long[] callIds = getCallIds(cursor, getGroupSize(position));
+    CallLogAsyncTaskUtil.deleteCalls(activity, callIds, null);
   }
 
   @Override
