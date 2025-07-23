@@ -23,7 +23,7 @@ import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
@@ -41,8 +41,16 @@ import java.util.List;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.view.View;
+import android.view.ViewGroup;
+import android.graphics.Shader;
+import android.graphics.RenderEffect;
+
 /** Dialer Bottom Nav Bar for {@link MainActivity}. */
-public final class BottomNavBar extends LinearLayout {
+public final class BottomNavBar extends FrameLayout {
 
   /** Index for each tab in the bottom nav. */
   @Retention(RetentionPolicy.SOURCE)
@@ -112,39 +120,42 @@ public final class BottomNavBar extends LinearLayout {
 
   /**
      * This method applies the blur effect to the content *behind* this view.
-     */
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        /*
-        // This API for blurring behind a view requires Android 13 (API 33) or higher.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            try {
-                // Set the radius in pixels for the blur that will be applied to
-                // any content rendered behind this view's bounds.
-                Method setBlurBehindRadius = View.class.getMethod("setBlurBehindRadius", int.class);
-                setBlurBehindRadius.invoke(this, 60);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                LogUtil.e("BottomNavBar.onAttachedToWindow", "Failed to set blur behind radius", e);
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                RenderEffect blurEffect = RenderEffect.createBlurEffect(
-                    60f, 60f, Shader.TileMode.CLAMP);
-                setRenderEffect(blurEffect);
 
+@Override
+protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+
+    final View blurView = findViewById(R.id.nav_blur_bg);
+
+    blurView.post(() -> {
+        View root = ((View) getParent()).getRootView();
+        int width = blurView.getWidth();
+        int height = blurView.getHeight();
+
+        if (width > 0 && height > 0) {
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+
+            // Offset canvas to capture what's behind the blurView
+            canvas.translate(-blurView.getLeft(), -blurView.getTop());
+            root.draw(canvas);
+
+            // Apply blur to bitmap
+            RenderEffect blur = RenderEffect.createBlurEffect(60f, 60f, Shader.TileMode.CLAMP);
+            BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+            drawable.setAlpha(200); // optional: brighten background a bit
+
+            blurView.setBackground(drawable);
+            blurView.setRenderEffect(blur);
+
+            // Optional: Light white overlay for brighter effect
+            //blurView.setForeground(new ColorDrawable(Color.argb(30, 255, 255, 255)));
         }
-    }
-*/
-
-
-View blurView = findViewById(R.id.nav_blur_bg);
-
-RenderEffect blurEffect = RenderEffect.createBlurEffect(
-    30f, 30f, Shader.TileMode.MIRROR);
-
-blurView.setRenderEffect(blurEffect)
-
+    });
 }
+     */
+
+
 
 
   private void setSelected(View view) {

@@ -41,6 +41,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.view.ViewOutlineProvider;
+import android.graphics.drawable.Drawable;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -207,6 +209,18 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
   }
 
   private void initLayout(Bundle savedInstanceState) {
+        // Set up the blur view
+    float blurRadius = 10f;
+    Drawable windowBackground = activity.getWindow().getDecorView().getBackground();
+    eightbitlab.com.blurview.BlurView blurView = activity.findViewById(R.id.bottom_nav_blur_view);
+    eightbitlab.com.blurview.BlurTarget target = activity.findViewById(R.id.main_content_blur_target);
+    blurView.setupWith(target)
+            .setFrameClearDrawable(windowBackground)
+            .setBlurRadius(blurRadius);
+    blurView.setBackgroundResource(R.drawable.bottom_nav_background_glass);
+    blurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+    blurView.setClipToOutline(true);
+
     onContactSelectedListener = new MainOnContactSelectedListener(activity);
     dialpadFragmentHostInterface = new MainDialpadFragmentHost();
 
