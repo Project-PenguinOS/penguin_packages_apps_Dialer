@@ -18,6 +18,9 @@
 package com.android.dialer.main.impl.bottomnav;
 
 import android.content.Context;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -34,6 +37,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /** Dialer Bottom Nav Bar for {@link MainActivity}. */
 public final class BottomNavBar extends LinearLayout {
@@ -103,6 +109,43 @@ public final class BottomNavBar extends LinearLayout {
     contacts.setOnClickListener(v -> selectTab(TabIndex.CONTACTS));
     voicemail.setOnClickListener(v -> selectTab(TabIndex.VOICEMAIL));
   }
+
+  /**
+     * This method applies the blur effect to the content *behind* this view.
+     */
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        /*
+        // This API for blurring behind a view requires Android 13 (API 33) or higher.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            try {
+                // Set the radius in pixels for the blur that will be applied to
+                // any content rendered behind this view's bounds.
+                Method setBlurBehindRadius = View.class.getMethod("setBlurBehindRadius", int.class);
+                setBlurBehindRadius.invoke(this, 60);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                LogUtil.e("BottomNavBar.onAttachedToWindow", "Failed to set blur behind radius", e);
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                RenderEffect blurEffect = RenderEffect.createBlurEffect(
+                    60f, 60f, Shader.TileMode.CLAMP);
+                setRenderEffect(blurEffect);
+
+        }
+    }
+*/
+
+
+View blurView = findViewById(R.id.nav_blur_bg);
+
+RenderEffect blurEffect = RenderEffect.createBlurEffect(
+    30f, 30f, Shader.TileMode.MIRROR);
+
+blurView.setRenderEffect(blurEffect)
+
+}
+
 
   private void setSelected(View view) {
     speedDial.setSelected(view == speedDial);
