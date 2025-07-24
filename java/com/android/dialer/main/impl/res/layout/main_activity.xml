@@ -53,7 +53,7 @@
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/top_blur_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="144dp"
         android:visibility="gone"
         app:blurOverlayColor="#B3FFFFFF">
 
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="64dp"
             android:layout_marginEnd="64dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="24dp"
             android:layout_gravity="bottom"
             app:cardCornerRadius="24dp"
             app:cardElevation="0dp">
