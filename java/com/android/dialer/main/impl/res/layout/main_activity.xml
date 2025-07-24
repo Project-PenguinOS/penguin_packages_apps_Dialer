@@ -59,6 +59,7 @@
     <!-- MainToolbar -->
     <include
         android:id="@+id/toolbar"
+        android:layout_alignParentBottom="true"
         layout="@layout/toolbar_layout"/>
 
     <!-- The BlurView now wraps the bottom navigation bar and is a sibling to the BlurTarget -->

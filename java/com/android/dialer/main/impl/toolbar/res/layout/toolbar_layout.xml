@@ -146,6 +146,7 @@
             app:tabIndicatorColor="@color/dialer_pill_color"
             app:tabIndicatorGravity="stretch"
             app:tabSelectedTextColor="?android:attr/textColorPrimaryInverse"
+            app:tabRippleColor="@android:color/transparent"
             app:tabTextColor="?android:attr/textColorSecondary"/>
 
     </androidx.cardview.widget.CardView>
