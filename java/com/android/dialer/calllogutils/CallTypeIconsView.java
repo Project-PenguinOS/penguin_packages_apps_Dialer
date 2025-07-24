@@ -322,7 +322,7 @@ public class CallTypeIconsView extends View {
       Drawable drawable = largeIcons
               ? ResourcesCompat.getDrawable(r, iconId, context.getTheme())
               : getScaledBitmap(context, iconId);
-      drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+      drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
       return drawable;
     }
 

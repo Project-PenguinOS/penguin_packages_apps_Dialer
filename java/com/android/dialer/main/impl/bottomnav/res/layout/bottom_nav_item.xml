@@ -34,10 +34,10 @@
 
     <View
         android:id="@+id/active_indicator"
-        android:layout_width="match_parent"
+        android:layout_width="48dp"
         android:layout_height="36dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:layout_gravity="center"
