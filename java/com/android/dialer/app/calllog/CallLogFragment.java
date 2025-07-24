@@ -391,6 +391,10 @@ public class CallLogFragment extends Fragment
           .setFrameClearDrawable(windowBackground)
           .setBlurRadius(0f); // Start with zero blur
 
+          topBlurView.setBackgroundResource(R.drawable.bottom_nav_background_glass_no_round);
+          topBlurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+          topBlurView.setClipToOutline(true);
+
       // Add a scroll listener to the RecyclerView to dynamically change the blur
       recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
         private final float maxBlurRadius = 20f;
@@ -405,6 +409,9 @@ public class CallLogFragment extends Fragment
 
           // Update the blur radius on the single top BlurView
           topBlurView.setBlurRadius(blurRadius);
+              topBlurView.setBackgroundResource(R.drawable.bottom_nav_background_glass_no_round);
+              topBlurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+              topBlurView.setClipToOutline(true);
         }
       });
     }
