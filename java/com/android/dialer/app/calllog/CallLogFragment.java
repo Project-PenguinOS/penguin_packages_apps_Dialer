@@ -245,15 +245,8 @@ public class CallLogFragment extends Fragment
     getActivity().invalidateOptionsMenu();
 
     if (cursor != null && cursor.getCount() > 0) {
-      recyclerView.setPaddingRelative(
-          recyclerView.getPaddingStart(),
-          0,
-          recyclerView.getPaddingEnd(),
-          getResources().getDimensionPixelSize(R.dimen.floating_action_button_list_bottom_padding));
       emptyListView.setVisibility(View.GONE);
     } else {
-      recyclerView.setPaddingRelative(
-          recyclerView.getPaddingStart(), 0, recyclerView.getPaddingEnd(), 0);
       emptyListView.setVisibility(View.VISIBLE);
     }
     if (scrollToTop) {
@@ -409,9 +402,6 @@ public class CallLogFragment extends Fragment
 
           // Update the blur radius on the single top BlurView
           topBlurView.setBlurRadius(blurRadius);
-              topBlurView.setBackgroundResource(R.drawable.bottom_nav_background_glass_no_round);
-              topBlurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-              topBlurView.setClipToOutline(true);
         }
       });
     }

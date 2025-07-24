@@ -25,6 +25,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:background="?android:attr/colorBackground"
+      android:paddingTop="144dp"
       android:paddingBottom="@dimen/floating_action_button_list_bottom_padding"
       android:clipToPadding="false"/>
 
