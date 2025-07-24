@@ -29,9 +29,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.android.contacts.common.list.ViewPagerTabStrip;
 import com.android.dialer.R;
 import com.android.dialer.database.CallLogQueryHandler;
+import com.google.android.material.tabs.TabLayout;
+
 
 public class NewCallLogFragment extends Fragment {
 
+private TabLayout tabLayout;
     private static final int TAB_INDEX_ALL = 0;
     private static final int TAB_INDEX_MISSED = 1;
     private static final int TAB_INDEX_COUNT = 2;
@@ -49,9 +52,8 @@ public class NewCallLogFragment extends Fragment {
         tabTitles[0] = getString(R.string.call_log_all_title);
         tabTitles[1] = getString(R.string.call_log_missed_title);
 
-        // 1. Find both of your views
         viewPager = view.findViewById(R.id.new_call_log_pager);
-        viewPagerTabStrip = view.findViewById(R.id.new_viewpager_header);
+        tabLayout = requireActivity().findViewById(R.id.tabs);
 
         // 2. Set up the adapter for the ViewPager
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
@@ -59,7 +61,7 @@ public class NewCallLogFragment extends Fragment {
         viewPager.setOffscreenPageLimit(1);
 
         // 3. Connect the tab strip to the pager. This one line now handles everything.
-        viewPagerTabStrip.setViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
 
         return view;
     }
