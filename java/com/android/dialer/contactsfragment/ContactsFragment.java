@@ -55,6 +55,8 @@ import com.android.dialer.widget.EmptyContentView.OnEmptyViewActionButtonClicked
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
+import android.graphics.drawable.Drawable;
+import android.view.ViewOutlineProvider;
 
 /** Fragment containing a list of all contacts. */
 public class ContactsFragment extends Fragment
@@ -202,6 +204,36 @@ public class ContactsFragment extends Fragment
       emptyContentView.setActionLabel(R.string.permission_single_turn_on);
       emptyContentView.setVisibility(View.VISIBLE);
       recyclerView.setVisibility(View.GONE);
+    }
+
+    eightbitlab.com.blurview.BlurView topBlurView = requireActivity().findViewById(R.id.top_blur_view);
+    eightbitlab.com.blurview.BlurTarget target = requireActivity().findViewById(R.id.main_content_blur_target);
+
+    if (topBlurView != null && target != null && recyclerView != null) {
+      Drawable windowBackground = requireActivity().getWindow().getDecorView().getBackground();
+
+      topBlurView.setupWith(target)
+          .setFrameClearDrawable(windowBackground)
+          .setBlurRadius(0f); // Start with zero blur
+
+          topBlurView.setBackgroundResource(R.drawable.bottom_nav_background_glass_no_round);
+          topBlurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+          topBlurView.setClipToOutline(true);
+
+      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        private final float maxBlurRadius = 20f;
+        private final int transitionDistance = 300; // Blur develops over 300px of scrolling
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+          super.onScrolled(recyclerView, dx, dy);
+
+          int scrollY = recyclerView.computeVerticalScrollOffset();
+          float blurRadius = Math.min((float) scrollY / transitionDistance, 1f) * maxBlurRadius;
+
+          topBlurView.setBlurRadius(blurRadius);
+        }
+      });
     }
 
     return view;

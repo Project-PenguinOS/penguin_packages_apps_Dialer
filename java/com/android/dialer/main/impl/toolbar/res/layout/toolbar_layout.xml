@@ -127,6 +127,8 @@
       <include layout="@layout/expanded_search_bar"/>
     </com.android.dialer.main.impl.toolbar.SearchBarView>
 
+
+
     <!-- Sets android:importantForAccessibility="no" to avoid being announced when navigating with
          talkback enabled. It will still be announced when user drag or drop contact onto it.
          This is required since drag and drop event is only sent to views are visible when drag

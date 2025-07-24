@@ -18,9 +18,12 @@
 package com.android.dialer.main.impl.bottomnav;
 
 import android.content.Context;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
@@ -35,8 +38,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.view.View;
+import android.view.ViewGroup;
+import android.graphics.Shader;
+import android.graphics.RenderEffect;
+
 /** Dialer Bottom Nav Bar for {@link MainActivity}. */
-public final class BottomNavBar extends LinearLayout {
+public final class BottomNavBar extends FrameLayout {
 
   /** Index for each tab in the bottom nav. */
   @Retention(RetentionPolicy.SOURCE)
@@ -91,6 +105,10 @@ public final class BottomNavBar extends LinearLayout {
     contacts.setOnClickListener(v -> selectTab(TabIndex.CONTACTS));
     voicemail.setOnClickListener(v -> selectTab(TabIndex.VOICEMAIL));
   }
+
+
+
+
 
   private void setSelected(View view) {
     speedDial.setSelected(view == speedDial);

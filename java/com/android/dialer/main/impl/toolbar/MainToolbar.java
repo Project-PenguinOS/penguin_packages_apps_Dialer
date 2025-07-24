@@ -85,6 +85,7 @@ public final class MainToolbar extends Toolbar implements PopupMenu.OnMenuItemCl
   }
 
   public void setTitle(CharSequence title) {
+  titleView.setTextSize(32);
     titleView.setText(title);
   }
 

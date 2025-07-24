@@ -164,6 +164,8 @@ public class MainSearchController implements SearchBarListener {
       return;
     }
 
+    activity.findViewById(R.id.top_blur_view).setVisibility(View.GONE);
+
     fab.hide();
     searchBackground.setVisibility(View.GONE);
     searchMagnifyingGlass.setVisibility(View.GONE);
@@ -348,6 +350,13 @@ public class MainSearchController implements SearchBarListener {
       return;
     }
 
+    if (bottomNav.getSelectedTab() == BottomNavBar.TabIndex.CALL_LOG ||
+        bottomNav.getSelectedTab() == BottomNavBar.TabIndex.CONTACTS) {
+      activity.findViewById(R.id.top_blur_view).setVisibility(View.VISIBLE);
+    } else {
+      activity.findViewById(R.id.top_blur_view).setVisibility(View.GONE);
+    }
+
     if (isDialpadVisible()) {
       hideDialpad(animate);
     } else if (!fab.isShown()) {
@@ -420,6 +429,7 @@ public class MainSearchController implements SearchBarListener {
     toolbar.showKeyboard();
     hideBottomNav();
     updateStatusBarColor(android.R.attr.colorBackgroundFloating);
+    activity.findViewById(R.id.top_blur_view).setVisibility(View.GONE);
 
     FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
     // Show Search
