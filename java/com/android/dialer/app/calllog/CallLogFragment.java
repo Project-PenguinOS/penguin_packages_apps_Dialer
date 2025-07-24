@@ -73,7 +73,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import com.android.dialer.widget.SwipeAndDragHelper;
 
 import java.util.Arrays;
-
+import android.graphics.drawable.Drawable;
+import android.view.ViewOutlineProvider;
 /**
  * Displays a list of call log entries. To filter for a particular kind of call (all, missed or
  * voicemails), specify it in the constructor.
@@ -376,6 +377,38 @@ public class CallLogFragment extends Fragment
     LogUtil.enterBlock("CallLogFragment.onViewCreated");
     super.onViewCreated(view, savedInstanceState);
     updateEmptyMessage(callTypeFilter);
+
+    // Find the views from the parent activity and the fragment
+    eightbitlab.com.blurview.BlurView topBlurView = requireActivity().findViewById(R.id.top_blur_view);
+    eightbitlab.com.blurview.BlurTarget target = requireActivity().findViewById(R.id.main_content_blur_target);
+    RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+
+    if (topBlurView != null && target != null && recyclerView != null) {
+      Drawable windowBackground = requireActivity().getWindow().getDecorView().getBackground();
+
+      // Initial setup for the BlurView
+      topBlurView.setupWith(target)
+          .setFrameClearDrawable(windowBackground)
+          .setBlurRadius(0f); // Start with zero blur
+
+      // Add a scroll listener to the RecyclerView to dynamically change the blur
+      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        private final float maxBlurRadius = 20f;
+        private final int transitionDistance = 300; // Blur develops over 300px of scrolling
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+          super.onScrolled(recyclerView, dx, dy);
+
+          int scrollY = recyclerView.computeVerticalScrollOffset();
+          float blurRadius = Math.min((float) scrollY / transitionDistance, 1f) * maxBlurRadius;
+
+          // Update the blur radius on the single top BlurView
+          topBlurView.setBlurRadius(blurRadius);
+        }
+      });
+    }
+
     setupData();
     updateSelectAllState(savedInstanceState);
     adapter.onRestoreInstanceState(savedInstanceState);

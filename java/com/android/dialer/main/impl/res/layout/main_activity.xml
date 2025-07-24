@@ -22,17 +22,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- MainToolbar -->
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar_layout"/>
-
     <!-- This BlurTarget wraps the content that will be blurred -->
     <eightbitlab.com.blurview.BlurTarget
         android:id="@+id/main_content_blur_target"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar">
+        android:layout_height="match_parent">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinator_layout"
@@ -53,79 +47,90 @@
             <include android:id="@+id/promotion_bottom_sheet"
                      layout="@layout/promotion_bottom_sheet"/>
 
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
-        </eightbitlab.com.blurview.BlurTarget>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </eightbitlab.com.blurview.BlurTarget>
 
-        <!-- The BlurView now wraps the bottom navigation bar and is a sibling to the BlurTarget -->
-        <eightbitlab.com.blurview.BlurView
-            android:id="@+id/bottom_nav_blur_view"
-            android:layout_width="match_parent"
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/top_blur_view"
+        android:layout_width="match_parent"
+        android:layout_height="104dp"
+        app:blurOverlayColor="#B3FFFFFF" />
+
+    <!-- MainToolbar -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_layout"/>
+
+    <!-- The BlurView now wraps the bottom navigation bar and is a sibling to the BlurTarget -->
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/bottom_nav_blur_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="72dp"
+        android:layout_marginBottom="24dp"
+        android:elevation="8dp"
+        app:blurOverlayColor="#4DFFFFFF"> <!-- Tint color for the glass effect -->
+
+        <!-- The actual navigation bar layout is included INSIDE the BlurView -->
+        <include layout="@layout/bottom_nav_bar_layout"/>
+
+    </eightbitlab.com.blurview.BlurView>
+
+    <ImageButton
+        android:id="@+id/search_background_main"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        app:layout_anchor="@id/bottom_nav_bar"
+        android:background="@drawable/icon_background_circle"
+        android:translationX="12dp"
+        android:elevation="4dp"
+        android:visibility="gone"
+        android:tint="@color/dialer_fab_icon_color"
+        app:tint="@color/dialer_fab_icon_color"
+        app:backgroundTint="@color/theme_ved_white"/>
+
+    <ImageButton
+        android:id="@+id/search_magnifying_glass_main"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:elevation="4dp"
+        android:importantForAccessibility="no"
+        android:visibility="gone"
+        android:background="@null"
+        android:scaleType="center"
+        android:src="@drawable/quantum_ic_search_vd_theme_24"
+        android:translationX="12dp"
+        android:tint="@color/dialer_fab_icon_color"
+        app:tint="@color/dialer_fab_icon_color"/>
+
+    <!-- Holds Dialpad fragment -->
+    <FrameLayout
+        android:id="@+id/dialpad_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="0dp"/>
+
+    <!-- Host container for the contact tile drag shadow -->
+    <FrameLayout
+        android:id="@+id/activity_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/contact_tile_drag_shadow_overlay"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="72dp"
-            android:layout_marginBottom="24dp"
-            android:elevation="8dp"
-            app:blurOverlayColor="#4DFFFFFF"> <!-- Tint color for the glass effect -->
-
-            <!-- The actual navigation bar layout is included INSIDE the BlurView -->
-            <include layout="@layout/bottom_nav_bar_layout"/>
-
-        </eightbitlab.com.blurview.BlurView>
-
-        <ImageButton
-            android:id="@+id/search_background_main"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
-            app:layout_anchor="@id/bottom_nav_bar"
-            android:background="@drawable/icon_background_circle"
-            android:translationX="12dp"
-            android:elevation="4dp"
-            android:visibility="gone"
-            android:tint="@color/dialer_fab_icon_color"
-            app:tint="@color/dialer_fab_icon_color"
-            app:backgroundTint="@color/theme_ved_white"/>
-
-        <ImageButton
-            android:id="@+id/search_magnifying_glass_main"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
-            android:elevation="4dp"
             android:importantForAccessibility="no"
-            android:visibility="gone"
-            android:background="@null"
-            android:scaleType="center"
-            android:src="@drawable/quantum_ic_search_vd_theme_24"
-            android:translationX="12dp"
-            android:tint="@color/dialer_fab_icon_color"
-            app:tint="@color/dialer_fab_icon_color"/>
+            android:visibility="gone"/>
+        </FrameLayout>
 
-        <!-- Holds Dialpad fragment -->
-        <FrameLayout
-            android:id="@+id/dialpad_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="0dp"/>
-
-        <!-- Host container for the contact tile drag shadow -->
-        <FrameLayout
-            android:id="@+id/activity_overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/contact_tile_drag_shadow_overlay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
-                android:visibility="gone"/>
-            </FrameLayout>
-
-        </RelativeLayout>
+</RelativeLayout>
