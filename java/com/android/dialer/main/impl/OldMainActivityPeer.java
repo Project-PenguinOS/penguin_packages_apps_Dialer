@@ -250,7 +250,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
             activity.getSupportFragmentManager(),
             fab,
             bottomSheet,
-            toolbar);
+            toolbar,
+            activity.findViewById(R.id.top_blur_view));
     bottomNav.addOnTabSelectedListener(bottomNavTabListener);
     bottomNavTabListener.setSearchIcon(activity.findViewById(R.id.search_background_main),
         activity.findViewById(R.id.search_magnifying_glass_main));
@@ -661,8 +662,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
   /** @see CallLogFragment.HostInterface */
   private static final class MainCallLogHost implements CallLogFragment.HostInterface {
 
-    private final FloatingActionButton fab;
     private final MainSearchController searchController;
+    private final FloatingActionButton fab;
 
     MainCallLogHost(MainSearchController searchController, FloatingActionButton fab) {
       this.searchController = searchController;
@@ -960,6 +961,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
     private final MainToolbar toolbar;
     private View searchBackground;
     private View searchMagnifyingGlass;
+    private final View topBlurView;
 
     @TabIndex private int selectedTab = TabIndex.NONE;
 
@@ -968,12 +970,14 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
         FragmentManager fragmentManager,
         FloatingActionButton fab,
         View bottomSheet,
-        MainToolbar toolbar) {
+        MainToolbar toolbar,
+        View topBlurView) {
       this.activity = activity;
       this.fragmentManager = fragmentManager;
       this.fab = fab;
       this.bottomSheet = bottomSheet;
       this.toolbar = toolbar;
+      this.topBlurView = topBlurView;
     }
 
     public void setSearchIcon(View searchBackground, View searchMagnifyingGlass) {
@@ -996,6 +1000,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       fab.show();
       searchBackground.setVisibility(View.GONE);
       searchMagnifyingGlass.setVisibility(View.GONE);
+      topBlurView.setVisibility(View.GONE);
+      activity.findViewById(R.id.tabs).setVisibility(View.GONE);
     }
 
     @Override
@@ -1013,6 +1019,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       fab.show();
       searchBackground.setVisibility(View.VISIBLE);
       searchMagnifyingGlass.setVisibility(View.VISIBLE);
+      topBlurView.setVisibility(View.VISIBLE);
+      activity.findViewById(R.id.tabs).setVisibility(View.VISIBLE);
       showPromotionBottomSheet(activity, bottomSheet);
     }
 
@@ -1061,6 +1069,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       fab.show();
       searchBackground.setVisibility(View.VISIBLE);
       searchMagnifyingGlass.setVisibility(View.VISIBLE);
+      topBlurView.setVisibility(View.VISIBLE);
+      activity.findViewById(R.id.tabs).setVisibility(View.GONE);
     }
 
     @Override
@@ -1080,6 +1090,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       showFragment(fragment, VOICEMAIL_TAG);
       fragment.setUserVisibleHint(true);
       fragment.onVisible();
+      topBlurView.setVisibility(View.GONE);
+      activity.findViewById(R.id.tabs).setVisibility(View.GONE);
     }
 
     /**

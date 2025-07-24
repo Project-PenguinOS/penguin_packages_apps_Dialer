@@ -128,28 +128,7 @@
       <include layout="@layout/expanded_search_bar"/>
     </com.android.dialer.main.impl.toolbar.SearchBarView>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp"
-        android:layout_gravity="bottom"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="0dp">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:background="@android:color/transparent"
-            app:tabIndicator="@drawable/tab_indicator"
-            app:tabIndicatorColor="@color/dialer_pill_color"
-            app:tabIndicatorGravity="stretch"
-            app:tabSelectedTextColor="?android:attr/textColorPrimaryInverse"
-            app:tabRippleColor="@android:color/transparent"
-            app:tabTextColor="?android:attr/textColorSecondary"/>
-
-    </androidx.cardview.widget.CardView>
 
     <!-- Sets android:importantForAccessibility="no" to avoid being announced when navigating with
          talkback enabled. It will still be announced when user drag or drop contact onto it.

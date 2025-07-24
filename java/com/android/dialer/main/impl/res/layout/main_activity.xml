@@ -53,13 +53,40 @@
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/top_blur_view"
         android:layout_width="match_parent"
-        android:layout_height="104dp"
-        app:blurOverlayColor="#B3FFFFFF" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:blurOverlayColor="#B3FFFFFF">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="64dp"
+            android:layout_marginBottom="4dp"
+            android:layout_gravity="bottom"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:background="@android:color/transparent"
+                app:tabIndicator="@drawable/tab_indicator"
+                app:tabIndicatorColor="@color/dialer_pill_color"
+                app:tabIndicatorGravity="stretch"
+                app:tabSelectedTextColor="?android:attr/textColorPrimaryInverse"
+                app:tabRippleColor="@android:color/transparent"
+                android:visibility="gone"
+                app:tabTextColor="?android:attr/textColorSecondary"/>
+
+            </androidx.cardview.widget.CardView>
+        </eightbitlab.com.blurview.BlurView>
 
     <!-- MainToolbar -->
     <include
         android:id="@+id/toolbar"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         layout="@layout/toolbar_layout"/>
 
     <!-- The BlurView now wraps the bottom navigation bar and is a sibling to the BlurTarget -->
