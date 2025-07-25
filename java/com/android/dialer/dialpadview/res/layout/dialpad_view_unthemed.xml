@@ -69,7 +69,7 @@
 
   <!-- Text field and possibly soft menu button above the keypad where
    the digits are displayed. -->
-  <LinearLayout
+  <RelativeLayout
       android:id="@+id/digits_container"
       android:layout_width="match_parent"
       android:layout_height="?attr/dialpad_digits_adjustable_height"
@@ -104,12 +104,14 @@
         android:src="@drawable/quantum_ic_more_vert_vd_theme_24"
         android:tintMode="src_in"
         android:visibility="gone"
+        android:layout_alignParentStart="true"
         app:tint="@color/dialer_theme_color_light"
         tools:visibility="visible"/>
 
-      <FrameLayout android:layout_width="0dp"
+      <FrameLayout
           android:layout_height="match_parent"
-          android:layout_weight="1">
+          android:layout_width="match_parent">
+
         <TextView android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/digits_hint"
@@ -117,8 +119,7 @@
             android:gravity="center"
             android:textSize="14sp"
             android:textColor="?colorIcon"
-            android:visibility="gone"
-          />
+            android:visibility="gone"/>
         <com.android.dialer.dialpadview.DigitsEditText
             xmlns:ex="http://schemas.android.com/apk/res-auto"
             android:id="@+id/digits"
@@ -151,9 +152,10 @@
         android:contentDescription="@string/description_delete_button"
         android:src="@drawable/quantum_ic_backspace_vd_theme_24"
         android:visibility="visible"
+        android:layout_alignParentEnd="true"
         android:tintMode="src_in"
         app:tint="@color/dialer_theme_color_light" />
-  </LinearLayout>
+  </RelativeLayout>
 
   <View
       android:layout_width="match_parent"
