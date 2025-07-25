@@ -24,7 +24,7 @@
     <color name="dialer_background_color">@android:color/black</color>
     <color name="dialer_background_floating">#1A1A1A</color>
     <color name="dialer_search_bar_color">#FF212121</color>
-    <color name="rounded_dialpad_bg_color">#1A1A1A</color>
+    <color name="rounded_dialpad_bg_color">@android:color/black</color>
     <color name="menubar_icon_color">#FFF8F8F8</color>
     <color name="searchbar_icon_color">#212121</color>
     <color name="dialer_theme_color_light">#FFF8F8F8</color>
