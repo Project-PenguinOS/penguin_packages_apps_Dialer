@@ -251,7 +251,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
             fab,
             bottomSheet,
             toolbar,
-            activity.findViewById(R.id.top_blur_view));
+            activity.findViewById(R.id.search_background_main));
     bottomNav.addOnTabSelectedListener(bottomNavTabListener);
     bottomNavTabListener.setSearchIcon(activity.findViewById(R.id.search_background_main),
         activity.findViewById(R.id.search_magnifying_glass_main));

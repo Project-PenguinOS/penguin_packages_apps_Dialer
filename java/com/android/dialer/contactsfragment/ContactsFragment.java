@@ -207,7 +207,7 @@ public class ContactsFragment extends Fragment
     }
 
     // Find the views from the parent activity and the fragment
-    eightbitlab.com.blurview.BlurView topBlurView = requireActivity().findViewById(R.id.top_blur_view);
+    eightbitlab.com.blurview.BlurView topBlurView = requireActivity().findViewById(R.id.search_background_main);
     eightbitlab.com.blurview.BlurTarget target = requireActivity().findViewById(R.id.main_content_blur_target);
 
     if (topBlurView != null && target != null && recyclerView != null) {

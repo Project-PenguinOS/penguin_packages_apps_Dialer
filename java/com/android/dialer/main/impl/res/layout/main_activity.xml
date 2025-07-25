@@ -50,12 +50,12 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </eightbitlab.com.blurview.BlurTarget>
 
-    <eightbitlab.com.blurview.BlurView
-        android:id="@+id/top_blur_view"
+    <FrameLayout
+        android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="144dp"
         android:visibility="gone"
-        app:blurOverlayColor="#B3FFFFFF">
+        app:blurOverlayColor="#4DFFFFFF">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                 app:tabTextColor="?android:attr/textColorSecondary"/>
 
             </androidx.cardview.widget.CardView>
-        </eightbitlab.com.blurview.BlurView>
+        </FrameLayout>
 
     <!-- MainToolbar -->
     <include
@@ -105,8 +105,7 @@
         <include layout="@layout/bottom_nav_bar_layout"/>
 
     </eightbitlab.com.blurview.BlurView>
-
-    <ImageButton
+    <eightbitlab.com.blurview.BlurView
         android:id="@+id/search_background_main"
         android:layout_width="54dp"
         android:layout_height="54dp"
@@ -114,33 +113,23 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        app:layout_anchor="@id/bottom_nav_bar"
+        android:elevation="4dp"
+        android:translationX="12dp"
+        android:visibility="gone"
         android:background="@drawable/icon_background_circle"
-        android:translationX="12dp"
-        android:elevation="4dp"
-        android:visibility="gone"
-        android:tint="@color/dialer_fab_icon_color"
-        app:tint="@color/dialer_fab_icon_color"
-        app:backgroundTint="@color/theme_ved_white"/>
+        app:blurOverlayColor="#4DFFFFFF">
 
-    <ImageButton
-        android:id="@+id/search_magnifying_glass_main"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:elevation="4dp"
-        android:importantForAccessibility="no"
-        android:visibility="gone"
-        android:background="@null"
-        android:scaleType="center"
-        android:src="@drawable/quantum_ic_search_vd_theme_24"
-        android:translationX="12dp"
-        android:tint="@color/dialer_fab_icon_color"
-        app:tint="@color/dialer_fab_icon_color"/>
+        <ImageButton
+            android:id="@+id/search_magnifying_glass_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@drawable/quantum_ic_search_vd_theme_24"
+            android:tint="@color/dialer_fab_icon_color"
+            app:tint="@color/dialer_fab_icon_color"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
+</eightbitlab.com.blurview.BlurView>
     <!-- Holds Dialpad fragment -->
     <FrameLayout
         android:id="@+id/dialpad_fragment_container"
