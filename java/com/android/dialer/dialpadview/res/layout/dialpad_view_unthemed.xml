@@ -150,7 +150,7 @@
         android:background="@drawable/btn_dialpad_key"
         android:contentDescription="@string/description_delete_button"
         android:src="@drawable/quantum_ic_backspace_vd_theme_24"
-        android:state_enabled="false"
+        android:visibility="visible"
         android:tintMode="src_in"
         app:tint="@color/dialer_theme_color_light" />
   </LinearLayout>
