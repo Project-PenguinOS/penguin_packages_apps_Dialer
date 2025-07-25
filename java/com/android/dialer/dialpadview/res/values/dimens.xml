@@ -27,7 +27,7 @@
   <dimen name="dialpad_voicemail_icon_size">18dp</dimen>
   <dimen name="dialpad_key_button_translate_y">100dp</dimen>
   <dimen name="dialpad_overflow_margin">8dp</dimen>
-  <dimen name="dialpad_space_above_keys">0dp</dimen>
+  <dimen name="dialpad_space_above_keys">14dp</dimen>
   <dimen name="dialpad_space_below_keys">8dp</dimen>
 
   <!-- Top/Bottom padding around the ILD rate display box. -->

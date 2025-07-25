@@ -22,7 +22,8 @@
     android:id="@+id/dialpad_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
+    android:layout_gravity="bottom"
+    android:background="?attr/dialpad_background"
     android:clickable="true"
     android:elevation="?attr/dialpad_elevation"
     android:layoutDirection="ltr"
@@ -67,28 +68,13 @@
   </LinearLayout>
 
   <!-- Text field and possibly soft menu button above the keypad where
-  android:paddingLeft="@dimen/dialpad_digits_padding"
-  android:paddingRight="@dimen/dialpad_digits_padding"
-
    the digits are displayed. -->
-
-  <androidx.cardview.widget.CardView
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      app:cardCornerRadius="24dp"
-      app:cardBackgroundColor="?android:attr/colorBackgroundFloating"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      app:cardElevation="0dp">
-
   <LinearLayout
       android:id="@+id/digits_container"
       android:layout_width="match_parent"
       android:layout_height="?attr/dialpad_digits_adjustable_height"
-      android:orientation="horizontal">
+      android:orientation="horizontal"
+      tools:layout_height="50dp">
 
     <ImageButton
         android:id="@+id/dialpad_back"
@@ -154,20 +140,24 @@
             android:textSize="?attr/dialpad_digits_adjustable_text_size"
             ex:resizing_text_min_size="@dimen/dialpad_digits_text_min_size"/>
       </FrameLayout>
-      <ImageView
-          android:visibility="invisible"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:paddingLeft="@dimen/dialpad_digits_padding"
-          android:paddingRight="@dimen/dialpad_digits_padding"
-          android:layout_margin="@dimen/dialpad_overflow_margin"
-          android:src="@drawable/quantum_ic_backspace_vd_theme_24"
-          android:state_enabled="false"/>
+    <ImageButton
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/dialpad_digits_padding"
+        android:paddingRight="@dimen/dialpad_digits_padding"
+        android:layout_margin="@dimen/dialpad_overflow_margin"
+        android:background="@drawable/btn_dialpad_key"
+        android:contentDescription="@string/description_delete_button"
+        android:src="@drawable/quantum_ic_backspace_vd_theme_24"
+        android:state_enabled="false"
+        android:tintMode="src_in"
+        app:tint="@color/dialer_theme_color_light" />
   </LinearLayout>
-</androidx.cardview.widget.CardView>
+
   <View
       android:layout_width="match_parent"
-      android:layout_height="8dp"
+      android:layout_height="1dp"
       android:background="@android:color/transparent"/>
 
   <Space
@@ -176,43 +166,6 @@
 
   <include layout="@layout/dialpad"/>
 
-  <LinearLayout
-      android:id="@+id/digits_container"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="horizontal"
-      android:paddingTop="8dp"
-      android:paddingEnd="45dp"
-      android:gravity="end">
-
-      <androidx.cardview.widget.CardView
-          android:layout_width="76dp"
-          android:layout_height="52dp"
-          app:cardBackgroundColor="@color/dialpad_color"
-          app:cardElevation="0dp"
-          app:contentPadding="4dp"
-          android:padding="4dp"
-          app:cardCornerRadius="24dp">
-
-  <ImageButton
-      android:id="@+id/deleteButton"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:paddingLeft="@dimen/dialpad_digits_padding"
-      android:paddingRight="@dimen/dialpad_digits_padding"
-      android:layout_margin="@dimen/dialpad_overflow_margin"
-      android:background="@drawable/btn_dialpad_key"
-      android:contentDescription="@string/description_delete_button"
-      android:src="@drawable/quantum_ic_backspace_vd_theme_24"
-      android:state_enabled="false"
-      android:translationX="0dp"
-      android:tintMode="src_in"
-      app:elevation="@dimen/floating_action_button_translation_z"
-      app:tint="@color/dialer_theme_color_light" />
-
-        </androidx.cardview.widget.CardView>
-
-    </LinearLayout>
   <Space
       android:layout_width="match_parent"
       android:layout_height="@dimen/dialpad_space_below_keys"/>
