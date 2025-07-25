@@ -32,6 +32,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.accessibility.AccessibilityManager;
@@ -287,33 +288,39 @@ public class DialpadView extends LinearLayout {
   }
 
   public void animateShow() {
-    // This is a hack; without this, the setTranslationY is delayed in being applied, and the
-    // numbers appear at their original position (0) momentarily before animating.
-    final AnimatorListenerAdapter showListener = new AnimatorListenerAdapter() {};
+    getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            // This listener will be removed after the first layout pass.
+            getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-    for (int i = 0; i < BUTTON_IDS.length; i++) {
-      int delay = (int) (getKeyButtonAnimationDelay(BUTTON_IDS[i]) * DELAY_MULTIPLIER);
-      int duration = (int) (getKeyButtonAnimationDuration(BUTTON_IDS[i]) * DURATION_MULTIPLIER);
-      final DialpadKeyButton dialpadKey = (DialpadKeyButton) findViewById(BUTTON_IDS[i]);
+            final AnimatorListenerAdapter showListener = new AnimatorListenerAdapter() {};
 
-      ViewPropertyAnimator animator = dialpadKey.animate();
-      if (isLandscapeMode) {
-        // Landscape orientation requires translation along the X axis.
-        // For RTL locales, ensure we translate negative on the X axis.
-        dialpadKey.setTranslationX((isRtl ? -1 : 1) * translateDistance);
-        animator.translationX(0);
-      } else {
-        // Portrait orientation requires translation along the Y axis.
-        dialpadKey.setTranslationY(translateDistance);
-        animator.translationY(0);
-      }
-      animator
-          .setInterpolator(AnimUtils.EASE_OUT_EASE_IN)
-          .setStartDelay(delay)
-          .setDuration(duration)
-          .setListener(showListener)
-          .start();
-    }
+            for (int i = 0; i < BUTTON_IDS.length; i++) {
+                int delay = (int) (getKeyButtonAnimationDelay(BUTTON_IDS[i]) * DELAY_MULTIPLIER);
+                int duration = (int) (getKeyButtonAnimationDuration(BUTTON_IDS[i]) * DURATION_MULTIPLIER);
+                final DialpadKeyButton dialpadKey = (DialpadKeyButton) findViewById(BUTTON_IDS[i]);
+
+                ViewPropertyAnimator animator = dialpadKey.animate();
+                if (isLandscapeMode) {
+                    // Landscape orientation requires translation along the X axis.
+                    // For RTL locales, ensure we translate negative on the X axis.
+                    dialpadKey.setTranslationX((isRtl ? -1 : 1) * translateDistance);
+                    animator.translationX(0);
+                } else {
+                    // Portrait orientation requires translation along the Y axis.
+                    dialpadKey.setTranslationY(translateDistance);
+                    animator.translationY(0);
+                }
+                animator
+                    .setInterpolator(AnimUtils.EASE_OUT_EASE_IN)
+                    .setStartDelay(delay)
+                    .setDuration(duration)
+                    .setListener(showListener)
+                    .start();
+            }
+        }
+    });
   }
 
   public EditText getDigits() {
