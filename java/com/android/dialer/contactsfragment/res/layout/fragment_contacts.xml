@@ -25,9 +25,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:background="?android:attr/colorBackground"
-      android:paddingTop="144dp"
-      android:paddingBottom="@dimen/floating_action_button_list_bottom_padding"
-      android:clipToPadding="false"/>
+      android:paddingTop="104dp"
+      android:clipToPadding="true"/>
 
   <!-- Scrollbars are always on the right side of the screen. Layouts should use Rights/Left instead
        of Start/End -->
@@ -35,9 +34,9 @@
       android:id="@+id/fast_scroller"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="8dp"
+      android:layout_marginTop="104dp"
       android:layout_marginBottom="8dp"
-      android:clipChildren="false"
+      android:clipToPadding="true"
       android:visibility="gone">
 
     <TextView
@@ -58,7 +57,7 @@
         android:layout_marginStart="8dp"
         android:layout_alignParentEnd="true"
         android:paddingEnd="16dp"
-        android:src="@drawable/fast_scroller_scroll_bar" />
+        android:src="@null" />
   </com.android.dialer.contactsfragment.FastScroller>
 
   <!-- Anchored header view -->

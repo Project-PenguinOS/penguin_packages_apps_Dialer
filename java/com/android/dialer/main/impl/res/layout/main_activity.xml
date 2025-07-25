@@ -54,8 +54,7 @@
         android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="144dp"
-        android:visibility="gone"
-        app:blurOverlayColor="#4DFFFFFF">
+        android:visibility="gone">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

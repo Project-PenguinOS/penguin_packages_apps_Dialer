@@ -22,4 +22,5 @@
     android:textColor="?android:attr/colorAccent"
     android:gravity="center"
     android:textStyle="bold"
+    android:visibility="gone"
     style="@style/Dialer.TextAppearance.Header2"/>

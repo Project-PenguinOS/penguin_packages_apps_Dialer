@@ -1001,6 +1001,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       searchBackground.setVisibility(View.GONE);
       searchMagnifyingGlass.setVisibility(View.GONE);
       topBlurView.setVisibility(View.GONE);
+            activity.findViewById(R.id.top_view).setVisibility(View.GONE);
       activity.findViewById(R.id.tabs).setVisibility(View.GONE);
     }
 
@@ -1020,6 +1021,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       searchBackground.setVisibility(View.VISIBLE);
       searchMagnifyingGlass.setVisibility(View.VISIBLE);
       topBlurView.setVisibility(View.VISIBLE);
+      activity.findViewById(R.id.top_view).setVisibility(View.VISIBLE);
       activity.findViewById(R.id.tabs).setVisibility(View.VISIBLE);
       showPromotionBottomSheet(activity, bottomSheet);
     }
@@ -1070,6 +1072,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       searchBackground.setVisibility(View.VISIBLE);
       searchMagnifyingGlass.setVisibility(View.VISIBLE);
       topBlurView.setVisibility(View.VISIBLE);
+      activity.findViewById(R.id.top_view).setVisibility(View.VISIBLE);
+      activity.findViewById(R.id.top_view).bringToFront();
       activity.findViewById(R.id.tabs).setVisibility(View.GONE);
     }
 
@@ -1091,6 +1095,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       fragment.setUserVisibleHint(true);
       fragment.onVisible();
       topBlurView.setVisibility(View.GONE);
+      activity.findViewById(R.id.top_view).setVisibility(View.GONE);
       activity.findViewById(R.id.tabs).setVisibility(View.GONE);
     }
 

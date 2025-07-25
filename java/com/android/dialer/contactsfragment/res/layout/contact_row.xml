@@ -16,7 +16,6 @@
  -->
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="@dimen/row_height">
 
@@ -24,11 +23,16 @@
 
   <androidx.cardview.widget.CardView
       android:id="@+id/contact_row"
-      style="@style/CallLogCardStyle"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginStart="@dimen/call_log_start_margin"
-      android:layout_marginEnd="@dimen/call_log_outer_margin">
+      android:layout_gravity="center_horizontal"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="1dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    cardCornerRadius="28dp">
 
     <LinearLayout
         android:id="@+id/click_target"
