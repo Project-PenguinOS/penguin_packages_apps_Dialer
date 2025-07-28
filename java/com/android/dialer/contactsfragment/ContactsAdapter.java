@@ -138,23 +138,26 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // Always show the view holder's header if it's the first item in the list. Otherwise, compare
     // it to the previous element and only show the anchored header if the row elements fall into
     // the same sublists.
-    boolean showHeader = position == 0 || !header.equals(getHeaderString(position - 1));
-    contactViewHolder.bind(header, name, contactUri, getContactId(cursor), showHeader);
+    boolean showHeader = (position == 0);
 
-    boolean isFirstInGroup = showHeader;
-    boolean isLastInGroup = position == getItemCount() - 1 || !header.equals(getHeaderString(position + 1));
+contactViewHolder.bind(header, name, contactUri, getContactId(cursor), showHeader);
 
-    int drawableId;
-    if (isFirstInGroup && isLastInGroup) {
-        drawableId = R.drawable.call_log_card_background_single;
-    } else if (isFirstInGroup) {
-        drawableId = R.drawable.call_log_card_background_top;
-    } else if (isLastInGroup) {
-        drawableId = R.drawable.call_log_card_background_bottom;
-    } else {
-        drawableId = R.drawable.call_log_card_background_middle;
-    }
-    contactViewHolder.itemView.findViewById(R.id.contact_row).setBackgroundResource(drawableId);
+boolean isFirstInGroup = (position == 1);
+boolean isLastInGroup = (position == getItemCount() - 1);
+
+int drawableId;
+if (isFirstInGroup && isLastInGroup) {
+    drawableId = R.drawable.call_log_card_background_single;
+} else if (isFirstInGroup) {
+    drawableId = R.drawable.call_log_card_background_top;
+} else if (isLastInGroup) {
+    drawableId = R.drawable.call_log_card_background_bottom;
+} else {
+    drawableId = R.drawable.call_log_card_background_middle;
+}
+contactViewHolder.itemView.findViewById(R.id.contact_row).setBackgroundResource(drawableId);
+
+
   }
 
   /**

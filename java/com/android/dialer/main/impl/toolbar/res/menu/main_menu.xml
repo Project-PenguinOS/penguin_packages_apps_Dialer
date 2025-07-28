@@ -21,6 +21,7 @@
   <item
       android:id="@+id/menu_call_history"
       android:title="@string/action_menu_call_history_description"
+      android:visible="false"
       app:showAsAction="collapseActionView"/>
 
   <item

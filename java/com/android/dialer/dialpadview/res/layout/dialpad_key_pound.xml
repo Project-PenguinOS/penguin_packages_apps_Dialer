@@ -17,7 +17,6 @@
 <!-- A layout representing key "#" in the dialpad -->
 <com.android.dialer.dialpadview.DialpadKeyButton
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pound"
     style="@style/DialpadKeyButtonStyle">
 
@@ -25,21 +24,8 @@
       android:id="@+id/dialpad_key_layout"
       style="@style/DialpadKeyInternalLayoutStyle">
 
-    <androidx.cardview.widget.CardView
-      android:layout_width="76dp"
-      android:layout_height="52dp"
-      app:cardBackgroundColor="@color/dialpad_color"
-      app:cardElevation="0dp"
-      android:padding="4dp"
-      app:cardCornerRadius="24dp">
-      <com.android.dialer.dialpadview.DialpadTextView
-        android:id="@+id/dialpad_key_number"
-        style="@style/DialpadKeyPoundStyle"
-        android:translationY="12dp"
-        android:layout_gravity="center"
-        android:background="@null"/>
-
-      </androidx.cardview.widget.CardView>
-
+    <com.android.dialer.dialpadview.DialpadTextView
+        android:id="@id/dialpad_key_number"
+        style="@style/DialpadKeyPoundStyle"/>
   </LinearLayout>
 </com.android.dialer.dialpadview.DialpadKeyButton>

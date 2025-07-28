@@ -29,6 +29,11 @@ import androidx.appcompat.widget.Toolbar;
 import com.android.dialer.R;
 import com.android.dialer.theme.base.ThemeComponent;
 
+import android.content.res.Resources;
+import android.util.AttributeSet;
+import android.util.TypedValue;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.Toolbar;
 /** Toolbar widget for Dialer. */
 public class DialerToolbar extends Toolbar {
 
@@ -41,8 +46,15 @@ public class DialerToolbar extends Toolbar {
     title = (TextView) findViewById(R.id.title);
     subtitle = (BidiTextView) findViewById(R.id.subtitle);
 
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(android.R.attr.colorBackground, typedValue, true);
+        int color = ContextCompat.getColor(context, typedValue.resourceId);
+
+        setBackgroundColor(color);
+
     setElevation(getResources().getDimensionPixelSize(R.dimen.toolbar_elevation));
-    setBackgroundColor(ThemeComponent.get(context).theme().getColorPrimary());
+
     setNavigationIcon(R.drawable.quantum_ic_close_vd_theme_24);
     setNavigationContentDescription(R.string.toolbar_close);
     setNavigationOnClickListener(v -> ((Activity) context).finish());

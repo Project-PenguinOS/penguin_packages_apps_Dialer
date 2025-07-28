@@ -17,107 +17,88 @@
 -->
 
 <!-- Dialpad in the Phone app. -->
-<androidx.cardview.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialpad"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    app:cardCornerRadius="24dp"
-    app:contentPadding="12dp"
-    app:contentPaddingTop="16dp"
-    app:contentPaddingBottom="16dp"
-    app:cardBackgroundColor="?android:attr/colorBackgroundFloating"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginTop="0dp"
-    android:layout_marginBottom="0dp"
-    app:cardElevation="0dp">
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:orientation="vertical">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:orientation="horizontal">
+    <Space style="@style/DialpadSpaceStyle"/>
+    <include layout="@layout/dialpad_key_one"/>
+    <include
+        android:id="@+id/two"
+        style="@style/DialpadKeyButtonStyle"
+        layout="@layout/dialpad_key"/>
+    <include
+        android:id="@+id/three"
+        style="@style/DialpadKeyButtonStyle"
+        layout="@layout/dialpad_key"/>
+    <Space style="@style/DialpadSpaceStyle"/>
+  </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/dialpad"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:orientation="vertical">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:orientation="horizontal">
+    <Space style="@style/DialpadSpaceStyle"/>
+    <include
+        android:id="@+id/four"
+        style="@style/DialpadKeyButtonStyle"
+        layout="@layout/dialpad_key"/>
+    <include
+        android:id="@+id/five"
+        style="@style/DialpadKeyButtonStyle"
+        layout="@layout/dialpad_key"/>
+    <include
+        android:id="@+id/six"
+        style="@style/DialpadKeyButtonStyle"
+        layout="@layout/dialpad_key"/>
+    <Space style="@style/DialpadSpaceStyle"/>
+  </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <Space style="@style/DialpadSpaceStyle"/>
-            <include layout="@layout/dialpad_key_one"/>
-            <include
-                android:id="@+id/two"
-                style="@style/DialpadKeyButtonStyle"
-                layout="@layout/dialpad_key"/>
-            <include
-                android:id="@+id/three"
-                style="@style/DialpadKeyButtonStyle"
-                layout="@layout/dialpad_key"/>
-            <Space style="@style/DialpadSpaceStyle"/>
-        </LinearLayout>
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:orientation="horizontal">
+    <Space style="@style/DialpadSpaceStyle"/>
+    <include
+        android:id="@+id/seven"
+        style="@style/DialpadKeyButtonStyle"
+        layout="@layout/dialpad_key"/>
+    <include
+        android:id="@+id/eight"
+        style="@style/DialpadKeyButtonStyle"
+        layout="@layout/dialpad_key"/>
+    <include
+        android:id="@+id/nine"
+        style="@style/DialpadKeyButtonStyle"
+        layout="@layout/dialpad_key"/>
+    <Space style="@style/DialpadSpaceStyle"/>
+  </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <Space style="@style/DialpadSpaceStyle"/>
-            <include
-                android:id="@+id/four"
-                style="@style/DialpadKeyButtonStyle"
-                layout="@layout/dialpad_key"/>
-            <include
-                android:id="@+id/five"
-                style="@style/DialpadKeyButtonStyle"
-                layout="@layout/dialpad_key"/>
-            <include
-                android:id="@+id/six"
-                style="@style/DialpadKeyButtonStyle"
-                layout="@layout/dialpad_key"/>
-            <Space style="@style/DialpadSpaceStyle"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <Space style="@style/DialpadSpaceStyle"/>
-            <include
-                android:id="@+id/seven"
-                style="@style/DialpadKeyButtonStyle"
-                layout="@layout/dialpad_key"/>
-            <include
-                android:id="@+id/eight"
-                style="@style/DialpadKeyButtonStyle"
-                layout="@layout/dialpad_key"/>
-            <include
-                android:id="@+id/nine"
-                style="@style/DialpadKeyButtonStyle"
-                layout="@layout/dialpad_key"/>
-            <Space style="@style/DialpadSpaceStyle"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <Space style="@style/DialpadSpaceStyle"/>
-            <include layout="@layout/dialpad_key_star"/>
-            <include
-                android:id="@+id/zero"
-                layout="@layout/dialpad_key"/>
-            <include layout="@layout/dialpad_key_pound"/>
-            <Space style="@style/DialpadSpaceStyle"/>
-        </LinearLayout>
-        <Space
-            android:id="@+id/end_call_space"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"/>
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:orientation="horizontal">
+    <Space style="@style/DialpadSpaceStyle"/>
+    <include layout="@layout/dialpad_key_star"/>
+    <include
+        android:id="@+id/zero"
+        layout="@layout/dialpad_key"/>
+    <include layout="@layout/dialpad_key_pound"/>
+    <Space style="@style/DialpadSpaceStyle"/>
+  </LinearLayout>
+  <Space
+      android:id="@+id/end_call_space"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/dialpad_end_key_spacing"/>
+</LinearLayout>

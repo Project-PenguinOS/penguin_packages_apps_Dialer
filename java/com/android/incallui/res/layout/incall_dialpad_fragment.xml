@@ -22,5 +22,5 @@
   android:clipToPadding="false"
   android:clipChildren="false"
   android:orientation="vertical">
-  <include layout="@layout/new_dialpad_view"/>
+  <include layout="@layout/dialpad_view"/>
 </view>

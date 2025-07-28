@@ -371,36 +371,19 @@ public class CallLogFragment extends Fragment
     super.onViewCreated(view, savedInstanceState);
     updateEmptyMessage(callTypeFilter);
 
-    eightbitlab.com.blurview.BlurView topBlurView = requireActivity().findViewById(R.id.top_blur_view);
+    // Find the views from the parent activity and the fragment
+    eightbitlab.com.blurview.BlurView blurView = requireActivity().findViewById(R.id.search_background_main);
     eightbitlab.com.blurview.BlurTarget target = requireActivity().findViewById(R.id.main_content_blur_target);
     RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
 
-    if (topBlurView != null && target != null && recyclerView != null) {
-      Drawable windowBackground = requireActivity().getWindow().getDecorView().getBackground();
-
-      topBlurView.setupWith(target)
-          .setFrameClearDrawable(windowBackground)
-          .setBlurRadius(0f); // Start with zero blur
-
-          topBlurView.setBackgroundResource(R.drawable.bottom_nav_background_glass_no_round);
-          topBlurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-          topBlurView.setClipToOutline(true);
-
-      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-        private final float maxBlurRadius = 20f;
-        private final int transitionDistance = 300; // Blur develops over 300px of scrolling
-
-        @Override
-        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-          super.onScrolled(recyclerView, dx, dy);
-
-          int scrollY = recyclerView.computeVerticalScrollOffset();
-          float blurRadius = Math.min((float) scrollY / transitionDistance, 1f) * maxBlurRadius;
-
-          topBlurView.setBlurRadius(blurRadius);
-        }
-      });
-    }
+    float blurRadius = 10f;
+    Drawable windowBackground = requireActivity().getWindow().getDecorView().getBackground();
+    blurView.setupWith(target)
+            .setFrameClearDrawable(windowBackground)
+            .setBlurRadius(blurRadius);
+    blurView.setBackgroundResource(R.drawable.bottom_nav_background_glass);
+    blurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+    blurView.setClipToOutline(true);
 
     setupData();
     updateSelectAllState(savedInstanceState);

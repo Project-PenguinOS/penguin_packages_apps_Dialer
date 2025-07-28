@@ -205,37 +205,6 @@ public class ContactsFragment extends Fragment
       emptyContentView.setVisibility(View.VISIBLE);
       recyclerView.setVisibility(View.GONE);
     }
-
-    eightbitlab.com.blurview.BlurView topBlurView = requireActivity().findViewById(R.id.top_blur_view);
-    eightbitlab.com.blurview.BlurTarget target = requireActivity().findViewById(R.id.main_content_blur_target);
-
-    if (topBlurView != null && target != null && recyclerView != null) {
-      Drawable windowBackground = requireActivity().getWindow().getDecorView().getBackground();
-
-      topBlurView.setupWith(target)
-          .setFrameClearDrawable(windowBackground)
-          .setBlurRadius(0f); // Start with zero blur
-
-          topBlurView.setBackgroundResource(R.drawable.bottom_nav_background_glass_no_round);
-          topBlurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-          topBlurView.setClipToOutline(true);
-
-      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-        private final float maxBlurRadius = 20f;
-        private final int transitionDistance = 300; // Blur develops over 300px of scrolling
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-          super.onScrolled(recyclerView, dx, dy);
-
-          int scrollY = recyclerView.computeVerticalScrollOffset();
-          float blurRadius = Math.min((float) scrollY / transitionDistance, 1f) * maxBlurRadius;
-
-          topBlurView.setBlurRadius(blurRadius);
-        }
-      });
-    }
-
     return view;
   }
 
@@ -319,7 +288,7 @@ public class ContactsFragment extends Fragment
     } else if (firstVisibleItem != 0) { // skip the add contact row
       if (adapter.getHeaderString(firstVisibleItem).equals(anchoredHeaderString)) {
         anchoredHeader.setText(anchoredHeaderString);
-        anchoredHeader.setVisibility(View.VISIBLE);
+        anchoredHeader.setVisibility(View.GONE);
         getContactHolder(firstVisibleItem).getHeaderView().setVisibility(View.INVISIBLE);
         getContactHolder(firstCompletelyVisible).getHeaderView().setVisibility(View.INVISIBLE);
       } else {

@@ -232,7 +232,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
             fab,
             bottomSheet,
             toolbar,
-            activity.findViewById(R.id.top_blur_view));
+            activity.findViewById(R.id.search_background_main));
     bottomNav.addOnTabSelectedListener(bottomNavTabListener);
     bottomNavTabListener.setSearchIcon(activity.findViewById(R.id.search_background_main),
         activity.findViewById(R.id.search_magnifying_glass_main));
@@ -981,6 +981,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       searchBackground.setVisibility(View.GONE);
       searchMagnifyingGlass.setVisibility(View.GONE);
       topBlurView.setVisibility(View.GONE);
+            activity.findViewById(R.id.top_view).setVisibility(View.GONE);
       activity.findViewById(R.id.tabs).setVisibility(View.GONE);
     }
 
@@ -1000,6 +1001,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       searchBackground.setVisibility(View.VISIBLE);
       searchMagnifyingGlass.setVisibility(View.VISIBLE);
       topBlurView.setVisibility(View.VISIBLE);
+      activity.findViewById(R.id.top_view).setVisibility(View.VISIBLE);
       activity.findViewById(R.id.tabs).setVisibility(View.VISIBLE);
       showPromotionBottomSheet(activity, bottomSheet);
     }
@@ -1050,6 +1052,8 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       searchBackground.setVisibility(View.VISIBLE);
       searchMagnifyingGlass.setVisibility(View.VISIBLE);
       topBlurView.setVisibility(View.VISIBLE);
+      activity.findViewById(R.id.top_view).setVisibility(View.VISIBLE);
+      activity.findViewById(R.id.top_view).bringToFront();
       activity.findViewById(R.id.tabs).setVisibility(View.GONE);
     }
 
@@ -1071,6 +1075,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       fragment.setUserVisibleHint(true);
       fragment.onVisible();
       topBlurView.setVisibility(View.GONE);
+      activity.findViewById(R.id.top_view).setVisibility(View.GONE);
       activity.findViewById(R.id.tabs).setVisibility(View.GONE);
     }
 

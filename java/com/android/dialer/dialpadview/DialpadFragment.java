@@ -318,6 +318,7 @@ public class DialpadFragment extends Fragment
       if (activity != null) {
         activity.invalidateOptionsMenu();
         updateMenuOverflowButton(wasEmptyBeforeTextChange);
+        updateDeleteButtonVisibility(wasEmptyBeforeTextChange);
       }
       updateDialpadHint();
     }
@@ -345,8 +346,6 @@ public class DialpadFragment extends Fragment
     if (dialpadQueryListener != null) {
       dialpadQueryListener.onDialpadQueryChanged(digits.getText().toString());
     }
-
-    updateDeleteButtonEnabledState();
   }
 
   @Override
@@ -768,8 +767,6 @@ public class DialpadFragment extends Fragment
       showDialpadChooser(false);
     }
 
-    updateDeleteButtonEnabledState();
-
     // Populate the overflow menu in onResume instead of onCreate, so that if the SMS activity
     // is disabled while Dialer is paused, the "Send a text message" option can be correctly
     // removed when resumed.
@@ -778,6 +775,7 @@ public class DialpadFragment extends Fragment
     overflowMenuButton.setOnTouchListener(overflowPopupMenu.getDragToOpenListener());
     overflowMenuButton.setOnClickListener(this);
     overflowMenuButton.setVisibility(isDigitsEmpty() ? View.INVISIBLE : View.VISIBLE);
+    delete.setVisibility(isDigitsEmpty() ? View.INVISIBLE : View.VISIBLE);
 
     updateDialpadHint();
 
@@ -1441,13 +1439,21 @@ public class DialpadFragment extends Fragment
     }
   }
 
-  /** Update the enabledness of the "Dial" and "Backspace" buttons if applicable. */
-  private void updateDeleteButtonEnabledState() {
-    if (getActivity() == null) {
-      return;
+  private void updateDeleteButtonVisibility(boolean transitionIn) {
+    if (transitionIn) {
+      delete.setVisibility(View.VISIBLE);
+      AnimUtils.fadeIn(delete, AnimUtils.DEFAULT_DURATION);
+    } else {
+      AnimUtils.fadeOut(
+          delete,
+          AnimUtils.DEFAULT_DURATION,
+          new AnimationCallback() {
+            @Override
+            public void onAnimationEnd() {
+              delete.setVisibility(View.INVISIBLE);
+            }
+          });
     }
-    final boolean digitsNotEmpty = !isDigitsEmpty();
-    delete.setEnabled(digitsNotEmpty);
   }
 
   /**
@@ -1528,7 +1534,6 @@ public class DialpadFragment extends Fragment
                 return;
               }
               lastNumberDialed = number;
-              updateDeleteButtonEnabledState();
             });
   }
 
