@@ -18,6 +18,7 @@
 package com.android.dialer.theme.base.impl;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -36,61 +37,10 @@ import javax.inject.Singleton;
 @Singleton
 public class AospThemeImpl implements Theme {
 
-  private int colorIcon = -1;
-  private int colorIconSecondary = -1;
-  private int colorPrimary = -1;
-  private int colorPrimaryDark = -1;
-  private int colorAccent = -1;
-  private int textColorPrimary = -1;
-  private int textColorSecondary = -1;
-  private int textColorPrimaryInverse = -1;
-  private int textColorHint = -1;
-  private int colorBackground = -1;
-  private int colorBackgroundFloating = -1;
-  private int colorTextOnUnthemedDarkBackground = -1;
-  private int colorIconOnUnthemedDarkBackground = -1;
-  private int colorCallNotificationBackground = -1;
+  private final Context context;
 
   public AospThemeImpl(Context context) {
-
-    context = context.getApplicationContext();
-    context.setTheme(getApplicationThemeRes());
-    TypedArray array =
-        context
-            .getTheme()
-            .obtainStyledAttributes(
-                getApplicationThemeRes(),
-                new int[] {
-                  android.R.attr.colorPrimary,
-                  android.R.attr.colorPrimaryDark,
-                  android.R.attr.colorAccent,
-                  android.R.attr.textColorPrimary,
-                  android.R.attr.textColorSecondary,
-                  android.R.attr.textColorPrimaryInverse,
-                  android.R.attr.textColorHint,
-                  android.R.attr.colorBackground,
-                  android.R.attr.colorBackgroundFloating,
-                  R.attr.colorIcon,
-                  R.attr.colorIconSecondary,
-                  R.attr.colorTextOnUnthemedDarkBackground,
-                  R.attr.colorIconOnUnthemedDarkBackground,
-                  R.attr.colorCallNotificationBackground
-                });
-    colorPrimary = array.getColor(/* index= */ 0, /* defValue= */ -1);
-    colorPrimaryDark = array.getColor(/* index= */ 1, /* defValue= */ -1);
-    colorAccent = array.getColor(/* index= */ 2, /* defValue= */ -1);
-    textColorPrimary = array.getColor(/* index= */ 3, /* defValue= */ -1);
-    textColorSecondary = array.getColor(/* index= */ 4, /* defValue= */ -1);
-    textColorPrimaryInverse = array.getColor(/* index= */ 5, /* defValue= */ -1);
-    textColorHint = array.getColor(/* index= */ 6, /* defValue= */ -1);
-    colorBackground = array.getColor(/* index= */ 7, /* defValue= */ -1);
-    colorBackgroundFloating = array.getColor(/* index= */ 8, /* defValue= */ -1);
-    colorIcon = array.getColor(/* index= */ 9, /* defValue= */ -1);
-    colorIconSecondary = array.getColor(/* index= */ 10, /* defValue= */ -1);
-    colorTextOnUnthemedDarkBackground = array.getColor(/* index= */ 11, /* defValue= */ -1);
-    colorIconOnUnthemedDarkBackground = array.getColor(/* index= */ 12, /* defValue= */ -1);
-    colorCallNotificationBackground = array.getColor(/* index= */ 13, /* defValue= */ -1);
-    array.recycle();
+    this.context = context.getApplicationContext();
   }
 
   /**
@@ -99,8 +49,15 @@ public class AospThemeImpl implements Theme {
    */
   @Override
   public @Type int getTheme() {
-    // TODO(a bug): add share prefs check to configure this
-    return LIGHT;
+    int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+    switch (currentNightMode) {
+        case Configuration.UI_MODE_NIGHT_NO:
+            return LIGHT;
+        case Configuration.UI_MODE_NIGHT_YES:
+            return DARK;
+        default:
+            return LIGHT;
+    }
   }
 
   @Override
@@ -128,61 +85,60 @@ public class AospThemeImpl implements Theme {
 
   @Override
   public @ColorInt int getColorIcon() {
-    Assert.checkArgument(colorIcon != -1);
-    return colorIcon;
+    return resolveColor(R.attr.colorIcon);
   }
 
   @Override
   public @ColorInt int getColorIconSecondary() {
-    Assert.checkArgument(colorIconSecondary != -1);
-    return colorIconSecondary;
+    return resolveColor(R.attr.colorIconSecondary);
   }
 
   @Override
   public @ColorInt int getColorPrimary() {
-    Assert.checkArgument(colorPrimary != -1);
-    return colorPrimary;
+    return resolveColor(android.R.attr.colorPrimary);
   }
 
   @Override
   public int getColorPrimaryDark() {
-    Assert.checkArgument(colorPrimaryDark != -1);
-    return colorPrimaryDark;
+    return resolveColor(android.R.attr.colorPrimaryDark);
   }
 
   @Override
   public @ColorInt int getColorAccent() {
-    Assert.checkArgument(colorAccent != -1);
-    return colorAccent;
+    return resolveColor(android.R.attr.colorAccent);
   }
 
   @Override
   public @ColorInt int getTextColorSecondary() {
-    Assert.checkArgument(textColorSecondary != -1);
-    return textColorSecondary;
+    return resolveColor(android.R.attr.textColorSecondary);
   }
 
   @Override
   public @ColorInt int getTextColorPrimary() {
-    Assert.checkArgument(textColorPrimary != -1);
-    return textColorPrimary;
+    return resolveColor(android.R.attr.textColorPrimary);
   }
 
   @Override
   public @ColorInt int getColorTextOnUnthemedDarkBackground() {
-    Assert.checkArgument(colorTextOnUnthemedDarkBackground != -1);
-    return colorTextOnUnthemedDarkBackground;
+    return resolveColor(R.attr.colorTextOnUnthemedDarkBackground);
   }
 
   @Override
   public @ColorInt int getColorIconOnUnthemedDarkBackground() {
-    Assert.checkArgument(colorIconOnUnthemedDarkBackground != -1);
-    return colorIconOnUnthemedDarkBackground;
+    return resolveColor(R.attr.colorIconOnUnthemedDarkBackground);
   }
 
   @Override
   public @ColorInt int getColorCallNotificationBackground() {
-    Assert.checkArgument(colorCallNotificationBackground != -1);
-    return colorCallNotificationBackground;
+    return resolveColor(R.attr.colorCallNotificationBackground);
+  }
+
+  private int resolveColor(int attr) {
+    final TypedArray a = context.obtainStyledAttributes(new int[]{attr});
+    try {
+      return a.getColor(0, 0);
+    } finally {
+      a.recycle();
+    }
   }
 }

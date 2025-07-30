@@ -128,7 +128,7 @@
         android:layout_alignParentBottom="true"
         android:clipChildren="false"
         android:clipToPadding="false"
-        tools:background="@android:color/white"
+        tools:background="?android:attr/colorBackgroundFloating"
         tools:visibility="gone"/>
     <ImageButton
         android:id="@+id/incall_end_call"

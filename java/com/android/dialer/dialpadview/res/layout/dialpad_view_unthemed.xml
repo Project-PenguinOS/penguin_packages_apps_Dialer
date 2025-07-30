@@ -108,7 +108,7 @@
         app:tint="@color/dialer_theme_color_light"
         tools:visibility="visible"/>
 
-      <androidx.constraintlayout.widget.ConstraintLayout
+      <FrameLayout
           android:layout_height="match_parent"
           android:layout_width="match_parent">
 
@@ -142,7 +142,7 @@
             android:textCursorDrawable="@null"
             android:textSize="?attr/dialpad_digits_adjustable_text_size"
             ex:resizing_text_min_size="@dimen/dialpad_digits_text_min_size"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
     <ImageButton
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
