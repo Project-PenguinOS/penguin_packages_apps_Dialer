@@ -250,7 +250,7 @@ android_app {
 
 android_library_import {
     name: "blurview",
-    aars: ["prebuilts/BlurView/BlurView-version-3.0.0.aar"],
+    aars: ["prebuilts/BlurView/BlurView-version-3.1.0.aar"],
 }
 
 java_library {
