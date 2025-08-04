@@ -17,8 +17,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     coreApp="true"
     package="com.android.dialer"
-    android:versionCode="250000"
-    android:versionName="25.7.30">
+    android:versionCode="250804"
+    android:versionName="25.8.04">
 
     <uses-feature
         android:name="android.hardware.telephony"
