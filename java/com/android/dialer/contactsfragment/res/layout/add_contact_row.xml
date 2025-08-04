@@ -23,12 +23,9 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/row_height"
     android:layout_marginTop="8dp"
-    android:layout_marginStart="@dimen/header_width"
-    android:layout_marginEnd="@dimen/row_end_margin"
     android:paddingTop="@dimen/row_top_bottom_padding"
     android:paddingBottom="@dimen/row_top_bottom_padding"
-    android:paddingStart="@dimen/row_start_padding"
-    android:gravity="center_vertical"
+    android:gravity="center_horizontal"
     android:background="?android:attr/selectableItemBackground">
 
   <ImageView
