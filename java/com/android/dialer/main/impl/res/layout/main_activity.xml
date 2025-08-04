@@ -97,6 +97,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="84dp"
         android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:focusable="true"
         android:elevation="8dp"
         app:blurOverlayColor="#4DFFFFFF"> <!-- Tint color for the glass effect -->
 
