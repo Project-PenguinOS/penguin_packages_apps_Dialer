@@ -24,6 +24,10 @@
     <item name="android:windowLightStatusBar">true</item>
   </style>
 
+  <style name="MyCustomTabText">
+    <item name="android:textAllCaps">false</item>
+    <item name="android:textSize">14sp</item>
+  </style>
   <!-- Activities should use this theme as their style -->
   <style name="MainActivityTheme" parent="MainActivityThemeBase">
     <!-- Used to change the navigation bar color -->
