@@ -15,7 +15,7 @@ import com.android.contacts.common.list.ViewPagerTabStrip;
 import com.android.dialer.R;
 import com.android.dialer.database.CallLogQueryHandler;
 import com.google.android.material.tabs.TabLayout;
-
+import android.text.SpannableString;
 
 public class NewCallLogFragment extends Fragment {
 
@@ -34,8 +34,8 @@ private TabLayout tabLayout;
         View view = inflater.inflate(R.layout.new_call_log_fragment, container, false);
 
         tabTitles = new String[TAB_INDEX_COUNT];
-        tabTitles[0] = getString(R.string.call_log_all_title);
-        tabTitles[1] = getString(R.string.call_log_missed_title);
+        tabTitles[0] = "All";
+        tabTitles[1] = "Missed";
 
         viewPager = view.findViewById(R.id.new_call_log_pager);
         tabLayout = requireActivity().findViewById(R.id.tabs);
@@ -69,7 +69,7 @@ private TabLayout tabLayout;
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return tabTitles[position];
+            return new SpannableString(tabTitles[position]);
         }
 
         @Override

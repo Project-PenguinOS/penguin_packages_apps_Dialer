@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.android.dialer.util.DialerUtils;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import android.graphics.Typeface;
 
 import com.android.dialer.R;
 
@@ -85,6 +86,9 @@ private void populateTabs() {
         };
 
         textView.setText(title);
+        textView.setAllCaps(false);
+        textView.setTypeface(Typeface.DEFAULT);
+        textView.setTransformationMethod(null);
         textView.setGravity(Gravity.CENTER);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 

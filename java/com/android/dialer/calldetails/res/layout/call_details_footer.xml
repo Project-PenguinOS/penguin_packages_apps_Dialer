@@ -34,10 +34,12 @@
       <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
-          android:layout_marginTop="@dimen/ec_divider_top_bottom_margin"
-          android:layout_marginBottom="@dimen/ec_divider_top_bottom_margin"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+          android:paddingTop="1dp"
+          android:paddingBottom="1dp"
           android:visibility="invisible"
-          android:background="@color/dialer_divider_line_color"/>
+          android:background="#4D8E8E93"/>
 
       <TextView
           android:id="@+id/call_detail_action_copy"
@@ -48,6 +50,16 @@
           android:text="@string/call_details_copy_number"
           app:drawableStartCompat="@drawable/quantum_ic_content_copy_vd_theme_24" />
 
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginStart="32dp"
+          android:layout_marginEnd="32dp"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
+          android:visibility="visible"
+          android:background="#4D8E8E93"/>
+
       <TextView
           android:id="@+id/call_detail_action_edit_before_call"
           style="@style/CallDetailsActionItemStyle"
@@ -57,6 +69,16 @@
           android:text="@string/call_details_edit_number"
           app:drawableStartCompat="@drawable/quantum_ic_edit_vd_theme_24"
           app:drawableTint="?colorIcon" />
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginStart="32dp"
+          android:layout_marginEnd="32dp"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
+          android:visibility="visible"
+          android:background="#4D8E8E93"/>
 
       <TextView
           android:id="@+id/call_detail_action_report_caller_id"

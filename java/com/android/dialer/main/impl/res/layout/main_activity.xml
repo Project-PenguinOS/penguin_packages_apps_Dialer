@@ -61,6 +61,7 @@
                 app:tabSelectedTextColor="?android:attr/textColorPrimaryInverse"
                 app:tabRippleColor="@android:color/transparent"
                 android:visibility="gone"
+                app:tabTextAppearance="@style/MyCustomTabText"
                 app:tabTextColor="?android:attr/textColorSecondary"/>
 
             </androidx.cardview.widget.CardView>
