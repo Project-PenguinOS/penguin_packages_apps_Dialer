@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="incall_background_gradient_top">@color/dialer_theme_color_dark</color>
-    <color name="incall_background_gradient_middle">@color/dialer_theme_color_dark</color>
-    <color name="incall_background_gradient_bottom">@color/dialer_theme_color_dark</color>
-    <color name="incall_background_multiwindow">@color/dialer_theme_color_dark</color>
+    <color name="incall_background_gradient_top">@color/dialer_background_color</color>
+    <color name="incall_background_gradient_middle">@color/dialer_background_color</color>
+    <color name="incall_background_gradient_bottom">@color/dialer_background_color</color>
+    <color name="incall_background_multiwindow">@color/dialer_background_color</color>
     <color name="incall_button_icon_color">@android:color/white</color>
     <color name="incall_button_icon_color_dark">@android:color/black</color>
     <!-- There is a nearby, more-convenient universe in which the following neutral colors are
