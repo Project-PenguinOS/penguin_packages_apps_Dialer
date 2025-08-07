@@ -12,6 +12,7 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/new_call_log_pager"
             android:textColor="?android:attr/textColorPrimaryInverse"
+	    android:textAllCaps="false"
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="1" />

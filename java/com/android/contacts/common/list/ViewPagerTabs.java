@@ -178,7 +178,7 @@ public class ViewPagerTabs extends HorizontalScrollView implements ViewPager.OnP
       if (mTextColor != null) {
         textView.setTextColor(mTextColor);
       }
-      textView.setAllCaps(mTextAllCaps);
+      textView.setAllCaps(false);
       textView.setGravity(Gravity.CENTER);
 
       tabView = textView;
