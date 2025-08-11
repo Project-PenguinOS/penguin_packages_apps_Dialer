@@ -161,15 +161,18 @@ public class CallLogGroupBuilder {
         groupDayGroup = getDayGroup(date, currentTime);
 
         if (groupDayGroup != currentDayGroup) {
+          if (!numberInDayGroup.containsKey(groupNumber)) {
+            groupCreator.addGroup(cursor.getPosition() - groupSize, groupSize);
+          }
           numberInDayGroup.clear();
           currentDayGroup = groupDayGroup;
-        }
-
-        // Create a group for the previous group of calls, which does not include the
-        // current call.
-        if (!numberInDayGroup.containsKey(groupNumber)) {
-          groupCreator.addGroup(cursor.getPosition() - groupSize, groupSize);
-          numberInDayGroup.put(groupNumber, true);
+        } else {
+          // Create a group for the previous group of calls, which does not include the
+          // current call.
+          if (!numberInDayGroup.containsKey(groupNumber)) {
+            groupCreator.addGroup(cursor.getPosition() - groupSize, groupSize);
+            numberInDayGroup.put(groupNumber, true);
+          }
         }
 
         // Start a new group; it will include at least the current call.
