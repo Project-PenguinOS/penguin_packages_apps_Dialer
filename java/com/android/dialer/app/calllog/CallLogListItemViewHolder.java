@@ -856,6 +856,25 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
       return;
     }
 
+    if (view.getId() == R.id.details_action) {
+      CallLogAsyncTaskUtil.getCallDetails(
+          context,
+          number,
+          (entries) -> {
+            if (entries != null) {
+              final Intent intent =
+                  IntentProvider.getCallDetailIntentProvider(
+                          entries,
+                          buildContact(),
+                          /* canReportCallerId = */ false,
+                          /* canSupportAssistedDialing = */ false)
+                      .getClickIntent(context);
+              DialerUtils.startActivityWithErrorToast(context, intent);
+            }
+          });
+      return;
+    }
+
     final IntentProvider intentProvider = (IntentProvider) view.getTag();
     if (intentProvider == null) {
       return;
