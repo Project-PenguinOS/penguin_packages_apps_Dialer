@@ -842,6 +842,18 @@ public class DialpadFragment extends Fragment
     getActivity().unregisterReceiver(callStateReceiver);
   }
 
+  @Override
+  public void onConfigurationChanged(@NonNull Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    // After a theme change, the activity is recreated and the fragment is reattached.
+    // We need to ensure the parent activity's UI is correctly updated to reflect the
+    // dialpad's visibility.
+    if (isAdded() && !isHidden() && !isDialpadChooserVisible()) {
+      // This will notify the host activity to hide elements like the search bar, etc.
+      FragmentUtils.getParentUnsafe(this, DialpadListener.class).onDialpadShown();
+    }
+  }
+
   private void keyPressed(int keyCode) {
     if (getView() == null || getView().getTranslationY() != 0) {
       return;
