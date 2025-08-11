@@ -51,10 +51,10 @@
     <item>#841F10</item>
   </array>
 
-  <color name="incall_background_gradient_top">@color/dialer_background_color</color>
-  <color name="incall_background_gradient_middle">@color/dialer_background_color</color>
-  <color name="incall_background_gradient_bottom">@color/dialer_background_color</color>
-  <color name="incall_background_multiwindow">@color/dialer_background_color</color>
+  <color name="incall_background_gradient_top">@android:color/white</color>
+  <color name="incall_background_gradient_middle">@android:color/white</color>
+  <color name="incall_background_gradient_bottom">@android:color/white</color>
+  <color name="incall_background_multiwindow">@android:color/white</color>
 
   <color name="incall_background_gradient_spam_top">#E5A30B0B</color>
   <color name="incall_background_gradient_spam_middle">#D6C01111</color>
