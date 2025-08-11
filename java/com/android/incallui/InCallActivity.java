@@ -169,14 +169,22 @@ public class InCallActivity extends TransactionSafeFragmentActivity
   }
 
   @Override
-  public void onConfigurationChanged(Configuration newConfig) {
+  public void onConfigurationChanged(@NonNull Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     InCallPresenter.getInstance().onConfigurationChanged(this);
-  }
-
-  public void onThemeColorsChanged() {
-    updateTaskDescription();
-    updateWindowBackgroundColor(0);
+    // Force recreation of fragments to apply the new theme
+    if (getCallCardFragmentVisible()) {
+      LogUtil.i("InCallActivity.onConfigurationChanged", "recreating fragments");
+      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+      hideInCallScreenFragment(transaction);
+      hideVideoCallScreenFragment(transaction);
+      hideRttCallScreenFragment(transaction);
+      hideAnswerScreenFragment(transaction);
+      transaction.commitAllowingStateLoss();
+      getSupportFragmentManager().executePendingTransactions();
+    }
+    showMainInCallFragment();
+    onPrimaryCallStateChanged();
   }
 
   @Override

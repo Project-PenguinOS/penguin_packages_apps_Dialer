@@ -1234,9 +1234,6 @@ public class InCallPresenter implements CallList.Listener, AudioModeProvider.Aud
 
   public void onConfigurationChanged(Context context) {
     themeColorManager.onConfigurationChanged(context);
-    if (inCallActivity != null) {
-      inCallActivity.onThemeColorsChanged();
-    }
   }
 
   /**

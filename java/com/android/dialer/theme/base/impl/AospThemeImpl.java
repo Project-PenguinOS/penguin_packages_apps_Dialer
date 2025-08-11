@@ -17,10 +17,7 @@
 
 package com.android.dialer.theme.base.impl;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.view.ContextThemeWrapper;
@@ -33,10 +30,6 @@ import com.android.dialer.R;
 import com.android.dialer.common.Assert;
 import com.android.dialer.theme.base.Theme;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /** Utility for fetching */
@@ -45,19 +38,9 @@ import javax.inject.Singleton;
 public class AospThemeImpl implements Theme {
 
   private final Context context;
-  private final Map<Integer, Integer> colorCache = new HashMap<>();
 
-  @Inject
   public AospThemeImpl(Context context) {
     this.context = context.getApplicationContext();
-    this.context.registerReceiver(
-        new BroadcastReceiver() {
-          @Override
-          public void onReceive(Context context, Intent intent) {
-            colorCache.clear();
-          }
-        },
-        new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
   }
 
   /**
@@ -66,15 +49,14 @@ public class AospThemeImpl implements Theme {
    */
   @Override
   public @Type int getTheme() {
-    int currentNightMode =
-        context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+    int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
     switch (currentNightMode) {
-      case Configuration.UI_MODE_NIGHT_NO:
-        return LIGHT;
-      case Configuration.UI_MODE_NIGHT_YES:
-        return DARK;
-      default:
-        return LIGHT;
+        case Configuration.UI_MODE_NIGHT_NO:
+            return LIGHT;
+        case Configuration.UI_MODE_NIGHT_YES:
+            return DARK;
+        default:
+            return LIGHT;
     }
   }
 
@@ -152,17 +134,9 @@ public class AospThemeImpl implements Theme {
   }
 
   private int resolveColor(int attr) {
-    if (colorCache.containsKey(attr)) {
-      Integer color = colorCache.get(attr);
-      if (color != null) {
-        return color;
-      }
-    }
-    final TypedArray a = context.obtainStyledAttributes(new int[] {attr});
+    final TypedArray a = context.obtainStyledAttributes(new int[]{attr});
     try {
-      int color = a.getColor(0, 0);
-      colorCache.put(attr, color);
-      return color;
+      return a.getColor(0, 0);
     } finally {
       a.recycle();
     }
