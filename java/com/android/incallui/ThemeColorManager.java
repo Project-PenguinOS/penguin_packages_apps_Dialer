@@ -53,6 +53,10 @@ public class ThemeColorManager {
     }
   }
 
+  public void onConfigurationChanged(Context context) {
+    updateThemeColors(context, false /* isSpam */);
+  }
+
   private void updateThemeColors(Context context, boolean isSpam) {
     MaterialPalette palette;
     if (isSpam) {

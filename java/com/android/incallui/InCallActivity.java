@@ -169,6 +169,17 @@ public class InCallActivity extends TransactionSafeFragmentActivity
   }
 
   @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    InCallPresenter.getInstance().onConfigurationChanged(this);
+  }
+
+  public void onThemeColorsChanged() {
+    updateTaskDescription();
+    updateWindowBackgroundColor(0);
+  }
+
+  @Override
   protected void onResumeFragments() {
     super.onResumeFragments();
     if (needDismissPendingDialogs) {
