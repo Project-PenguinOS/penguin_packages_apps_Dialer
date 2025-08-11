@@ -333,6 +333,8 @@ public class StatusBarNotifier
     LogUtil.i("StatusBarNotifier.buildAndSendNotification", "notificationType=" + notificationType);
     switch (notificationType) {
       case NOTIFICATION_INCOMING_CALL:
+        publicBuilder.setColorized(true);
+        builder.setColorized(true);
         builder.setChannelId(NotificationChannelId.INCOMING_CALL);
         // Set the intent as a full screen intent as well if a call is incoming
         configureFullScreenIntent(builder, createLaunchPendingIntent(true /* isFullScreen */));
@@ -348,6 +350,8 @@ public class StatusBarNotifier
         }
         break;
       case NOTIFICATION_INCOMING_CALL_QUIET:
+        publicBuilder.setColorized(true);
+        builder.setColorized(true);
         builder.setChannelId(NotificationChannelId.ONGOING_CALL);
         break;
       case NOTIFICATION_IN_CALL:
