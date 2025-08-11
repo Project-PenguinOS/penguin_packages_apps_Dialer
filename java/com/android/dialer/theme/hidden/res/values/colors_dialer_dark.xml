@@ -28,4 +28,5 @@
   <color name="searchbar_icon_color">#FF212121</color>
   <color name="dialer_theme_color_light">#FFF8F8F8</color>
   <color name="theme_ved_white">#FF212121</color>
+  <color name="theme_text">@android:color/white</color>
 </resources>

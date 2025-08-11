@@ -31,4 +31,5 @@
     <color name="theme_ved_white">#FF212121</color>
     <color name="theme_ved_black">#F8F8F8</color>
     <color name="theme_ved_pill">#F8F8F8</color>
+    <color name="theme_text">@android:color/white</color>
   </resources>
