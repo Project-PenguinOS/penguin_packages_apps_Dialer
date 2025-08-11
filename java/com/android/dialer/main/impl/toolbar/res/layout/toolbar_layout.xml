@@ -122,7 +122,8 @@
             android:contentDescription="@string/action_menu_overflow_description"
             android:scaleType="center"
             android:src="@drawable/quantum_ic_more_vert_vd_theme_24"
-            app:tint="@color/menubar_icon_color" />
+            app:tint="@color/menubar_icon_color" 
+            android:visibility="invisible"/>
       </RelativeLayout>
 
       <include layout="@layout/expanded_search_bar"/>
