@@ -171,17 +171,7 @@ public class InCallActivity extends TransactionSafeFragmentActivity
   @Override
   public void onConfigurationChanged(@NonNull Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    InCallPresenter.getInstance().onConfigurationChanged(this);
-    updateWindowBackgroundColor(0);
-    WindowInsetsControllerCompat insetsController =
-        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-    if (insetsController != null) {
-      boolean isLight =
-          (newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK)
-              != Configuration.UI_MODE_NIGHT_YES;
-      insetsController.setAppearanceLightStatusBars(isLight);
-    }
-    getWindow().getDecorView().invalidate();
+    recreate();
   }
 
   @Override
