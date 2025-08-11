@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <style name="Theme.InCallScreen" parent="@style/Dialer.ThemeBase.NoActionBar">
+    <style name="Theme.InCallScreen" parent="@style/Dialer.Dark.ThemeBase.NoActionBar">
     <item name="android:textColorPrimary">@color/theme_text</item>
     <item name="android:textColorSecondary">@color/theme_ved_pill</item>
     <item name="android:windowLightStatusBar">true</item>
