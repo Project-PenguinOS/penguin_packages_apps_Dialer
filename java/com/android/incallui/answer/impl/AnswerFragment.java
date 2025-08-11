@@ -393,7 +393,7 @@ public class AnswerFragment extends Fragment
     } else {
       LogUtil.i("AnswerFragment.setTextResponses", "textResponses.size: " + textResponses.size());
       this.textResponses = new ArrayList<>(textResponses);
-      secondaryButton.setVisibility(View.VISIBLE);
+      secondaryButton.setVisibility(View.INVISIBLE); // Hide the sms
     }
   }
 
@@ -412,7 +412,7 @@ public class AnswerFragment extends Fragment
     if (isVideoUpgradeRequest()) {
       secondaryButton.setVisibility(View.INVISIBLE);
     } else if (isVideoCall()) {
-      secondaryButton.setVisibility(View.VISIBLE);
+      secondaryButton.setVisibility(View.INVISIBLE); // Hide the sms button
     }
 
     answerAndReleaseBehavior = SecondaryBehavior.ANSWER_AND_RELEASE;

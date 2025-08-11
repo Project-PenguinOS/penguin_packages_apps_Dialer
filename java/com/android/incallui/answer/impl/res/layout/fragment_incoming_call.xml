@@ -181,7 +181,7 @@
       android:scaleType="center"
       android:src="@drawable/quantum_ic_message_vd_theme_24"
       android:visibility="invisible"
-      tools:visibility="visible"/>
+      tools:visibility="invisible"/>
 
   <com.android.incallui.answer.impl.affordance.SwipeButtonView
       android:id="@+id/incoming_secondary_button2"
