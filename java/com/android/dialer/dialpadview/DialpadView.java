@@ -288,6 +288,7 @@ public class DialpadView extends LinearLayout {
   }
 
   public void animateShow() {
+    setVisibility(View.VISIBLE); // Make the dialpad visible before animation starts
     getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {

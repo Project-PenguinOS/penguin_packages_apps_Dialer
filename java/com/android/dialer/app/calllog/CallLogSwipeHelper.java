@@ -10,7 +10,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.View;
-
+import android.graphics.Path; 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,7 +64,29 @@ public class CallLogSwipeHelper extends SwipeAndDragHelper {
                         cardTop,
                         itemView.getRight() - marginPx,
                         cardBottom);
-                c.drawRoundRect(background, cornerRadius, cornerRadius, paint);
+                float cornerRadiusPx = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 32, context.getResources().getDisplayMetrics());
+
+                int position = viewHolder.getAdapterPosition();
+                float[] radii = new float[8];
+                if (position != RecyclerView.NO_POSITION) {
+                    if (holder.isFirstInDateGroup) {
+                        radii[0] = cornerRadiusPx; // Top-left X
+                        radii[1] = cornerRadiusPx; // Top-left Y
+                        radii[2] = cornerRadiusPx; // Top-right X
+                        radii[3] = cornerRadiusPx; // Top-right Y
+                    }
+                    if (holder.isLastInDateGroup) {
+                        radii[4] = cornerRadiusPx; // Bottom-right X
+                        radii[5] = cornerRadiusPx; // Bottom-right Y
+                        radii[6] = cornerRadiusPx; // Bottom-left X
+                        radii[7] = cornerRadiusPx; // Bottom-left Y
+                    }
+                }
+
+                Path path = new Path();
+                path.addRoundRect(background, radii, Path.Direction.CW);
+                c.drawPath(path, paint);
 
                 Drawable icon = ContextCompat.getDrawable(context, isSwipingRight
                         ? R.drawable.quantum_ic_access_time_new_vd_theme_24

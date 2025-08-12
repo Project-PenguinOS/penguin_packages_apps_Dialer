@@ -33,6 +33,7 @@ import static com.android.incallui.NotificationBroadcastReceiver.ACTION_TURN_ON_
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.Notification.CallStyle;
 import android.app.PendingIntent;
 import android.app.Person;
 import android.app.admin.DevicePolicyManager;
@@ -311,6 +312,12 @@ public class StatusBarNotifier
       largeIcon = getRoundedIcon(largeIcon);
     }
 
+    Person callerPerson = new Person.Builder()
+        .setName(contentTitle)
+        .setIcon(largeIcon != null ? Icon.createWithBitmap(largeIcon) : null)
+        .setUri(contactInfo.lookupUri != null ? contactInfo.lookupUri.toString() : null)
+        .build();
+
     // This builder is used for the notification shown when the device is locked and the user
     // has set their notification settings to 'hide sensitive content'
     // {@see Notification.Builder#setPublicVersion}.
@@ -333,9 +340,13 @@ public class StatusBarNotifier
     LogUtil.i("StatusBarNotifier.buildAndSendNotification", "notificationType=" + notificationType);
     switch (notificationType) {
       case NOTIFICATION_INCOMING_CALL:
-        publicBuilder.setColorized(true);
-        builder.setColorized(true);
         builder.setChannelId(NotificationChannelId.INCOMING_CALL);
+        builder.setStyle(Notification.CallStyle.forIncomingCall(
+            callerPerson,
+            createNotificationPendingIntent(context, ACTION_DECLINE_INCOMING_CALL),
+            createNotificationPendingIntent(context, ACTION_ANSWER_VOICE_INCOMING_CALL))
+            .setAnswerButtonColorHint(context.getColor(R.color.notification_action_accept))
+            .setDeclineButtonColorHint(context.getColor(R.color.notification_action_dismiss)));
         // Set the intent as a full screen intent as well if a call is incoming
         configureFullScreenIntent(builder, createLaunchPendingIntent(true /* isFullScreen */));
         // Set the notification category and bump the priority for incoming calls
@@ -350,9 +361,13 @@ public class StatusBarNotifier
         }
         break;
       case NOTIFICATION_INCOMING_CALL_QUIET:
-        publicBuilder.setColorized(true);
-        builder.setColorized(true);
         builder.setChannelId(NotificationChannelId.ONGOING_CALL);
+        builder.setStyle(Notification.CallStyle.forIncomingCall(
+            callerPerson,
+            createNotificationPendingIntent(context, ACTION_DECLINE_INCOMING_CALL),
+            createNotificationPendingIntent(context, ACTION_ANSWER_VOICE_INCOMING_CALL))
+            .setAnswerButtonColorHint(context.getColor(R.color.notification_action_accept))
+            .setDeclineButtonColorHint(context.getColor(R.color.notification_action_dismiss)));
         break;
       case NOTIFICATION_IN_CALL:
         publicBuilder.setColorized(true);
@@ -378,7 +393,6 @@ public class StatusBarNotifier
       createIncomingCallNotification(call, callState, callAudioState, builder);
     }
 
-    addPersonReference(builder, contactInfo, call);
 
     Trace.beginSection("fire notification");
     // Fire off the notification
@@ -423,11 +437,9 @@ public class StatusBarNotifier
       addHangupAction(builder);
       addSpeakerAction(builder, callAudioState);
     } else if (state == DialerCallState.INCOMING || state == DialerCallState.CALL_WAITING) {
-      addDismissAction(builder);
       if (call.isVideoCall()) {
-        addVideoCallAction(builder);
+        addVideoCallAction(builder); // Keep this if it's a video call specific action not covered by CallStyle
       } else {
-        addAnswerAction(builder);
       }
     }
   }
@@ -548,21 +560,7 @@ public class StatusBarNotifier
     return preferredName;
   }
 
-  private void addPersonReference(
-      Notification.Builder builder, ContactCacheEntry contactInfo, DialerCall call) {
-    // Query {@link Contacts#CONTENT_LOOKUP_URI} directly with work lookup key is not allowed.
-    // So, do not pass {@link Contacts#CONTENT_LOOKUP_URI} to NotificationManager to avoid
-    // NotificationManager using it.
-    String uri = null;
-    if (contactInfo.lookupUri != null && contactInfo.userType != ContactsUtils.USER_TYPE_WORK) {
-      uri = contactInfo.lookupUri.toString();
-    } else if (!TextUtils.isEmpty(call.getNumber())) {
-      uri = Uri.fromParts(PhoneAccount.SCHEME_TEL, call.getNumber(), null).toString();
-    }
-    if (uri != null) {
-      builder.addPerson(new Person.Builder().setUri(uri).build());
-    }
-  }
+  
 
   /** Gets a large icon from the contact info object to display in the notification. */
   private static Bitmap getLargeIconToDisplay(

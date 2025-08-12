@@ -221,6 +221,8 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
   public int dayGroupHeaderVisibility;
   public CharSequence dayGroupHeaderText;
   public boolean isAttachedToWindow;
+  public boolean isFirstInDateGroup; // Added for date grouping
+  public boolean isLastInDateGroup;  // Added for date grouping
 
   public CallLogAdapter.LoadDataTaskInterface asyncTask;
   private CallDetailsEntries callDetailsEntries;

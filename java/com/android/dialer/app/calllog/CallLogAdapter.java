@@ -649,6 +649,9 @@ public class CallLogAdapter extends GroupingListAdapter
         boolean isFirstInGroup = getDayGroup(getItemId(position - 1)) != dayGroup;
         boolean isLastInGroup = getDayGroup(getItemId(position + 1)) != dayGroup;
 
+        vh.isFirstInDateGroup = isFirstInGroup;
+        vh.isLastInDateGroup = isLastInGroup;
+
         int drawableId;
         if (isFirstInGroup && isLastInGroup) {
             drawableId = R.drawable.call_log_card_background_single;
