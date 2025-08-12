@@ -30,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import com.android.dialer.R;
@@ -192,7 +193,17 @@ public class DialpadFragment extends BaseFragment<DialpadPresenter, DialpadUi>
   /** Starts the slide up animation for the Dialpad keys when the Dialpad is revealed. */
   public void animateShowDialpad() {
     final DialpadView dialpadView = getView().findViewById(R.id.dialpad_view);
-    dialpadView.animateShow();
+    // Add a listener to wait for the first draw, ensuring layout adjustments are complete.
+    dialpadView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+      @Override
+      public boolean onPreDraw() {
+        // Remove the listener to ensure it only runs once.
+        dialpadView.getViewTreeObserver().removeOnPreDrawListener(this);
+        // Now that the layout is stable, trigger the animation.
+        dialpadView.animateShow();
+        return true; // Allow the current drawing pass to proceed.
+      }
+    });
   }
 
   @Override

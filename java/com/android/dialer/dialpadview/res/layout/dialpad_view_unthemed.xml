@@ -27,7 +27,8 @@
     android:clickable="true"
     android:elevation="?attr/dialpad_elevation"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="gone">
 
   <!-- Text field where call rate is displayed for ILD calls. -->
   <LinearLayout
