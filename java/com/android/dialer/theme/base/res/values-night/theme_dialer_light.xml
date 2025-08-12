@@ -27,7 +27,7 @@
     <item name="android:textColorPrimaryInverse">@color/color_ved_black</item>
     <item name="android:textColorSecondaryInverse">@color/dialer_secondary_text_color</item>
     <item name="android:textColorHint">@color/google_grey_600</item>
-
+    <item name="colorCallNotificationBackground">@android:color/black</item>
   </style>
 
   <style name="DialerActionBarBaseTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
