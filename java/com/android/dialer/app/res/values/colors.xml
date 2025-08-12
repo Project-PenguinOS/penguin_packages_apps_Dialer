@@ -39,10 +39,10 @@
   <color name="thumb_off_color">@color/dialer_background_color</color>
 
   <!-- Material next track on color-->
-  <color name="track_on_color">#2A56C6</color>
+  <color name="track_on_color">#FF0E7AFE</color>
 
   <!-- Material next track off color-->
-  <color name="track_off_color">@android:color/system_neutral2_500</color>
+  <color name="track_off_color">#FF8E8E93</color>
 
   <!-- custom -->
   <color name="theme_white">#FFFFFF</color>
