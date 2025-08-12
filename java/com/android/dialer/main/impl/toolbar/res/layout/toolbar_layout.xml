@@ -123,7 +123,7 @@
             android:scaleType="center"
             android:src="@drawable/quantum_ic_more_vert_vd_theme_24"
             app:tint="@color/menubar_icon_color" 
-            android:visibility="invisible"/>
+            android:visibility="visible"/>
       </RelativeLayout>
 
       <include layout="@layout/expanded_search_bar"/>
