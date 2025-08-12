@@ -20,6 +20,7 @@ package com.android.dialer.app.calllog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.VoicemailContract.Voicemails;
@@ -28,11 +29,19 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.dialer.calldetails.CallDetailsEntries;
+import com.android.dialer.calldetails.CallDetailsEntries.CallDetailsEntry;
 import com.android.dialer.common.LogUtil;
 import com.android.dialer.common.concurrent.AsyncTaskExecutor;
 import com.android.dialer.common.concurrent.AsyncTaskExecutors;
+import com.android.dialer.phonenumbercache.CallLogQuery;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.voicemail.VoicemailClient;
+import java.util.function.Consumer;
+import android.os.Handler;
+import android.os.Looper;
+
+
 
 /** TODO(calderwoodra): documentation */
 public class CallLogAsyncTaskUtil {
@@ -158,12 +167,64 @@ public class CallLogAsyncTaskUtil {
     });
   }
 
+  public static void getCallDetails(
+      @NonNull final Context context,
+      @NonNull final String number,
+      @NonNull final Consumer<CallDetailsEntries> callback) {
+    if (!PermissionsUtil.hasPhonePermissions(context)
+        || !PermissionsUtil.hasCallLogReadPermissions(context)) {
+      callback.accept(null);
+      return;
+    }
+    if (asyncTaskExecutor == null) {
+      initTaskExecutor();
+    }
+
+    asyncTaskExecutor.submit(
+        Tasks.GET_CALL_DETAILS,
+        () -> {
+          final String selection = CallLog.Calls.NUMBER + " = ?";
+          final String[] selectionArgs = {number};
+          final CallDetailsEntries result;
+          try (Cursor cursor =
+              context
+                  .getContentResolver()
+                  .query(
+                      CallLog.Calls.CONTENT_URI,
+                      CallLogQuery.getProjection(),
+                      selection,
+                      selectionArgs,
+                      CallLog.Calls.DEFAULT_SORT_ORDER)) {
+            if (cursor == null || cursor.getCount() == 0) {
+              result = null;
+            } else {
+              CallDetailsEntries.Builder entries = CallDetailsEntries.newBuilder();
+              while (cursor.moveToNext()) {
+                CallDetailsEntry.Builder entry =
+                    CallDetailsEntry.newBuilder()
+                        .setCallId(cursor.getLong(CallLogQuery.ID))
+                        .setCallType(cursor.getInt(CallLogQuery.CALL_TYPE))
+                        .setDataUsage(cursor.getLong(CallLogQuery.DATA_USAGE))
+                        .setDate(cursor.getLong(CallLogQuery.DATE))
+                        .setDuration(cursor.getLong(CallLogQuery.DURATION))
+                        .setFeatures(cursor.getInt(CallLogQuery.FEATURES))
+                        .setCallMappingId(String.valueOf(cursor.getLong(CallLogQuery.DATE)));
+                entries.addEntries(entry.build());
+              }
+              result = entries.build();
+            }
+          }
+          new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
+  }
+
   /** The enumeration of objects used in this class. */
   public enum Tasks {
     DELETE_VOICEMAIL,
     MARK_VOICEMAIL_READ,
     MARK_CALL_READ,
     DELETE_CALL,
+    GET_CALL_DETAILS,
   }
 
   /** TODO(calderwoodra): documentation */

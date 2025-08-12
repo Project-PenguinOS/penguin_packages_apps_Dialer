@@ -1232,6 +1232,10 @@ public class InCallPresenter implements CallList.Listener, AudioModeProvider.Aud
     }
   }
 
+  public void onConfigurationChanged(Context context) {
+    themeColorManager.onConfigurationChanged(context);
+  }
+
   /**
    * When the state of in-call changes, this is the first method to get called. It determines if the
    * UI needs to be started or finished depending on the new state and does it.

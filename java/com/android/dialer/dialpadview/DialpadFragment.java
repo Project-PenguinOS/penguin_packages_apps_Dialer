@@ -841,6 +841,14 @@ public class DialpadFragment extends Fragment
     getActivity().unregisterReceiver(callStateReceiver);
   }
 
+  @Override
+  public void onConfigurationChanged(@NonNull Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    if (isAdded() && !isHidden() && !isDialpadChooserVisible()) {
+      FragmentUtils.getParentUnsafe(this, DialpadListener.class).onDialpadShown();
+    }
+  }
+
   private void keyPressed(int keyCode) {
     if (getView() == null || getView().getTranslationY() != 0) {
       return;

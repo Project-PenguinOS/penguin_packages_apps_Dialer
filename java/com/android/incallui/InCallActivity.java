@@ -52,6 +52,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -167,6 +169,12 @@ public class InCallActivity extends TransactionSafeFragmentActivity
   }
 
   @Override
+  public void onConfigurationChanged(@NonNull Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    recreate();
+  }
+
+  @Override
   protected void onResumeFragments() {
     super.onResumeFragments();
     if (needDismissPendingDialogs) {
@@ -194,6 +202,16 @@ public class InCallActivity extends TransactionSafeFragmentActivity
 
     setWindowFlags();
     setContentView(R.layout.incall_screen);
+
+    WindowInsetsControllerCompat insetsController =
+            WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+    if (insetsController != null) {
+      boolean isLight =
+          (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+              != Configuration.UI_MODE_NIGHT_YES;
+      insetsController.setAppearanceLightStatusBars(isLight);
+    }
+
     internalResolveIntent(getIntent());
 
     boolean isLandscape =

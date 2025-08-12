@@ -78,7 +78,7 @@
         android:stateListAnimator="@null"
         app:pressedTranslationZ="0dp"
         android:forceDarkAllowed="false"
-        app:fabCustomSize="24dp"
+        app:fabCustomSize="36dp"
         android:src="@drawable/veddialer"
         android:tint="@color/dialer_fab_icon_color"
         app:tint="@color/dialer_fab_icon_color" />

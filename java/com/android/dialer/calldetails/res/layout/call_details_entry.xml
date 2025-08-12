@@ -39,6 +39,7 @@
           android:layout_marginStart="@dimen/call_entry_padding"
           android:layout_centerHorizontal="false"
           android:layout_centerVertical="true"
+          android:visibility="gone"
           app:useLargeIcons="true"/>
 
       <TextView
@@ -46,7 +47,7 @@
           style="@style/Dialer.TextAppearance.Primary"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/call_entry_text_left_margin"
+          android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
           android:layout_toStartOf="@+id/call_duration"
           android:gravity="start"/>
@@ -56,7 +57,7 @@
           style="@style/Dialer.TextAppearance.Primary"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/call_entry_text_left_margin"
+          android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
           android:layout_below="@+id/call_type"/>
 
