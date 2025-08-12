@@ -124,7 +124,7 @@ public class DialerSettingsActivity extends BaseActivity implements
       setPreferenceScreen(getPreferenceManager().createPreferenceScreen(requireContext()));
 
       if (showDisplayOptions()) {
-        Preference displayOptions = new Preference(getContext());
+        CardPreference displayOptions = new CardPreference(getContext());
         displayOptions.setTitle(R.string.display_options_title);
         displayOptions.setFragment(DisplayOptionsSettingsFragment.class.getName());
         displayOptions.setIconSpaceReserved(false);
@@ -132,7 +132,7 @@ public class DialerSettingsActivity extends BaseActivity implements
       }
 
 
-      Preference quickResponseSettings = new Preference(getContext());
+      CardPreference quickResponseSettings = new CardPreference(getContext());
       Intent quickResponseSettingsIntent =
               new Intent(TelecomManager.ACTION_SHOW_RESPOND_VIA_SMS_SETTINGS);
       quickResponseSettings.setTitle(R.string.respond_via_sms_setting_title);
@@ -140,7 +140,7 @@ public class DialerSettingsActivity extends BaseActivity implements
       quickResponseSettings.setIconSpaceReserved(false);
       getPreferenceScreen().addPreference(quickResponseSettings);
 
-      final Preference lookupSettings = new Preference(getContext());
+      final CardPreference lookupSettings = new CardPreference(getContext());
       lookupSettings.setTitle(R.string.lookup_settings_label);
       lookupSettings.setFragment(LookupSettingsFragment.class.getName());
       lookupSettings.setIconSpaceReserved(false);
@@ -154,7 +154,7 @@ public class DialerSettingsActivity extends BaseActivity implements
       // is only one SIM. Otherwise, "Calling accounts" is shown.
       boolean isPrimaryUser = isPrimaryUser();
       if (isPrimaryUser && TelephonyManagerCompat.getPhoneCount(telephonyManager) <= 1) {
-        Preference callSettings = new Preference(getContext());
+        CardPreference callSettings = new CardPreference(getContext());
         Intent callSettingsIntent = new Intent(TelecomManager.ACTION_SHOW_CALL_SETTINGS);
         callSettingsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -163,7 +163,7 @@ public class DialerSettingsActivity extends BaseActivity implements
         callSettings.setIconSpaceReserved(false);
         getPreferenceScreen().addPreference(callSettings);
       } else {
-        Preference phoneAccountSettings = new Preference(getContext());
+        CardPreference phoneAccountSettings = new CardPreference(getContext());
         Intent phoneAccountSettingsIntent = new Intent(TelecomManager.ACTION_CHANGE_PHONE_ACCOUNTS);
         phoneAccountSettingsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -173,7 +173,7 @@ public class DialerSettingsActivity extends BaseActivity implements
         getPreferenceScreen().addPreference(phoneAccountSettings);
       }
       if (BlockedNumberContract.canCurrentUserBlockNumbers(getContext())) {
-        Preference blockedCalls = new Preference(getContext());
+        CardPreference blockedCalls = new CardPreference(getContext());
         blockedCalls.setTitle(R.string.manage_blocked_numbers_label);
         blockedCalls.setIntent(getContext().getSystemService(TelecomManager.class)
                 .createManageBlockedNumbersIntent());
@@ -186,7 +186,7 @@ public class DialerSettingsActivity extends BaseActivity implements
       if (isPrimaryUser
               && (TelephonyManagerCompat.isTtyModeSupported(telecomManager)
               || TelephonyManagerCompat.isHearingAidCompatibilitySupported(telephonyManager))) {
-        Preference accessibilitySettings = new Preference(getContext());
+        CardPreference accessibilitySettings = new CardPreference(getContext());
         Intent accessibilitySettingsIntent =
                 new Intent(TelecomManager.ACTION_SHOW_CALL_ACCESSIBILITY_SETTINGS);
         accessibilitySettings.setTitle(R.string.accessibility_settings_title);
@@ -227,7 +227,7 @@ public class DialerSettingsActivity extends BaseActivity implements
       }
 
       LogUtil.i("DialerSettingsActivity.addVoicemailSettings", "adding voicemail settings");
-      Preference voicemailSettings = new Preference(getContext());
+      CardPreference voicemailSettings = new CardPreference(getContext());
       voicemailSettings.setTitle(R.string.voicemail_settings_label);
       Bundle bundle = new Bundle();
       PhoneAccountHandle soleAccount = getSoleSimAccount();
