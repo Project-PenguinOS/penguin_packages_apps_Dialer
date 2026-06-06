@@ -208,6 +208,8 @@ android_app {
         "java/com/android/voicemail/impl/res",
     ],
     sdk_version: "system_current",
+    min_sdk_version: "30",
+    target_sdk_version: "36",
     srcs: [
         "java/**/I*.aidl",
         "java/**/*.java",
@@ -241,7 +243,6 @@ android_app {
         "jsr305",
         "jsr330",
         "libphonenumber",
-        "org.lineageos.lib.phone",
         "volley",
         "blurview",
     ],
