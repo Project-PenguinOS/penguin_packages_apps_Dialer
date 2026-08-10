@@ -9,6 +9,7 @@ package {
 
 android_app {
     name: "Dialer",
+    overrides: ["GoogleDialer"],
     aaptflags: [
         "--auto-add-overlay",
         "--extra-packages com.android.contacts.common",
