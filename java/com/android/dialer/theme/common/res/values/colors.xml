@@ -34,4 +34,6 @@
   <color name="blue_grey_100">#CFD8DC</color>
 
   <color name="cardBackgroundColor">#F8F8F8</color>
+
+  <color name="dialpad_key_circle_bg">#14000000</color>
 </resources>

@@ -107,6 +107,7 @@ public class CallLogAdapter extends GroupingListAdapter
   public static final String LOAD_DATA_TASK_IDENTIFIER = "load_data";
 
   protected final Activity activity;
+  private final Handler swipeRestoreHandler = new Handler(Looper.getMainLooper());
   protected final VoicemailPlaybackPresenter voicemailPlaybackPresenter;
   /** Cache for repeated requests to Telecom/Telephony. */
   protected final CallLogCache callLogCache;
@@ -1324,28 +1325,61 @@ public class CallLogAdapter extends GroupingListAdapter
     void tapSelectAll();
   }
 
+  @Override
   public void onViewSwiped(int position, int direction) {
-    if (direction == ItemTouchHelper.LEFT) {
-        deleteItem(position);
-    } else {
-        Cursor cursor = (Cursor) getItem(position);
-        String number = cursor.getString(CallLogQuery.NUMBER);
-        activity.startActivity(new Intent(Intent.ACTION_CALL, CallUtil.getCallUri(number)));
-    }
-  }
-
-  public void deleteItem(int position) {
     Cursor cursor = (Cursor) getItem(position);
     if (cursor == null) {
-        return;
+      restoreSwipedItem(position);
+      return;
     }
 
-    long[] callIds = getCallIds(cursor, getGroupSize(position));
-    CallLogAsyncTaskUtil.deleteCalls(activity, callIds, null);
+    boolean isDelete = direction == ItemTouchHelper.LEFT;
+    String number = cursor.getString(CallLogQuery.NUMBER);
+    String contactLabel = getSwipeContactLabel(cursor, number);
+    long[] callIds = isDelete ? getCallIds(cursor, getGroupSize(position)) : null;
+
+    new AlertDialog.Builder(activity)
+        .setMessage(
+            activity.getString(
+                isDelete
+                    ? R.string.call_log_swipe_delete_confirmation
+                    : R.string.call_log_swipe_call_confirmation,
+                contactLabel))
+        .setPositiveButton(
+            isDelete ? R.string.call_log_swipe_delete : R.string.call_log_swipe_call,
+            (dialog, which) -> {
+              if (isDelete) {
+                CallLogAsyncTaskUtil.deleteCalls(activity, callIds, null);
+              } else {
+                activity.startActivity(new Intent(Intent.ACTION_CALL, CallUtil.getCallUri(number)));
+              }
+            })
+        .setNegativeButton(android.R.string.cancel, null)
+        .setOnDismissListener(dialog -> restoreSwipedItem(position))
+        .show();
+  }
+
+  private String getSwipeContactLabel(Cursor cursor, String number) {
+    String name = cursor.getString(CallLogQuery.CACHED_NAME);
+    if (!TextUtils.isEmpty(name)) {
+      return name;
+    }
+    if (!TextUtils.isEmpty(number)) {
+      return number;
+    }
+    return activity.getString(R.string.call_log_swipe_unknown_contact);
+  }
+
+  private void restoreSwipedItem(int position) {
+    swipeRestoreHandler.post(
+        () -> {
+          if (position >= 0 && position < getItemCount()) {
+            notifyItemChanged(position);
+          }
+        });
   }
 
   @Override
   public void onRestoreInstanceState(ViewHolder viewHolder) {
-    notifyItemChanged(viewHolder.getAdapterPosition());
   }
 }

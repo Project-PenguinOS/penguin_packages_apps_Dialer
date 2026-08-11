@@ -195,16 +195,15 @@ public class DialpadView extends LinearLayout {
         numberContentDescription = spannable;
       }
 
-      final RippleDrawable rippleBackground =
-          (RippleDrawable) getContext().getDrawable(R.drawable.btn_dialpad_key);
-      if (rippleColor != null) {
-        rippleBackground.setColor(rippleColor);
-      }
-
       numberView.setText(numberString);
       numberView.setElegantTextHeight(false);
       dialpadKey.setContentDescription(numberContentDescription);
-      dialpadKey.setBackground(rippleBackground);
+      if (rippleColor != null) {
+        View keyCircle = dialpadKey.findViewById(R.id.dialpad_key_layout);
+        if (keyCircle != null && keyCircle.getBackground() instanceof RippleDrawable) {
+          ((RippleDrawable) keyCircle.getBackground().mutate()).setColor(rippleColor);
+        }
+      }
 
       TextView primaryLettersView = (TextView) dialpadKey.findViewById(R.id.dialpad_key_letters);
       TextView secondaryLettersView =

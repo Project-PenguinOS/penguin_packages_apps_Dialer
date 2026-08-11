@@ -39,9 +39,9 @@
     android:id="@id/contactgrid_status_text"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:singleLine="true"
-    android:ellipsize="marquee"
-    android:scrollHorizontally="true"
+    android:maxLines="2"
+    android:ellipsize="end"
+    android:gravity="center_horizontal"
     android:textAppearance="@style/Dialer.Incall.TextAppearance"
     tools:text="Captain Holt"/>
 </LinearLayout>

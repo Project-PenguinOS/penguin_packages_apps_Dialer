@@ -70,7 +70,7 @@
     <item name="android:layout_height">match_parent</item>
     <item name="android:layout_weight">15</item>
     <item name="android:minHeight">@dimen/dialpad_key_height</item>
-    <item name="android:background">@drawable/btn_dialpad_key</item>
+    <item name="android:background">@null</item>
     <item name="android:focusable">true</item>
   </style>
 
@@ -80,6 +80,12 @@
     <item name="android:layout_gravity">center</item>
     <item name="android:gravity">center</item>
     <item name="android:orientation">vertical</item>
+  </style>
+
+  <style name="DialpadKeyCircleLayoutStyle" parent="DialpadKeyInternalLayoutStyle">
+    <item name="android:layout_width">@dimen/dialpad_key_circle_size</item>
+    <item name="android:layout_height">@dimen/dialpad_key_circle_size</item>
+    <item name="android:background">@drawable/dialpad_key_circle</item>
   </style>
 
   <style name="DeviceIdBody">

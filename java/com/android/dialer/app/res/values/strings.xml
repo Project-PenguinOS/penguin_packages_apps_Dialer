@@ -516,4 +516,10 @@
 
   <!-- Label under the name of a spam number in the call log. [CHAR LIMIT=15] -->
   <string name="spam_number_call_log_label">Spam</string>
+
+  <string name="call_log_swipe_delete_confirmation">Delete call history with <xliff:g id="contact" example="Aslam Gogda">%1$s</xliff:g>?</string>
+  <string name="call_log_swipe_call_confirmation">Call <xliff:g id="contact" example="Aslam Gogda">%1$s</xliff:g>?</string>
+  <string name="call_log_swipe_delete">Delete</string>
+  <string name="call_log_swipe_call">Call</string>
+  <string name="call_log_swipe_unknown_contact">this number</string>
 </resources>

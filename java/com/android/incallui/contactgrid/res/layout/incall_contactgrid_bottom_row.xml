@@ -58,7 +58,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:singleLine="true"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
         android:textAppearance="@style/Dialer.Incall.TextAppearance"
         tools:gravity="start"
         tools:text="Mobile +1 (650) 253-0000"/>
