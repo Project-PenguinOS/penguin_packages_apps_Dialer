@@ -74,15 +74,20 @@ public class CallLogSwipeHelper extends SwipeAndDragHelper {
         float cardBottom = cardTop + cardView.getHeight();
 
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && dX != 0) {
-            c.save();
-            c.clipRect(cardLeft, cardTop, cardRight, cardBottom);
-
             boolean isSwipingRight = dX > 0;
+
+            float backgroundLeft = isSwipingRight ? cardLeft : cardLeft + dX;
+            float backgroundRight = isSwipingRight ? cardRight + dX : cardRight;
+
+            // Clip so that drawing cannot bleed onto neighbouring rows.
+            c.save();
+            c.clipRect(backgroundLeft, cardTop, backgroundRight, cardBottom);
+
             paint.setColor(ContextCompat.getColor(context, isSwipingRight
                     ? R.color.dialer_call_green
                     : R.color.dialer_end_call_button_color));
 
-            background.set(cardLeft, cardTop, cardRight, cardBottom);
+            background.set(backgroundLeft, cardTop, backgroundRight, cardBottom);
             setCornerRadii(context, holder);
             backgroundPath.rewind();
             backgroundPath.addRoundRect(background, radii, Path.Direction.CW);

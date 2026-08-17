@@ -39,18 +39,6 @@
           style="@style/DialpadKeyNumberStyle"/>
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/dialpad_key_icon_or_letters_layout"
-        style="@style/DialpadKeyInternalLayoutStyle">
-
-      <ImageView
-          android:id="@+id/dialpad_key_voicemail"
-          android:layout_width="wrap_content"
-          android:layout_height="@dimen/dialpad_voicemail_icon_size"
-          android:scaleType="fitCenter"
-          android:src="@drawable/quantum_ic_voicemail_vd_theme_24"
-          app:tint="?colorIcon" />
-    </LinearLayout>
 
     <!-- A placeholder to make the width the same as other dialpad keys. -->
     <View

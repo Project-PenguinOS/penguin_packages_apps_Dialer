@@ -211,6 +211,7 @@ public class InCallActivity extends TransactionSafeFragmentActivity
               != Configuration.UI_MODE_NIGHT_YES;
       insetsController.setAppearanceLightStatusBars(isLight);
     }
+    updateNavigationBarAppearance(false);
 
     internalResolveIntent(getIntent());
 
@@ -770,10 +771,20 @@ public class InCallActivity extends TransactionSafeFragmentActivity
     }
   }
 
+  private void updateNavigationBarAppearance(boolean dialpadVisible) {
+    WindowInsetsControllerCompat insetsController =
+        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+    if (insetsController != null) {
+      insetsController.setAppearanceLightNavigationBars(!dialpadVisible);
+    }
+  }
+
   public void showDialpadFragment(boolean show, boolean animate) {
     if (show == isDialpadVisible()) {
       return;
     }
+
+    updateNavigationBarAppearance(show);
 
     FragmentManager dialpadFragmentManager = getDialpadFragmentManager();
     if (dialpadFragmentManager == null) {

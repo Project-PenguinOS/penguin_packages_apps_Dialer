@@ -10,16 +10,13 @@
   android:layout_marginEnd="@dimen/incall_window_margin_horizontal"
   tools:showIn="@layout/frag_incall_voice">
 
-  <androidx.cardview.widget.CardView
+  <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="?android:attr/colorBackgroundFloating"
-    app:cardElevation="0dp"
     android:layout_gravity="bottom|center_horizontal"
-    app:cardCornerRadius="32dp"
+    android:background="@drawable/incall_button_pad_glass"
     android:layout_marginStart="32dp"
-    android:layout_marginEnd="32dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginEnd="32dp">
 
   <GridLayout
     android:layout_width="match_parent"
@@ -92,5 +89,5 @@
       tools:layout_height="@dimen/tools_button_height"
       tools:layout_width="@dimen/incall_labeled_button_size"/>
   </GridLayout>
-    </androidx.cardview.widget.CardView>
+    </FrameLayout>
 </FrameLayout>

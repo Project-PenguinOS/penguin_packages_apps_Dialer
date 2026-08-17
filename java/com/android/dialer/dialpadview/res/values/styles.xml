@@ -19,7 +19,7 @@
   <style name="DialpadSpaceStyle">
     <item name="android:layout_width">0dp</item>
     <item name="android:layout_height">match_parent</item>
-    <item name="android:layout_weight">1</item>
+    <item name="android:layout_weight">7</item>
   </style>
 
   <style name="DialpadKeyNumberStyle">
@@ -28,7 +28,7 @@
     <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginBottom">?attr/dialpad_key_number_margin_bottom</item>
+    <item name="android:layout_marginBottom">@dimen/dialpad_key_number_gap</item>
     <item name="android:gravity">center</item>
   </style>
 
@@ -39,7 +39,6 @@
     <item name="android:alpha">0.8</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginBottom">@dimen/dialpad_symbol_margin_bottom</item>
     <item name="android:layout_gravity">center</item>
   </style>
 
@@ -50,7 +49,6 @@
     <item name="android:alpha">0.8</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginBottom">@dimen/dialpad_symbol_margin_bottom</item>
     <item name="android:layout_gravity">center</item>
   </style>
 

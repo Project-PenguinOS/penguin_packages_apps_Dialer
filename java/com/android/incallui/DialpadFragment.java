@@ -26,9 +26,11 @@ import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.widget.EditText;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
@@ -157,7 +159,45 @@ public class DialpadFragment extends BaseFragment<DialpadPresenter, DialpadUi>
     backButton.setOnClickListener(this);
     endCallSpace = dialpadView.findViewById(R.id.end_call_space);
 
+    parent.addOnAttachStateChangeListener(
+        new OnAttachStateChangeListener() {
+          @Override
+          public void onViewAttachedToWindow(View v) {
+            extendBelowNavigationBar(v);
+          }
+
+          @Override
+          public void onViewDetachedFromWindow(View v) {}
+        });
+
     return parent;
+  }
+
+  private void extendBelowNavigationBar(View fragmentRoot) {
+    WindowInsets rootInsets = fragmentRoot.getRootWindowInsets();
+    if (rootInsets == null || !(fragmentRoot.getParent() instanceof View)) {
+      return;
+    }
+    int bottomInset = rootInsets.getInsets(WindowInsets.Type.systemBars()).bottom;
+    if (bottomInset == 0) {
+      return;
+    }
+
+    dialpadView.setPadding(
+        dialpadView.getPaddingLeft(),
+        dialpadView.getPaddingTop(),
+        dialpadView.getPaddingRight(),
+        bottomInset);
+
+    View container = (View) fragmentRoot.getParent();
+    ViewGroup.LayoutParams params = container.getLayoutParams();
+    if (params instanceof ViewGroup.MarginLayoutParams) {
+      ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) params;
+      if (marginParams.bottomMargin != -bottomInset) {
+        marginParams.bottomMargin = -bottomInset;
+        container.setLayoutParams(marginParams);
+      }
+    }
   }
 
   @Override

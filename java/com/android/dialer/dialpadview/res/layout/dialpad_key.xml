@@ -29,7 +29,8 @@
 
     <LinearLayout
         android:id="@+id/dialpad_key_icon_or_letters_layout"
-        style="@style/DialpadKeyInternalLayoutStyle">
+        style="@style/DialpadKeyInternalLayoutStyle"
+        android:layout_height="@dimen/dialpad_key_sublabel_height">
 
       <com.android.dialer.dialpadview.DialpadTextView
           android:id="@+id/dialpad_key_letters"
