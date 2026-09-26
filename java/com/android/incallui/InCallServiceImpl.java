@@ -63,6 +63,7 @@ public class InCallServiceImpl extends InCallService {
   @Override
   public void onCallAdded(Call call) {
     Trace.beginSection("InCallServiceImpl.onCallAdded");
+    UniversalDialer.onCallAdded(call);
     if (!UniversalDialer.shouldHandle(this, call)) {
       LogUtil.i("InCallServiceImpl.onCallAdded", "leaving VoIP call to its app");
       ignoredCalls.add(call);
@@ -76,6 +77,7 @@ public class InCallServiceImpl extends InCallService {
   @Override
   public void onCallRemoved(Call call) {
     Trace.beginSection("InCallServiceImpl.onCallRemoved");
+    UniversalDialer.onCallRemoved(call);
     if (ignoredCalls.remove(call)) {
       Trace.endSection();
       return;

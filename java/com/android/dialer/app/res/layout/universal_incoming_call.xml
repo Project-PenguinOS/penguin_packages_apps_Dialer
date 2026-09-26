@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/universal_call_background"
+    android:fitsSystemWindows="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="48dp"
+    android:paddingBottom="56dp">
+
+  <ImageView
+      android:id="@+id/universal_call_avatar"
+      android:layout_width="96dp"
+      android:layout_height="96dp"
+      android:importantForAccessibility="no"/>
+
+  <TextView
+      android:id="@+id/universal_call_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:layout_marginStart="24dp"
+      android:layout_marginEnd="24dp"
+      android:ellipsize="end"
+      android:gravity="center"
+      android:maxLines="2"
+      android:textAppearance="@style/Dialer.TextAppearance.LargeTitle"/>
+
+  <TextView
+      android:id="@+id/universal_call_subtitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="6dp"
+      android:textAppearance="@style/Dialer.TextAppearance.Hig.Subheadline"/>
+
+  <Space
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"/>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+      <ImageButton
+          android:id="@+id/universal_call_decline"
+          android:layout_width="76dp"
+          android:layout_height="76dp"
+          android:background="@drawable/universal_call_decline_button"
+          android:contentDescription="@string/universal_call_decline"
+          android:padding="20dp"
+          android:scaleType="fitCenter"
+          android:src="@drawable/quantum_ic_call_end_vd_theme_24"
+          android:tint="@android:color/white"/>
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="@string/universal_call_decline"
+          android:textAppearance="@style/Dialer.TextAppearance.Hig.Subheadline"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+      <ImageButton
+          android:id="@+id/universal_call_answer"
+          android:layout_width="76dp"
+          android:layout_height="76dp"
+          android:background="@drawable/universal_call_accept_button"
+          android:contentDescription="@string/universal_call_accept"
+          android:padding="20dp"
+          android:scaleType="fitCenter"
+          android:src="@drawable/quantum_ic_call_vd_theme_24"
+          android:tint="@android:color/white"/>
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="@string/universal_call_accept"
+          android:textAppearance="@style/Dialer.TextAppearance.Hig.Subheadline"/>
+    </LinearLayout>
+  </LinearLayout>
+</LinearLayout>

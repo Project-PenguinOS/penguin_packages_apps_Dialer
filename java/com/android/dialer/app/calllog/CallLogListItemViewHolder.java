@@ -77,12 +77,14 @@ import com.android.dialer.phonenumbercache.ContactInfo;
 import com.android.dialer.phonenumbercache.PhoneNumberCache;
 import com.android.dialer.phonenumberutil.PhoneNumberHelper;
 import com.android.dialer.telecom.TelecomUtil;
+import com.android.dialer.universaldialer.AppCalls;
 import com.android.dialer.universaldialer.UniversalDialer;
 import com.android.dialer.util.CallUtil;
 import com.android.dialer.util.DialerUtils;
 import com.android.dialer.util.UriUtils;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * This is an object containing references to views contained by the call log list item. This
@@ -137,6 +139,7 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
   public View createNewContactButtonView;
   public View addToExistingContactButtonView;
   public View sendMessageView;
+  public View callViaAppView;
   public View blockReportView;
   public View blockView;
   public View unblockView;
@@ -375,6 +378,8 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
 
       sendMessageView = actionsView.findViewById(R.id.send_message_action);
       sendMessageView.setOnClickListener(this);
+      callViaAppView = actionsView.findViewById(R.id.call_via_app_action);
+      callViaAppView.setOnClickListener(this);
 
       blockReportView = actionsView.findViewById(R.id.block_report_action);
       blockReportView.setOnClickListener(this);
@@ -429,7 +434,12 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
         && callIds != null
         && callIds.length > 0
         && UniversalDialer.isVoipAccount(accountHandle.getComponentName().flattenToString())) {
-      primaryActionButtonView.setTag(IntentProvider.getVoipCallBackIntentProvider(callIds[0]));
+      String component = accountHandle.getComponentName().flattenToString();
+      primaryActionButtonView.setTag(
+          UniversalDialer.isNotificationEntry(component)
+              ? IntentProvider.getAppCallBackIntentProvider(
+                  accountHandle.getComponentName().getPackageName(), number)
+              : IntentProvider.getVoipCallBackIntentProvider(callIds[0]));
       primaryActionButtonView.setContentDescription(
           TextUtils.expandTemplate(
               context.getString(R.string.description_call_action), validNameOrNumber));
@@ -655,6 +665,8 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
       sendMessageView.setVisibility(View.GONE);
     }
 
+    bindCallViaApp(canPlaceCallToNumber && !isBlockedOrSpam && !isVoicemailNumber);
+
     callLogListItemHelper.setActionContentDescriptions(this);
 
     boolean supportsCallSubject = callLogCache.doesAccountSupportCallSubject(accountHandle);
@@ -793,6 +805,44 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
     });
     actionsAnimator = animator;
     animator.start();
+  }
+
+  private void bindCallViaApp(boolean allowed) {
+    callViaAppView.setVisibility(View.GONE);
+    if (!allowed || !UniversalDialer.isEnabled(context) || TextUtils.isEmpty(number)) {
+      return;
+    }
+    final String boundNumber = number;
+    final Context appContext = context.getApplicationContext();
+    new Thread(() -> {
+      List<AppCalls.Option> options = AppCalls.forNumber(appContext, boundNumber);
+      AppCalls.Option voice = null;
+      for (AppCalls.Option option : options) {
+        if (!option.video) {
+          voice = option;
+          break;
+        }
+      }
+      final AppCalls.Option chosen = voice;
+      callViaAppView.post(() -> {
+        if (chosen == null || !boundNumber.equals(number)) {
+          return;
+        }
+        CharSequence app =
+            UniversalDialer.appLabel(
+                context, UniversalDialer.notificationAccountComponent(chosen.appPackage));
+        ((TextView) callViaAppView.findViewById(R.id.call_via_app_text))
+            .setText(context.getString(R.string.call_log_action_call_via_app, app));
+        callViaAppView.setTag(
+            new IntentProvider() {
+              @Override
+              public Intent getClickIntent(Context context) {
+                return chosen.intent();
+              }
+            });
+        callViaAppView.setVisibility(View.VISIBLE);
+      });
+    }, "CallLogListItemViewHolder.callViaApp").start();
   }
 
   public void updatePhoto() {

@@ -17,6 +17,7 @@
 package com.android.dialer.app.settings;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,6 +49,7 @@ import com.android.dialer.app.BaseActivity;
 import com.android.dialer.common.LogUtil;
 import com.android.dialer.compat.telephony.TelephonyManagerCompat;
 import com.android.dialer.lookup.LookupSettingsFragment;
+import com.android.dialer.universaldialer.UniversalCallNotificationListener;
 import com.android.dialer.universaldialer.UniversalDialer;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.widget.HigNavigationBar;
@@ -269,9 +271,25 @@ public class DialerSettingsActivity extends BaseActivity implements
       usageAccess.setIntent(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
       usageAccess.setIconSpaceReserved(false);
       experimental.addPreference(usageAccess);
-      Runnable updateUsageAccess = () -> usageAccess.setVisible(
-          UniversalDialer.isEnabled(getContext())
-              && !UniversalDialer.canDetectForegroundApp(getContext()));
+      CardPreference notificationAccess = new CardPreference(getContext());
+      notificationAccess.setTitle(R.string.universal_dialer_notification_access_title);
+      notificationAccess.setSummary(R.string.universal_dialer_notification_access_summary);
+      notificationAccess.setIntent(
+          new Intent(Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS)
+              .putExtra(
+                  Settings.EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME,
+                  new ComponentName(getContext(), UniversalCallNotificationListener.class)
+                      .flattenToString()));
+      notificationAccess.setIconSpaceReserved(false);
+      experimental.addPreference(notificationAccess);
+
+      Runnable updateUsageAccess = () -> {
+        boolean enabled = UniversalDialer.isEnabled(getContext());
+        usageAccess.setVisible(enabled && !UniversalDialer.canDetectForegroundApp(getContext()));
+        notificationAccess.setVisible(
+            enabled && !UniversalDialer.hasNotificationAccess(getContext()));
+      };
+      accessRowsUpdater = updateUsageAccess;
       updateUsageAccess.run();
       universalDialer.setOnPreferenceChangeListener((preference, newValue) -> {
         preference.getPreferenceManager().getSharedPreferences()
@@ -296,6 +314,16 @@ public class DialerSettingsActivity extends BaseActivity implements
       licenses.setFragment(LicensesFragment.class.getName());
       licenses.setIconSpaceReserved(false);
       about.addPreference(licenses);
+    }
+
+    @Nullable private Runnable accessRowsUpdater;
+
+    @Override
+    public void onResume() {
+      super.onResume();
+      if (accessRowsUpdater != null) {
+        accessRowsUpdater.run();
+      }
     }
 
     @Override

@@ -36,6 +36,7 @@ import com.android.dialer.callintent.CallInitiationType;
 import com.android.dialer.callintent.CallIntentBuilder;
 import com.android.dialer.dialercontact.DialerContact;
 import com.android.dialer.precall.PreCall;
+import com.android.dialer.universaldialer.AppCalls;
 import com.android.dialer.util.IntentUtil;
 
 import java.util.ArrayList;
@@ -78,6 +79,16 @@ public abstract class IntentProvider {
       public Intent getClickIntent(Context context) {
         return new Intent(
             Intent.ACTION_CALL, ContentUris.withAppendedId(Calls.CONTENT_URI, callLogId));
+      }
+    };
+  }
+
+  public static IntentProvider getAppCallBackIntentProvider(
+      final String appPackage, final String number) {
+    return new IntentProvider() {
+      @Override
+      public Intent getClickIntent(Context context) {
+        return AppCalls.callBackIntent(context, appPackage, number);
       }
     };
   }

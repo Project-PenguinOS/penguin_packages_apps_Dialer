@@ -598,6 +598,24 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="com.android.dialer.universaldialer.UniversalCallNotificationListener"
+            android:exported="true"
+            android:label="@string/universal_dialer_title"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.android.dialer.universaldialer.UniversalIncomingCallActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:taskAffinity="com.android.dialer.universaldialer"
+            android:theme="@style/Theme.InCallScreen" />
+
         <activity
             android:name="com.android.incallui.AudioRouteSelectorActivity"
             android:excludeFromRecents="true"

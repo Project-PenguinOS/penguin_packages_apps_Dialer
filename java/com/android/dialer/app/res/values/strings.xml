@@ -547,4 +547,9 @@
   <string name="universal_dialer_usage_access_summary">Needed to leave calls to their app while you\'re using it.</string>
   <string name="universal_dialer_call_label_audio"><xliff:g id="app" example="WhatsApp">%1$s</xliff:g> audio</string>
   <string name="universal_dialer_call_label_video"><xliff:g id="app" example="WhatsApp">%1$s</xliff:g> video</string>
+  <string name="universal_call_decline">Decline</string>
+  <string name="universal_call_accept">Accept</string>
+  <string name="universal_dialer_notification_access_title">Allow notification access</string>
+  <string name="universal_dialer_notification_access_summary">Needed for apps that don\'t use Android\'s calling system, like WhatsApp.</string>
+  <string name="call_log_action_call_via_app">Call via <xliff:g id="app" example="WhatsApp">%1$s</xliff:g></string>
 </resources>

@@ -82,6 +82,32 @@ public final class UniversalDialer {
     return appLabel(context, handle.getComponentName().flattenToString());
   }
 
+  public static void onCallAdded(Call call) {
+    String owner = selfManagedOwner(call);
+    if (owner != null) {
+      UniversalCallNotificationListener.onTelecomVoipCall(owner, true);
+    }
+  }
+
+  public static void onCallRemoved(Call call) {
+    String owner = selfManagedOwner(call);
+    if (owner != null) {
+      UniversalCallNotificationListener.onTelecomVoipCall(owner, false);
+    }
+  }
+
+  @Nullable
+  private static String selfManagedOwner(Call call) {
+    PhoneAccountHandle handle = call.getDetails().getAccountHandle();
+    return isSelfManaged(call) && handle != null ? handle.getComponentName().getPackageName() : null;
+  }
+
+  public static boolean hasNotificationAccess(Context context) {
+    return context.getSystemService(android.app.NotificationManager.class)
+        .isNotificationListenerAccessGranted(
+            new ComponentName(context, UniversalCallNotificationListener.class));
+  }
+
   public static boolean isSelfManaged(Call call) {
     return call.getDetails().hasProperty(Call.Details.PROPERTY_SELF_MANAGED);
   }
@@ -95,15 +121,28 @@ public final class UniversalDialer {
     }
     PhoneAccountHandle handle = call.getDetails().getAccountHandle();
     String owner = handle == null ? null : handle.getComponentName().getPackageName();
-    if (owner == null) {
-      return true;
-    }
+    return owner == null || shouldHandleVoip(context, owner);
+  }
+
+  public static boolean shouldHandleVoip(Context context, String ownerPackage) {
     PowerManager power = context.getSystemService(PowerManager.class);
     KeyguardManager keyguard = context.getSystemService(KeyguardManager.class);
     if (!power.isInteractive() || keyguard.isKeyguardLocked()) {
       return true;
     }
-    return !owner.equals(foregroundPackage(context));
+    return !ownerPackage.equals(foregroundPackage(context));
+  }
+
+  public static final String NOTIFICATION_ACCOUNT_CLASS = "com.android.dialer.universaldialer.Call";
+
+  public static boolean isNotificationEntry(@Nullable String componentName) {
+    ComponentName component =
+        componentName == null ? null : ComponentName.unflattenFromString(componentName);
+    return component != null && NOTIFICATION_ACCOUNT_CLASS.equals(component.getClassName());
+  }
+
+  public static String notificationAccountComponent(String appPackage) {
+    return new ComponentName(appPackage, NOTIFICATION_ACCOUNT_CLASS).flattenToString();
   }
 
   public static boolean canDetectForegroundApp(Context context) {

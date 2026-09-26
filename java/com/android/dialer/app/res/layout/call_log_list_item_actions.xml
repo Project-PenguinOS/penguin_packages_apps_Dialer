@@ -103,6 +103,21 @@
   </LinearLayout>
 
   <LinearLayout
+    android:id="@+id/call_via_app_action"
+    style="@style/CallLogActionStyle"
+    android:visibility="gone">
+
+    <ImageView
+      style="@style/CallLogActionIconStyle"
+      android:src="@drawable/quantum_ic_call_vd_theme_24"/>
+
+    <TextView
+      android:id="@+id/call_via_app_text"
+      style="@style/CallLogActionTextStyle"/>
+
+  </LinearLayout>
+
+  <LinearLayout
     android:id="@+id/send_message_action"
     style="@style/CallLogActionStyle">
 
