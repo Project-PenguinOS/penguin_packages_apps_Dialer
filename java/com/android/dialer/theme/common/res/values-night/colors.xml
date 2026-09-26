@@ -31,5 +31,6 @@
   <color name="dialer_tint">@color/dialer_label_primary</color>
   <color name="dialer_label_primary">#FFFFFFFF</color>
   <color name="dialer_label_secondary">#99EBEBF5</color>
+  <color name="dialer_menu_background">#FF2C2C2E</color>
   <color name="dialer_system_red">#FF453A</color>
 </resources>

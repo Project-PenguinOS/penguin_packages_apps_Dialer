@@ -33,7 +33,7 @@ import com.android.dialer.simulator.SimulatorComponent;
 public final class MainToolbarMenu extends PopupMenu {
 
   public MainToolbarMenu(Context context, View anchor) {
-    super(context, anchor, Gravity.NO_GRAVITY, R.attr.actionOverflowMenuStyle, 0);
+    super(context, anchor, Gravity.NO_GRAVITY, 0, R.style.Dialer_ContextMenu);
   }
 
   public void showClearFrequents(boolean show) {
