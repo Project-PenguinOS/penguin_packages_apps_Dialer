@@ -167,7 +167,7 @@ public class MainSearchController implements SearchBarListener {
     activity.findViewById(R.id.top_view).setVisibility(View.GONE);
 
     bottomNav.setKeypadActive(true);
-    toolbar.slideUp(false, fragmentContainer);
+    toolbar.slideUp(false, null);
     toolbar.expand(false, Optional.empty(), /* requestFocus */ false);
 
     activity.setTitle(R.string.dialpad_activity_title);
@@ -567,7 +567,7 @@ public class MainSearchController implements SearchBarListener {
     }
     boolean isSlideUp = savedInstanceState.getBoolean(KEY_IS_TOOLBAR_SLIDE_UP, false);
     if (isSlideUp) {
-      toolbar.slideUp(false, fragmentContainer);
+      toolbar.slideUp(false, null);
     }
     if (savedInstanceState.getBoolean(KEY_IS_TOOLBAR_EXPANDED, false)) {
       // If the toolbar is slide up, that means the dialpad is showing. Thus we don't want to

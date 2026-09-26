@@ -30,8 +30,16 @@
         android:id="@+id/dialpad_key_number"
         style="@style/DialpadKeyNumberStyle"/>
 
-    <Space
+    <ImageView
+        android:id="@+id/dialpad_key_voicemail"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dialpad_key_sublabel_height"/>
+        android:layout_height="@dimen/dialpad_voicemail_icon_size"
+        android:layout_marginTop="@dimen/dialpad_voicemail_icon_inset"
+        android:layout_marginBottom="@dimen/dialpad_voicemail_icon_inset"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:src="@drawable/quantum_ic_voicemail_vd_theme_24"
+        app:tint="?attr/dialpad_text_color_secondary"/>
   </LinearLayout>
 </com.android.dialer.dialpadview.DialpadKeyButton>

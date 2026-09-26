@@ -23,6 +23,8 @@
   <dimen name="dialpad_hide_offset">10dp</dimen>
   <dimen name="dialpad_key_number_gap">5dp</dimen>
   <dimen name="dialpad_key_sublabel_height">9dp</dimen>
+  <dimen name="dialpad_voicemail_icon_size">19dp</dimen>
+  <dimen name="dialpad_voicemail_icon_inset">-5dp</dimen>
   <dimen name="dialpad_digits_text_min_size">24sp</dimen>
   <dimen name="dialpad_digits_padding">16dp</dimen>
   <dimen name="dialpad_digits_menu_left_padding">10dp</dimen>

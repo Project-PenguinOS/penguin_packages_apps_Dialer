@@ -20,8 +20,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="4dp"
-    android:layout_marginEnd="2dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     android:layout_marginTop="1dp"
     android:layout_marginBottom="1dp"
     app:cardCornerRadius="16dp">
@@ -55,6 +55,8 @@
             android:id="@+id/primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:gravity="center_vertical|start"
             android:fontFamily="@*android:string/config_bodyFontFamily"
             style="@style/Dialer.TextAppearance.Primary"/>
@@ -63,6 +65,8 @@
             android:id="@+id/secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:gravity="center_vertical|start"
             android:fontFamily="@*android:string/config_bodyFontFamily"
             style="@style/Dialer.TextAppearance.Secondary"/>

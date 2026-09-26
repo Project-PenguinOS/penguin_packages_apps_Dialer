@@ -28,6 +28,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -89,7 +90,7 @@ public final class MainToolbar extends Toolbar implements PopupMenu.OnMenuItemCl
   }
 
   /** Slides the toolbar up and off the screen. */
-  public void slideUp(boolean animate, View container) {
+  public void slideUp(boolean animate, @Nullable View container) {
     if (hasGlobalLayoutListener) {
       // Return early since we've already scheduled the toolbar to slide up
       return;
@@ -116,16 +117,18 @@ public final class MainToolbar extends Toolbar implements PopupMenu.OnMenuItemCl
         .setDuration(animate ? SLIDE_DURATION : 0)
         .setInterpolator(SLIDE_INTERPOLATOR)
         .start();
-    container
-        .animate()
-        .translationY(-getHeight())
-        .setDuration(animate ? SLIDE_DURATION : 0)
-        .setInterpolator(SLIDE_INTERPOLATOR)
-        .start();
+    if (container != null) {
+      container
+          .animate()
+          .translationY(-getHeight())
+          .setDuration(animate ? SLIDE_DURATION : 0)
+          .setInterpolator(SLIDE_INTERPOLATOR)
+          .start();
+    }
   }
 
   /** Slides the toolbar down and back onto the screen. */
-  public void slideDown(boolean animate, View container) {
+  public void slideDown(boolean animate, @Nullable View container) {
     if (getTranslationY() == 0) {
       LogUtil.e("MainToolbar.slideDown", "Already slide down.");
       return;
@@ -135,12 +138,14 @@ public final class MainToolbar extends Toolbar implements PopupMenu.OnMenuItemCl
         .setDuration(animate ? SLIDE_DURATION : 0)
         .setInterpolator(SLIDE_INTERPOLATOR)
         .start();
-    container
-        .animate()
-        .translationY(0)
-        .setDuration(animate ? SLIDE_DURATION : 0)
-        .setInterpolator(SLIDE_INTERPOLATOR)
-        .start();
+    if (container != null) {
+      container
+          .animate()
+          .translationY(0)
+          .setDuration(animate ? SLIDE_DURATION : 0)
+          .setInterpolator(SLIDE_INTERPOLATOR)
+          .start();
+    }
   }
 
   /** @see SearchBarView#collapse(boolean) */
