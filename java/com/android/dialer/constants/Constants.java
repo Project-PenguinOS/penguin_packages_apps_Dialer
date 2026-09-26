@@ -20,14 +20,21 @@ package com.android.dialer.constants;
  * Utility to access constants
  */
 public class Constants {
-  public static final String FILE_PROVIDER_AUTHORITY = "com.android.dialer.files";
+  public static final String APPLICATION_ID = "com.penguin.dialer";
+
+  public static final String FILE_PROVIDER_AUTHORITY = APPLICATION_ID + ".files";
 
   public static final String ANNOTATED_CALL_LOG_PROVIDER_AUTHORITY =
-          "com.android.dialer.annotatedcalllog";
+          APPLICATION_ID + ".annotatedcalllog";
 
   public static final String PHONE_LOOKUP_HISTORY_PROVIDER_AUTHORITY =
-          "com.android.dialer.phonelookuphistory";
+          APPLICATION_ID + ".phonelookuphistory";
 
   public static final String PREFERRED_SIM_FALLBACK_PROVIDER_AUTHORITY =
-          "com.android.dialer.preferredsimfallback";
+          APPLICATION_ID + ".preferredsimfallback";
+
+  public static final String LOOKUP_PROVIDER_AUTHORITY = APPLICATION_ID + ".lookup";
+
+  public static final String PERMISSION_DIALER_ORIGIN =
+          APPLICATION_ID + ".permission.DIALER_ORIGIN";
 }

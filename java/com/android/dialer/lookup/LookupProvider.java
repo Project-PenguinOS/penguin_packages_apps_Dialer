@@ -33,6 +33,7 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.provider.ContactsContract.Contacts;
 import android.util.Log;
 
+import com.android.dialer.constants.Constants;
 import com.android.dialer.phonenumbercache.ContactInfo;
 import com.android.dialer.searchfragment.common.Projections;
 import com.android.dialer.util.PermissionsUtil;
@@ -61,7 +62,7 @@ public class LookupProvider extends ContentProvider {
 
   private static final boolean DEBUG = false;
 
-  public static final String AUTHORITY = "com.android.dialer.lookup";
+  public static final String AUTHORITY = Constants.LOOKUP_PROVIDER_AUTHORITY;
   public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
   public static final Uri NEARBY_LOOKUP_URI =
       Uri.withAppendedPath(AUTHORITY_URI, "nearby");

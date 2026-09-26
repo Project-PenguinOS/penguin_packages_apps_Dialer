@@ -17,8 +17,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     coreApp="true"
     package="com.android.dialer"
-    android:versionCode="260825"
-    android:versionName="26.8.25">
+    android:versionCode="260926"
+    android:versionName="1.6">
 
     <uses-feature
         android:name="android.hardware.telephony"
@@ -85,10 +85,10 @@
 
     <!-- Used for sending PendingIntents to dynamically registered receivers -->
     <permission
-        android:name="com.android.dialer.permission.DIALER_ORIGIN"
+        android:name="com.penguin.dialer.permission.DIALER_ORIGIN"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.android.dialer.permission.DIALER_ORIGIN" />
+    <uses-permission android:name="com.penguin.dialer.permission.DIALER_ORIGIN" />
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -227,7 +227,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.android.dialer.files"
+            android:authorities="com.penguin.dialer.files"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -260,7 +260,7 @@
         <!-- Provide this since upgrade path seems to be messy; Only a stub class exists there -->
         <provider
             android:name="com.android.dialer.blocking.FilteredNumberProvider"
-            android:authorities="com.android.dialer.blocking.filterednumberprovider"
+            android:authorities="com.penguin.dialer.blocking.filterednumberprovider"
             android:exported="false"
             android:multiprocess="false" />
 
@@ -276,7 +276,7 @@
 
         <provider
             android:name="com.android.dialer.calllog.database.AnnotatedCallLogContentProvider"
-            android:authorities="com.android.dialer.annotatedcalllog"
+            android:authorities="com.penguin.dialer.annotatedcalllog"
             android:exported="false"
             android:multiprocess="false" />
 
@@ -309,7 +309,7 @@
 
         <provider
             android:name="com.android.dialer.lookup.LookupProvider"
-            android:authorities="com.android.dialer.lookup"
+            android:authorities="com.penguin.dialer.lookup"
             android:exported="false"
             android:multiprocess="false" />
 
@@ -413,7 +413,7 @@
 
         <provider
             android:name="com.android.dialer.phonelookup.database.PhoneLookupHistoryContentProvider"
-            android:authorities="com.android.dialer.phonelookuphistory"
+            android:authorities="com.penguin.dialer.phonelookuphistory"
             android:exported="false"
             android:multiprocess="false" />
 
@@ -451,7 +451,7 @@
 
         <provider
             android:name="com.android.dialer.preferredsim.impl.PreferredSimFallbackProvider"
-            android:authorities="com.android.dialer.preferredsimfallback"
+            android:authorities="com.penguin.dialer.preferredsimfallback"
             android:exported="true"
             android:multiprocess="false"
             android:readPermission="android.permission.READ_CONTACTS"
@@ -462,7 +462,7 @@
             android:value="true" />
         <meta-data
             android:name="com.android.dialer.PREFERRED_SIM_FALLBACK_AUTHORITY"
-            android:value="com.android.dialer.preferredsimfallback" />
+            android:value="com.penguin.dialer.preferredsimfallback" />
 
         <activity android:name="com.android.dialer.rtt.RttTranscriptActivity" />
 

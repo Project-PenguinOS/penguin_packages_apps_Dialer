@@ -32,6 +32,7 @@ import androidx.annotation.MainThread;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
+import com.android.dialer.constants.Constants;
 import com.android.voicemail.impl.Assert;
 import com.android.voicemail.impl.OmtpConstants;
 import com.android.voicemail.impl.OmtpService;
@@ -54,8 +55,7 @@ public class StatusSmsFetcher extends BroadcastReceiver implements Closeable {
 
   private static final long STATUS_SMS_TIMEOUT_MILLIS = 60_000;
 
-  private static final String PERMISSION_DIALER_ORIGIN =
-      "com.android.dialer.permission.DIALER_ORIGIN";
+  private static final String PERMISSION_DIALER_ORIGIN = Constants.PERMISSION_DIALER_ORIGIN;
 
   private static final String ACTION_REQUEST_SENT_INTENT =
       "com.android.voicemailomtp.sms.REQUEST_SENT";

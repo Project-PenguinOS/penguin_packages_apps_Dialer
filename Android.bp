@@ -9,6 +9,7 @@ package {
 
 android_app {
     name: "Dialer",
+    package_name: "com.penguin.dialer",
     overrides: ["GoogleDialer"],
     aaptflags: [
         "--auto-add-overlay",
@@ -125,10 +126,7 @@ android_app {
     ],
     privileged: true,
     product_specific: true,
-    required: [
-        "privapp_whitelist_com.android.dialer",
-        "privapp_whitelist_com.android.dialer-ext.xml",
-    ],
+    required: ["privapp_whitelist_com.penguin.dialer.xml"],
     resource_dirs: [
         "assets/quantum/res",
         "java/com/android/contacts/common/res",
@@ -286,8 +284,8 @@ java_plugin {
 }
 
 prebuilt_etc {
-    name: "privapp_whitelist_com.android.dialer-ext.xml",
+    name: "privapp_whitelist_com.penguin.dialer.xml",
     product_specific: true,
-    src: "privapp_whitelist_com.android.dialer-ext.xml",
+    src: "privapp_whitelist_com.penguin.dialer.xml",
     sub_dir: "permissions",
 }
