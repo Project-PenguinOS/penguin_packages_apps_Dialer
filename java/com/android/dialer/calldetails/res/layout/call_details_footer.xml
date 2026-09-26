@@ -19,11 +19,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
-    app:cardCornerRadius="28dp">
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="24dp"
+    android:layout_marginBottom="0dp"
+    app:cardBackgroundColor="@color/dialer_grouped_cell"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp">
 
     <LinearLayout
         android:id="@+id/footer_container"
@@ -95,9 +97,9 @@
           style="@style/CallDetailsActionItemStyle"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:tint="?colorIcon"
           android:text="@string/delete"
-          app:drawableTint="?colorIcon"
+          android:textColor="@color/dialer_system_red"
+          app:drawableTint="@color/dialer_system_red"
           app:drawableStartCompat="@drawable/quantum_ic_delete_vd_theme_24" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -55,6 +55,7 @@ import com.android.dialer.precall.PreCall;
 import com.android.dialer.rtt.RttTranscriptActivity;
 import com.android.dialer.rtt.RttTranscriptUtil;
 import com.android.dialer.theme.base.ThemeComponent;
+import com.android.dialer.widget.GroupedListDecoration;
 import com.android.dialer.widget.HigNavigationBar;
 
 import com.google.common.base.Preconditions;
@@ -193,6 +194,13 @@ abstract class CallDetailsActivityCommon extends BaseActivity {
     RecyclerView recyclerView = findViewById(R.id.recycler_view);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     recyclerView.setAdapter(adapter);
+    recyclerView.addItemDecoration(
+        new GroupedListDecoration(this) {
+          @Override
+          protected boolean isGroupedRow(@NonNull RecyclerView parent, int position) {
+            return adapter.isCallEntry(position);
+          }
+        });
   }
 
   final CallDetailsAdapterCommon getAdapter() {

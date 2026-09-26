@@ -133,6 +133,11 @@ abstract class CallDetailsAdapterCommon extends RecyclerView.Adapter<RecyclerVie
     }
   }
 
+  public boolean isCallEntry(int position) {
+    return position >= 0 && position < getItemCount()
+        && getItemViewType(position) == CALL_ENTRY_VIEW_TYPE;
+  }
+
   @Override
   @CallSuper
   public int getItemViewType(int position) {
