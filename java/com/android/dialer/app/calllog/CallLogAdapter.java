@@ -101,6 +101,11 @@ public class CallLogAdapter extends GroupingListAdapter
   private static final int VIEW_TYPE_ALERT = 1;
   private static final int VIEW_TYPE_CALLLOG = 2;
 
+  public boolean isCallLogRow(int position) {
+    return position >= 0 && position < getItemCount()
+        && getItemViewType(position) == VIEW_TYPE_CALLLOG;
+  }
+
   private static final String KEY_EXPANDED_POSITION = "expanded_position";
   private static final String KEY_EXPANDED_ROW_ID = "expanded_row_id";
   private static final String KEY_ACTION_MODE = "action_mode_selected_items";
@@ -645,11 +650,9 @@ public class CallLogAdapter extends GroupingListAdapter
 
     if (viewHolder instanceof CallLogListItemViewHolder) {
         CallLogListItemViewHolder vh = (CallLogListItemViewHolder) viewHolder;
-        int dayGroup = getDayGroup(vh.rowId);
-        int nextDayGroup = getDayGroup(getItemId(position + 1));
 
-        boolean isFirstInGroup = getDayGroup(getItemId(position - 1)) != dayGroup;
-        boolean isLastInGroup = getDayGroup(getItemId(position + 1)) != dayGroup;
+        boolean isFirstInGroup = position == 0;
+        boolean isLastInGroup = position == getItemCount() - 1;
 
         vh.isFirstInDateGroup = isFirstInGroup;
         vh.isLastInDateGroup = isLastInGroup;
@@ -1028,7 +1031,7 @@ public class CallLogAdapter extends GroupingListAdapter
     } else {
       views.showActions(false, false);
     }
-    views.dayGroupHeader.setVisibility(views.dayGroupHeaderVisibility);
+    views.dayGroupHeader.setVisibility(View.GONE);
     views.dayGroupHeader.setText(views.dayGroupHeaderText);
   }
 

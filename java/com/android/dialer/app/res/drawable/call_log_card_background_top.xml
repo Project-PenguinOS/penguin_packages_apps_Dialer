@@ -1,17 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-  <item>
-    <shape>
-      <solid android:color="@color/dialer_grouped_cell"/>
-      <corners android:topLeftRadius="@dimen/dialer_grouped_row_radius" android:topRightRadius="@dimen/dialer_grouped_row_radius" android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp"/>
-    </shape>
-  </item>
-  <item
-      android:gravity="bottom|fill_horizontal"
-      android:height="@dimen/dialer_grouped_separator_height"
-      android:start="@dimen/dialer_grouped_row_separator_inset">
-    <shape>
-      <solid android:color="@color/dialer_grouped_separator"/>
-    </shape>
-  </item>
-</layer-list>
+<color xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@android:color/transparent"/>

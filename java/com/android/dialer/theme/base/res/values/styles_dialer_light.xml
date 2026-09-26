@@ -38,6 +38,10 @@
     <item name="colorPrimaryDark">?android:attr/colorBackground</item>
     <item name="android:statusBarColor">?android:attr/colorBackground</item>
     <item name="preferenceTheme">@style/Dialer.Settings.PreferenceTheme</item>
+    <item name="android:textAppearanceListItem">@style/Dialer.TextAppearance.Hig.Body</item>
+    <item name="android:textAppearanceListItemSecondary">@style/Dialer.TextAppearance.Hig.Subheadline</item>
+    <item name="preferenceCategoryTitleTextAppearance">@style/Dialer.TextAppearance.Hig.SectionHeader</item>
+    <item name="preferenceCategoryTitleTextColor">@color/dialer_label_secondary</item>
     <item name="android:switchStyle">@style/Dialer.Switch</item>
     <item name="android:dropDownSpinnerStyle">@style/Dialer.Settings.DropDownSpinnerStyle</item>
   </style>

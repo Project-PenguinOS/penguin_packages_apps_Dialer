@@ -14,17 +14,18 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License
  -->
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/row_height">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
   <include layout="@layout/header"/>
 
   <androidx.cardview.widget.CardView
       android:id="@+id/contact_row"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="@dimen/row_height"
       android:layout_gravity="center_horizontal"
     android:layout_marginStart="@dimen/dialer_grouped_row_inset"
     android:layout_marginEnd="@dimen/dialer_grouped_row_inset"
@@ -61,9 +62,8 @@
           android:maxLines="1"
           android:ellipsize="end"
           android:gravity="center_vertical"
-          android:textSize="@dimen/text_size"
-          android:textColor="?android:attr/textColorPrimary"
-          android:fontFamily="@*android:string/config_bodyFontFamily"/>
+          android:textAppearance="@style/Dialer.TextAppearance.Hig.Body"
+          />
 
       <ImageView
           android:id="@+id/call_action_icon"
@@ -75,4 +75,4 @@
           android:visibility="gone"/>
     </LinearLayout>
   </androidx.cardview.widget.CardView>
-</FrameLayout>
+</LinearLayout>

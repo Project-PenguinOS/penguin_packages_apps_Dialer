@@ -34,6 +34,7 @@ import android.widget.FrameLayout.LayoutParams;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
@@ -66,6 +67,7 @@ import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.util.ViewUtil;
 import com.android.dialer.widget.EmptyContentView;
 import com.android.dialer.widget.EmptyContentView.OnEmptyViewActionButtonClickedListener;
+import com.android.dialer.widget.PlainListSeparatorDecoration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -166,6 +168,16 @@ public final class NewSearchFragment extends Fragment
     emptyContentView = view.findViewById(R.id.empty_view);
     recyclerView = view.findViewById(R.id.recycler_view);
     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    recyclerView.addItemDecoration(
+        new PlainListSeparatorDecoration(getContext()) {
+          @Override
+          protected boolean hasSeparatorBelow(@NonNull RecyclerView parent, int position) {
+            RecyclerView.Adapter<?> a = parent.getAdapter();
+            return a != null
+                && super.hasSeparatorBelow(parent, position)
+                && a.getItemViewType(position) == a.getItemViewType(position + 1);
+          }
+        });
     recyclerView.setOnTouchListener(this);
     recyclerView.setAdapter(adapter);
 

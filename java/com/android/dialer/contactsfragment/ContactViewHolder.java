@@ -69,7 +69,7 @@ final class ContactViewHolder extends RecyclerView.ViewHolder implements OnClick
 
     name.setText(displayName);
     header.setText(headerText);
-    header.setVisibility(showHeader ? View.VISIBLE : View.INVISIBLE);
+    header.setVisibility(showHeader ? View.VISIBLE : View.GONE);
   }
 
   public QuickContactBadge getPhoto() {

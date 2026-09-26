@@ -2,6 +2,7 @@ package com.android.dialer.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -27,11 +28,11 @@ public abstract class GroupedListDecoration extends RecyclerView.ItemDecoration 
 
   protected GroupedListDecoration(Context context) {
     float density = context.getResources().getDisplayMetrics().density;
-    margin = Math.round(16 * density);
+    margin = 0;
     groupGap = Math.round(24 * density);
-    radius = 12 * density;
+    radius = 0;
     separatorInset = Math.round(16 * density);
-    cellPaint.setColor(context.getColor(R.color.dialer_grouped_cell));
+    cellPaint.setColor(Color.TRANSPARENT);
     separatorPaint.setColor(context.getColor(R.color.dialer_grouped_separator));
     separatorPaint.setStrokeWidth(Math.max(1f, density / 3f));
   }
@@ -95,9 +96,11 @@ public abstract class GroupedListDecoration extends RecyclerView.ItemDecoration 
       float bottomRadius = isRow(parent, lastPos + 1) ? 0 : radius;
       radii[0] = radii[1] = radii[2] = radii[3] = topRadius;
       radii[4] = radii[5] = radii[6] = radii[7] = bottomRadius;
-      groupPath.rewind();
-      groupPath.addRoundRect(groupBounds, radii, Path.Direction.CW);
-      c.drawPath(groupPath, cellPaint);
+      if (Color.alpha(cellPaint.getColor()) != 0) {
+        groupPath.rewind();
+        groupPath.addRoundRect(groupBounds, radii, Path.Direction.CW);
+        c.drawPath(groupPath, cellPaint);
+      }
 
       for (int k = i; k < j; k++) {
         View row = parent.getChildAt(k);

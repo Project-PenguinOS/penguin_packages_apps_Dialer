@@ -20,6 +20,8 @@ package com.android.dialer.app.calllog;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.android.dialer.R;
 import com.android.dialer.calllogutils.CallTypeIconsView;
 import com.android.dialer.widget.BidiTextView;
@@ -32,18 +34,21 @@ public final class PhoneCallDetailsViews {
   public final CallTypeIconsView callTypeIcons;
   public final TextView callLocationAndDate;
   public final TextView callAccountLabel;
+  @Nullable public final TextView callTime;
 
   private PhoneCallDetailsViews(
       BidiTextView nameView,
       View callTypeView,
       CallTypeIconsView callTypeIcons,
       TextView callLocationAndDate,
-      TextView callAccountLabel) {
+      TextView callAccountLabel,
+      @Nullable TextView callTime) {
     this.nameView = nameView;
     this.callTypeView = callTypeView;
     this.callTypeIcons = callTypeIcons;
     this.callLocationAndDate = callLocationAndDate;
     this.callAccountLabel = callAccountLabel;
+    this.callTime = callTime;
   }
 
   /**
@@ -59,6 +64,7 @@ public final class PhoneCallDetailsViews {
         view.findViewById(R.id.call_type),
         (CallTypeIconsView) view.findViewById(R.id.call_type_icons),
         (TextView) view.findViewById(R.id.call_location_and_date),
-        (TextView) view.findViewById(R.id.call_account_label));
+        (TextView) view.findViewById(R.id.call_account_label),
+        (TextView) view.findViewById(R.id.call_time));
   }
 }

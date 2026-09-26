@@ -35,6 +35,7 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
@@ -51,6 +52,7 @@ import com.android.dialer.util.IntentUtil;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.widget.EmptyContentView;
 import com.android.dialer.widget.EmptyContentView.OnEmptyViewActionButtonClickedListener;
+import com.android.dialer.widget.PlainListSeparatorDecoration;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -100,6 +102,7 @@ public class ContactsFragment extends Fragment
 
   private FastScroller fastScroller;
   private TextView anchoredHeader;
+  private AlphabetIndexView alphabetIndex;
   private RecyclerView recyclerView;
   private LinearLayoutManager manager;
   private ContactsAdapter adapter;
@@ -172,6 +175,9 @@ public class ContactsFragment extends Fragment
     View view = inflater.inflate(R.layout.fragment_contacts, container, false);
     fastScroller = view.findViewById(R.id.fast_scroller);
     anchoredHeader = view.findViewById(R.id.header);
+    anchoredHeader.setVisibility(View.GONE);
+    alphabetIndex = view.findViewById(R.id.alphabet_index);
+    alphabetIndex.setOnLetterSelectedListener(this::scrollToLetter);
     recyclerView = view.findViewById(R.id.recycler_view);
     adapter =
         new ContactsAdapter(
@@ -183,15 +189,23 @@ public class ContactsFragment extends Fragment
           public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
             super.onLayoutChildren(recycler, state);
             int itemsShown = findLastVisibleItemPosition() - findFirstVisibleItemPosition() + 1;
-            if (adapter.getItemCount() > itemsShown) {
-              fastScroller.setVisibility(View.VISIBLE);
-              recyclerView.setOnScrollChangeListener(ContactsFragment.this);
-            } else {
-              fastScroller.setVisibility(View.GONE);
-            }
+            fastScroller.setVisibility(View.GONE);
+            recyclerView.setOnScrollChangeListener(ContactsFragment.this);
+            alphabetIndex.setVisibility(
+                adapter.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
           }
         };
     recyclerView.setLayoutManager(manager);
+    recyclerView.addItemDecoration(
+        new PlainListSeparatorDecoration(getContext()) {
+          @Override
+          protected boolean hasSeparatorBelow(@NonNull RecyclerView parent, int position) {
+            return adapter != null
+                && adapter.isContactRow(position)
+                && adapter.isContactRow(position + 1)
+                && !adapter.isFirstInSection(position + 1);
+          }
+        });
 
     emptyContentView = view.findViewById(R.id.empty_list_view);
     emptyContentView.setImage(R.drawable.empty_contacts);
@@ -238,6 +252,7 @@ public class ContactsFragment extends Fragment
       emptyContentView.setVisibility(View.GONE);
       recyclerView.setVisibility(View.VISIBLE);
       adapter.updateCursor(cursor);
+      loadMyCard();
 
       fastScroller.setup(adapter, manager);
     }
@@ -263,14 +278,6 @@ public class ContactsFragment extends Fragment
   @Override
   public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
     fastScroller.updateContainerAndScrollBarPosition(recyclerView);
-    int firstVisibleItem = manager.findFirstVisibleItemPosition();
-    int firstCompletelyVisible = manager.findFirstCompletelyVisibleItemPosition();
-    if (firstCompletelyVisible == RecyclerView.NO_POSITION) {
-      // No items are visible, so there are no headers to update.
-      return;
-    }
-    String anchoredHeaderString = adapter.getHeaderString(firstCompletelyVisible);
-
     OnContactsListScrolledListener listener =
         FragmentUtils.getParent(this, OnContactsListScrolledListener.class);
     if (listener != null) {
@@ -278,24 +285,38 @@ public class ContactsFragment extends Fragment
           recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING
               || fastScroller.isDragStarted());
     }
+  }
 
-    // If the user swipes to the top of the list very quickly, there is some strange behavior
-    // between this method updating headers and adapter#onBindViewHolder updating headers.
-    // To overcome this, we refresh the headers to ensure they are correct.
-    if (firstVisibleItem == firstCompletelyVisible && firstVisibleItem == 0) {
-      adapter.refreshHeaders();
-      anchoredHeader.setVisibility(View.INVISIBLE);
-    } else if (firstVisibleItem != 0) { // skip the add contact row
-      if (adapter.getHeaderString(firstVisibleItem).equals(anchoredHeaderString)) {
-        anchoredHeader.setText(anchoredHeaderString);
-        anchoredHeader.setVisibility(View.GONE);
-        getContactHolder(firstVisibleItem).getHeaderView().setVisibility(View.INVISIBLE);
-        getContactHolder(firstCompletelyVisible).getHeaderView().setVisibility(View.INVISIBLE);
-      } else {
-        anchoredHeader.setVisibility(View.INVISIBLE);
-        getContactHolder(firstVisibleItem).getHeaderView().setVisibility(View.VISIBLE);
-        getContactHolder(firstCompletelyVisible).getHeaderView().setVisibility(View.VISIBLE);
+  private void loadMyCard() {
+    Context appContext = requireContext().getApplicationContext();
+    new Thread(() -> {
+      MyCard card = MyCard.load(appContext);
+      recyclerView.post(() -> {
+        if (adapter != null && isAdded()) {
+          adapter.setMyCard(card);
+        }
+      });
+    }, "ContactsFragment.loadMyCard").start();
+  }
+
+  private void scrollToLetter(String letter) {
+    if (adapter == null || adapter.getSectionTitles() == null) {
+      return;
+    }
+    String target = null;
+    for (String title : adapter.getSectionTitles()) {
+      if (title.equals(letter) || ("#".equals(letter) && !Character.isLetter(title.charAt(0)))) {
+        target = title;
+        break;
       }
+      if (target == null && Character.isLetter(title.charAt(0)) && title.compareTo(letter) > 0) {
+        target = title;
+        break;
+      }
+    }
+    int position = target == null ? adapter.getItemCount() - 1 : adapter.getPositionForSection(target);
+    if (position >= 0) {
+      manager.scrollToPositionWithOffset(position, 0);
     }
   }
 

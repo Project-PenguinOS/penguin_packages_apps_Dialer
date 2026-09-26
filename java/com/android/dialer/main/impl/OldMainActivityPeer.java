@@ -990,7 +990,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       }
       selectedTab = TabIndex.SPEED_DIAL;
 
-      activity.setTitle(R.string.dialer_title);
+      activity.setTitle(R.string.calls_title);
       Fragment fragment = fragmentManager.findFragmentByTag(SPEED_DIAL_TAG);
       showFragment(fragment == null ? SpeedDialFragment.newInstance() : fragment, SPEED_DIAL_TAG);
 
@@ -1010,7 +1010,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       }
       selectedTab = TabIndex.CALL_LOG;
 
-      activity.setTitle(R.string.dialer_title);
+      activity.setTitle(R.string.calls_title);
       Fragment fragment = fragmentManager.findFragmentByTag(CALL_LOG_TAG);
       showFragment(fragment == null ? new NewCallLogFragment() : fragment, CALL_LOG_TAG);
 
@@ -1082,7 +1082,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       }
       selectedTab = TabIndex.VOICEMAIL;
 
-      activity.setTitle(R.string.dialer_title);
+      activity.setTitle(R.string.calls_title);
       VisualVoicemailCallLogFragment fragment =
           (VisualVoicemailCallLogFragment) fragmentManager.findFragmentByTag(VOICEMAIL_TAG);
       if (fragment == null) {

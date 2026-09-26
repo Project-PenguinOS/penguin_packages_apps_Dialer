@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="letter_tile_gradient_top">#4B4A5E</color>
+  <color name="letter_tile_gradient_bottom">#302F3D</color>
+</resources>

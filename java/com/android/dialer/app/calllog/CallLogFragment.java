@@ -70,6 +70,7 @@ import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.widget.EmptyContentView;
 import com.android.dialer.widget.EmptyContentView.OnEmptyViewActionButtonClickedListener;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import com.android.dialer.widget.PlainListSeparatorDecoration;
 import com.android.dialer.widget.SwipeAndDragHelper;
 
 import java.util.Arrays;
@@ -295,6 +296,15 @@ public class CallLogFragment extends Fragment
     recyclerView.setHasFixedSize(true);
     layoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(layoutManager);
+    recyclerView.addItemDecoration(
+        new PlainListSeparatorDecoration(getContext()) {
+          @Override
+          protected boolean hasSeparatorBelow(@NonNull RecyclerView parent, int position) {
+            return adapter != null
+                && adapter.isCallLogRow(position)
+                && adapter.isCallLogRow(position + 1);
+          }
+        });
     emptyListView = (EmptyContentView) view.findViewById(R.id.empty_list_view);
     emptyListView.setImage(R.drawable.empty_call_log);
     emptyListView.setActionClickedListener(this);

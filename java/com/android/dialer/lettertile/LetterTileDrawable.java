@@ -95,7 +95,6 @@ public class LetterTileDrawable extends Drawable {
   private final Paint paint = new Paint();
 
   private final Rect rect = new Rect();
-  private final char[] firstChar = new char[1];
 
   /** Letter tile */
   @NonNull
@@ -120,6 +119,7 @@ public class LetterTileDrawable extends Drawable {
 
   private int color;
   private Character letter = null;
+  @Nullable private String initials = null;
 
   private String displayName;
 
@@ -219,23 +219,15 @@ public class LetterTileDrawable extends Drawable {
     }
     paint.setShader(null);
 
-    // Draw letter/digit only if the first character is an english letter or there's a override
-    if (letter != null) {
-      // Draw letter or digit.
-      firstChar[0] = letter;
-
-      // Scale text by canvas bounds and user selected scaling factor
-      paint.setTextSize(scale * letterToTileRatio * minDimension);
-      paint.getTextBounds(firstChar, 0, 1, rect);
-      paint.setTypeface(Typeface.create(Typeface.DEFAULT, 500, false));
+    String text = letter != null ? String.valueOf(letter) : initials;
+    if (text != null) {
+      float ratio = text.length() > 1 ? letterToTileRatio * 0.8f : letterToTileRatio;
+      paint.setTextSize(scale * ratio * minDimension);
+      paint.setTypeface(Typeface.create(Typeface.DEFAULT, 600, false));
+      paint.getTextBounds(text, 0, text.length(), rect);
       paint.setColor(tileFontColor);
-
-      // Draw the letter in the canvas, vertically shifted up or down by the user-defined
-      // offset
       canvas.drawText(
-          firstChar,
-          0,
-          1,
+          text,
           bounds.centerX(),
           bounds.centerY() + offset * bounds.height() - rect.exactCenterY(),
           paint);
@@ -346,8 +338,29 @@ public class LetterTileDrawable extends Drawable {
   private LetterTileDrawable setLetterAndColorFromContactDetails(
       final String displayName, final String identifier) {
     letter = null;
+    initials = initialsOf(displayName);
     color = pickColor(identifier);
     return this;
+  }
+
+  @Nullable
+  private static String initialsOf(@Nullable String displayName) {
+    if (TextUtils.isEmpty(displayName)) {
+      return null;
+    }
+    String[] words = displayName.trim().split("\\s+");
+    int first = words[0].codePointAt(0);
+    if (!Character.isLetter(first)) {
+      return null;
+    }
+    StringBuilder out = new StringBuilder().appendCodePoint(Character.toUpperCase(first));
+    if (words.length > 1) {
+      int last = words[words.length - 1].codePointAt(0);
+      if (Character.isLetter(last)) {
+        out.appendCodePoint(Character.toUpperCase(last));
+      }
+    }
+    return out.toString();
   }
 
   private LetterTileDrawable setContactType(@ContactType int contactType) {

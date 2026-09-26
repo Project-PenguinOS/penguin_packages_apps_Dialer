@@ -100,8 +100,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/call_log_name_margin_bottom"
             android:layout_marginEnd="@dimen/call_log_icon_margin"
-            android:textColor="@color/theme_text"
-            style="@style/Dialer.TextAppearance.Primary.Ellipsize"/>
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/Dialer.TextAppearance.Hig.Headline"/>
 
           <LinearLayout
             android:id="@+id/call_type"
@@ -131,7 +132,9 @@
               android:layout_height="wrap_content"
               android:layout_marginEnd="@dimen/call_log_icon_margin"
               android:layout_gravity="center_vertical"
-              style="Dialer.TextAppearance.Secondary.Ellipsize"/>
+              android:ellipsize="end"
+              android:maxLines="1"
+              android:textAppearance="@style/Dialer.TextAppearance.Hig.Subheadline"/>
 
           </LinearLayout>
 
@@ -146,15 +149,26 @@
 
         </LinearLayout>
 
+        <TextView
+          android:id="@+id/call_time"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:layout_marginStart="8dp"
+          android:maxLines="1"
+          android:textAppearance="@style/Dialer.TextAppearance.Hig.Subheadline"/>
+
         <ImageView
           android:id="@+id/primary_action_button"
-          android:layout_width="@dimen/call_log_list_item_primary_action_dimen"
-          android:layout_height="@dimen/call_log_list_item_primary_action_dimen"
+          android:layout_width="@dimen/call_log_round_button_size"
+          android:layout_height="@dimen/call_log_round_button_size"
           android:layout_gravity="center_vertical"
-          android:background="?android:attr/selectableItemBackgroundBorderless"
-          android:scaleType="center"
+          android:layout_marginStart="10dp"
+          android:background="@drawable/call_log_round_button"
+          android:padding="9dp"
+          android:scaleType="fitCenter"
           android:visibility="gone"
-          app:tint="?colorIcon" />
+          app:tint="@color/dialer_label_primary" />
 
       </LinearLayout>
 

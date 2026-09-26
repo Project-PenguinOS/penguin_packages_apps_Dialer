@@ -17,10 +17,12 @@
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/header"
-    android:layout_width="@dimen/header_width"
-    android:layout_height="@dimen/row_height"
-    android:textColor="?android:attr/colorAccent"
-    android:gravity="center"
-    android:textStyle="bold"
-    android:visibility="gone"
-    style="@style/Dialer.TextAppearance.Header2"/>
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/contacts_section_header_height"
+    android:background="@drawable/contacts_section_header_background"
+    android:gravity="bottom|start"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="6dp"
+    android:textAppearance="@style/Dialer.TextAppearance.Hig.SectionHeader"
+    android:visibility="gone"/>

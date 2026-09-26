@@ -8,8 +8,44 @@
   </style>
 
   <style name="Dialer.TextAppearance.NavTitle" parent="">
-    <item name="android:fontFamily">@*android:string/config_headlineFontFamilyMedium</item>
+    <item name="android:fontFamily">sans-serif</item>
     <item name="android:textColor">@color/dialer_label_primary</item>
+    <item name="android:textFontWeight">600</item>
     <item name="android:textSize">17sp</item>
+  </style>
+
+  <style name="Dialer.TextAppearance.Hig.Headline" parent="">
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="android:textColor">@color/dialer_label_primary</item>
+    <item name="android:textFontWeight">600</item>
+    <item name="android:textSize">17sp</item>
+  </style>
+
+  <style name="Dialer.TextAppearance.Hig.Body" parent="">
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="android:textColor">@color/dialer_label_primary</item>
+    <item name="android:textFontWeight">400</item>
+    <item name="android:textSize">17sp</item>
+  </style>
+
+  <style name="Dialer.TextAppearance.Hig.Subheadline" parent="">
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="android:textColor">@color/dialer_label_secondary</item>
+    <item name="android:textFontWeight">400</item>
+    <item name="android:textSize">15sp</item>
+  </style>
+
+  <style name="Dialer.TextAppearance.Hig.SectionHeader" parent="">
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="android:textColor">@color/dialer_label_secondary</item>
+    <item name="android:textFontWeight">600</item>
+    <item name="android:textSize">15sp</item>
+  </style>
+
+  <style name="Dialer.TextAppearance.Hig.Title3" parent="">
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="android:textColor">@color/dialer_label_primary</item>
+    <item name="android:textFontWeight">600</item>
+    <item name="android:textSize">20sp</item>
   </style>
 </resources>

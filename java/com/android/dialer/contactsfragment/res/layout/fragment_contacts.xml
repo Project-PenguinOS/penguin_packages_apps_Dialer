@@ -28,6 +28,15 @@
       android:paddingTop="104dp"
       android:clipToPadding="true"/>
 
+  <com.android.dialer.contactsfragment.AlphabetIndexView
+      android:id="@+id/alphabet_index"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end|center_vertical"
+      android:layout_marginTop="52dp"
+      android:layout_marginEnd="2dp"
+      android:visibility="gone"/>
+
   <!-- Scrollbars are always on the right side of the screen. Layouts should use Rights/Left instead
        of Start/End -->
   <com.android.dialer.contactsfragment.FastScroller

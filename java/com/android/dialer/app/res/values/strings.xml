@@ -536,4 +536,6 @@
   <string name="credits_open_telegram">Open <xliff:g id="handle" example="\@Whoraj">%1$s</xliff:g> in Telegram</string>
   <string name="credits_kitsune">our kitsune</string>
   <string name="licenses_footer">This app is based on the AOSP and LineageOS Dialer and includes the open-source components listed here.</string>
+  <string name="call_log_item_label_and_count"><xliff:g id="label" example="mobile">%1$s</xliff:g> (<xliff:g id="count" example="2">%2$d</xliff:g>)</string>
+  <string name="my_card_label">My Card</string>
 </resources>

@@ -82,9 +82,12 @@
           android:id="@+id/toolbar_title"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:paddingStart="16dp"
-          android:textAppearance="@style/Dialer.TextAppearance.LargeTitle" />
+          android:layout_alignTop="@+id/main_options_menu_button"
+          android:layout_alignBottom="@+id/main_options_menu_button"
+          android:layout_centerHorizontal="true"
+          android:gravity="center_vertical"
+          android:maxLines="1"
+          android:textAppearance="@style/Dialer.TextAppearance.NavTitle" />
 
         <TextView
             android:id="@+id/search_box_start_search"

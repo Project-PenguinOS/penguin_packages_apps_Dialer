@@ -242,7 +242,7 @@ public class MainSearchController implements SearchBarListener {
     if (bottomNav.getSelectedTab() == BottomNavBar.TabIndex.CONTACTS) {
       activity.setTitle(R.string.contacts_title);
     } else {
-      activity.setTitle(R.string.dialer_title);
+      activity.setTitle(R.string.calls_title);
     }
 
     dialpadFragment.setAnimate(false);
@@ -325,7 +325,7 @@ public class MainSearchController implements SearchBarListener {
       if (bottomNav.getSelectedTab() == BottomNavBar.TabIndex.CONTACTS) {
         activity.setTitle(R.string.contacts_title);
       } else {
-        activity.setTitle(R.string.dialer_title);
+        activity.setTitle(R.string.calls_title);
       }
       return true;
     } else {

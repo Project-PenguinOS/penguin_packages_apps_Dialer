@@ -7,7 +7,7 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dialer_grouped_background">
+    android:background="?android:attr/colorBackground">
 
     <eightbitlab.com.blurview.BlurTarget
         android:id="@+id/main_content_blur_target"

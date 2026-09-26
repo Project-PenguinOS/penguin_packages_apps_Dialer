@@ -18,14 +18,18 @@
 package com.android.dialer.contactsfragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract.Contacts;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.QuickContactBadge;
+import android.widget.TextView;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,10 +50,11 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
   private static final int UNKNOWN_VIEW_TYPE = 0;
   private static final int ADD_CONTACT_VIEW_TYPE = 1;
   private static final int CONTACT_VIEW_TYPE = 2;
+  private static final int MY_CARD_VIEW_TYPE = 3;
 
   /** An Enum for the different row view types shown by this adapter. */
   @Retention(RetentionPolicy.SOURCE)
-  @IntDef({UNKNOWN_VIEW_TYPE, ADD_CONTACT_VIEW_TYPE, CONTACT_VIEW_TYPE})
+  @IntDef({UNKNOWN_VIEW_TYPE, ADD_CONTACT_VIEW_TYPE, CONTACT_VIEW_TYPE, MY_CARD_VIEW_TYPE})
   @interface ContactsViewType {}
 
   private final ArrayMap<ContactViewHolder, Integer> holderMap = new ArrayMap<>();
@@ -63,12 +68,22 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
   private int[] counts = new int[0];
   // Cursor with list of contacts
   private Cursor cursor;
+  @Nullable private MyCard myCard;
 
   ContactsAdapter(
       Context context, @Header int header, OnContactSelectedListener onContactSelectedListener) {
     this.context = context;
     this.header = header;
     this.onContactSelectedListener = Assert.isNotNull(onContactSelectedListener);
+  }
+
+  void setMyCard(@Nullable MyCard myCard) {
+    this.myCard = myCard;
+    notifyDataSetChanged();
+  }
+
+  private int leadingRows() {
+    return (header != Header.NONE ? 1 : 0) + (myCard != null ? 1 : 0);
   }
 
   void updateCursor(Cursor cursor) {
@@ -96,6 +111,9 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
       case ADD_CONTACT_VIEW_TYPE:
         return new AddContactViewHolder(
             LayoutInflater.from(context).inflate(R.layout.add_contact_row, parent, false));
+      case MY_CARD_VIEW_TYPE:
+        return new RecyclerView.ViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.my_card_row, parent, false)) {};
       case CONTACT_VIEW_TYPE:
         return new ContactViewHolder(
             LayoutInflater.from(context).inflate(R.layout.contact_row, parent, false),
@@ -111,13 +129,14 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     if (viewHolder instanceof AddContactViewHolder) {
       return;
     }
+    if (getItemViewType(position) == MY_CARD_VIEW_TYPE) {
+      bindMyCard(viewHolder.itemView);
+      return;
+    }
 
     ContactViewHolder contactViewHolder = (ContactViewHolder) viewHolder;
     holderMap.put(contactViewHolder, position);
-    cursor.moveToPosition(position);
-    if (header != Header.NONE) {
-      cursor.moveToPrevious();
-    }
+    cursor.moveToPosition(position - leadingRows());
 
     String name = getDisplayName(cursor);
     String header = getHeaderString(position);
@@ -138,7 +157,7 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // Always show the view holder's header if it's the first item in the list. Otherwise, compare
     // it to the previous element and only show the anchored header if the row elements fall into
     // the same sublists.
-    boolean showHeader = (position == 0);
+    boolean showHeader = isFirstInSection(position);
 
 contactViewHolder.bind(header, name, contactUri, getContactId(cursor), showHeader);
 
@@ -169,7 +188,22 @@ contactViewHolder.itemView.findViewById(R.id.contact_row).setBackgroundResource(
     if (header != Header.NONE && position == 0) {
       return ADD_CONTACT_VIEW_TYPE;
     }
+    if (myCard != null && position == leadingRows() - 1) {
+      return MY_CARD_VIEW_TYPE;
+    }
     return CONTACT_VIEW_TYPE;
+  }
+
+  private void bindMyCard(View row) {
+    QuickContactBadge photo = row.findViewById(R.id.my_card_photo);
+    ((TextView) row.findViewById(R.id.my_card_name)).setText(myCard.name);
+    ContactPhotoManager.getInstance(context)
+        .loadDialerThumbnailOrPhoto(
+            photo, myCard.lookupUri, myCard.photoId, myCard.photoUri, myCard.name,
+            LetterTileDrawable.TYPE_DEFAULT);
+    Uri lookupUri = myCard.lookupUri;
+    row.setOnClickListener(
+        v -> context.startActivity(new Intent(Intent.ACTION_VIEW, lookupUri)));
   }
 
   @Override
@@ -183,21 +217,40 @@ contactViewHolder.itemView.findViewById(R.id.contact_row).setBackgroundResource(
   void refreshHeaders() {
     for (ContactViewHolder holder : holderMap.keySet()) {
       int position = holderMap.get(holder);
-      boolean showHeader =
-          position == 0 || !getHeaderString(position).equals(getHeaderString(position - 1));
-      int visibility = showHeader ? View.VISIBLE : View.INVISIBLE;
-      holder.getHeaderView().setVisibility(visibility);
+      holder.getHeaderView().setVisibility(isFirstInSection(position) ? View.VISIBLE : View.GONE);
     }
+  }
+
+  boolean isContactRow(int position) {
+    return position >= leadingRows() && position < getItemCount();
+  }
+
+  boolean isFirstInSection(int position) {
+    int firstContact = leadingRows();
+    return position == firstContact
+        || (position > firstContact
+            && !getHeaderString(position).equals(getHeaderString(position - 1)));
+  }
+
+  int getPositionForSection(String title) {
+    int position = leadingRows();
+    for (int i = 0; i < headers.length; i++) {
+      if (headers[i].equals(title)) {
+        return position;
+      }
+      position += counts[i];
+    }
+    return -1;
+  }
+
+  String[] getSectionTitles() {
+    return headers;
   }
 
   @Override
   public int getItemCount() {
     int count = cursor == null || cursor.isClosed() ? 0 : cursor.getCount();
-    // Manually insert the header if one exists.
-    if (header != Header.NONE) {
-      count++;
-    }
-    return count;
+    return count + leadingRows();
   }
 
   private static String getDisplayName(Cursor cursor) {
@@ -224,12 +277,10 @@ contactViewHolder.itemView.findViewById(R.id.contact_row).setBackgroundResource(
   }
 
   String getHeaderString(int position) {
-    if (header != Header.NONE) {
-      if (position == 0) {
-        return "+";
-      }
-      position--;
+    if (position < leadingRows()) {
+      return "+";
     }
+    position -= leadingRows();
 
     int index = -1;
     int sum = 0;
