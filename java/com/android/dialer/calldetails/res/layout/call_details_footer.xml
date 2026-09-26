@@ -50,6 +50,7 @@
           android:layout_height="wrap_content"
           android:tint="?colorIcon"
           android:text="@string/call_details_copy_number"
+          app:drawableTint="?colorIcon"
           app:drawableStartCompat="@drawable/quantum_ic_content_copy_vd_theme_24" />
 
       <View

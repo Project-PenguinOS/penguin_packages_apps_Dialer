@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/dialer_grouped_background">
 
     <eightbitlab.com.blurview.BlurTarget
         android:id="@+id/main_content_blur_target"
@@ -47,6 +48,7 @@
             android:layout_marginEnd="64dp"
             android:layout_marginBottom="24dp"
             android:layout_gravity="bottom"
+            app:cardBackgroundColor="@color/dialer_segmented_track"
             app:cardCornerRadius="24dp"
             app:cardElevation="0dp">
 
@@ -56,15 +58,15 @@
                 android:layout_height="46dp"
                 android:background="@android:color/transparent"
                 app:tabIndicator="@drawable/tab_indicator"
-                app:tabIndicatorColor="@color/dialer_pill_color"
+                app:tabIndicatorColor="@color/dialer_segmented_thumb"
                 app:tabIndicatorAnimationDuration="250"
                 app:tabIndicatorAnimationMode="elastic"
                 app:tabIndicatorGravity="stretch"
-                app:tabSelectedTextColor="?android:attr/textColorPrimaryInverse"
+                app:tabSelectedTextColor="@color/dialer_label_primary"
                 app:tabRippleColor="@android:color/transparent"
                 android:visibility="gone"
                 app:tabTextAppearance="@style/MyCustomTabText"
-                app:tabTextColor="?android:attr/textColorSecondary"/>
+                app:tabTextColor="@color/dialer_label_primary"/>
 
             </androidx.cardview.widget.CardView>
         </FrameLayout>
