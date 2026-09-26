@@ -44,7 +44,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.android.common.io.MoreCloseables;
 import com.android.dialer.R;
 import com.android.dialer.app.calllog.CallLogAdapter;
 import com.android.dialer.app.calllog.CallLogFragment;
@@ -418,7 +417,9 @@ public class VoicemailPlaybackPresenter
         return cursor.getInt(cursor.getColumnIndex(VoicemailContract.Voicemails.HAS_CONTENT)) == 1;
       }
     } finally {
-      MoreCloseables.closeQuietly(cursor);
+      if (cursor != null) {
+        cursor.close();
+      }
     }
     return false;
   }

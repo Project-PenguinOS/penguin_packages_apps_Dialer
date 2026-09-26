@@ -48,7 +48,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import com.android.common.io.MoreCloseables;
 import com.android.contacts.common.database.NoNullCursorAsyncQueryHandler;
 import com.android.contacts.common.util.ContactDisplayUtils;
 import com.android.contacts.common.widget.SelectPhoneAccountDialogFragment;
@@ -555,7 +554,9 @@ public class SpecialCharSequenceMgr {
           Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
         }
       } finally {
-        MoreCloseables.closeQuietly(c);
+        if (c != null) {
+          c.close();
+        }
       }
     }
 

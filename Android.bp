@@ -214,7 +214,6 @@ android_app {
         "java/**/*.java",
     ],
     static_libs: [
-        "android-common",
         "androidx.annotation_annotation",
         "androidx.appcompat_appcompat",
         "androidx.cardview_cardview",
