@@ -61,51 +61,61 @@
       android:visibility="gone"
       layout="@layout/bottom_nav_item"/>
 
-    <LinearLayout
+    <FrameLayout
       android:id="@+id/keypad_tab"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:minHeight="@dimen/bottom_nav_min_touch_height"
       android:layout_weight="1"
+      android:minHeight="@dimen/bottom_nav_min_touch_height"
       android:clickable="true"
       android:focusable="true"
-      android:contentDescription="@string/dialpad_button_content_description"
-      android:gravity="center"
-      android:orientation="vertical"
-      android:paddingTop="@dimen/bottom_nav_item_padding_vertical"
-      android:paddingBottom="@dimen/bottom_nav_item_padding_vertical">
+      android:contentDescription="@string/dialpad_button_content_description">
 
-      <com.android.dialer.widget.DialerFloatingActionButton
-        android:id="@+id/fab"
+      <LinearLayout
+        android:id="@+id/keypad_tab_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="false"
-        android:duplicateParentState="true"
-        android:focusable="false"
-        android:importantForAccessibility="no"
-        android:contentDescription="@string/dialpad_button_content_description"
-        android:forceDarkAllowed="false"
-        android:src="@drawable/veddialer"
-        android:stateListAnimator="@null"
-        app:backgroundTint="@android:color/transparent"
-        app:borderWidth="0dp"
-        app:elevation="0dp"
-        app:fabCustomSize="@dimen/bottom_nav_icon_size"
-        app:maxImageSize="@dimen/bottom_nav_icon_size"
-        app:hoveredFocusedTranslationZ="0dp"
-        app:pressedTranslationZ="0dp"
-        app:tint="@color/dialer_label_primary" />
+        android:layout_gravity="center"
+        android:minWidth="@dimen/bottom_nav_item_min_width"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/bottom_nav_item_padding_vertical"
+        android:paddingBottom="@dimen/bottom_nav_item_padding_vertical"
+        android:paddingStart="@dimen/bottom_nav_item_padding_horizontal"
+        android:paddingEnd="@dimen/bottom_nav_item_padding_horizontal">
 
-      <TextView
-        android:id="@+id/fab_label"
-        style="@style/Dialer.BottomNavLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:importantForAccessibility="no"
-        android:text="@string/dialpad_button_content_description"
-        android:textColor="@color/dialer_label_primary"/>
+        <com.android.dialer.widget.DialerFloatingActionButton
+          android:id="@+id/fab"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:clickable="false"
+          android:duplicateParentState="true"
+          android:focusable="false"
+          android:importantForAccessibility="no"
+          android:contentDescription="@string/dialpad_button_content_description"
+          android:forceDarkAllowed="false"
+          android:src="@drawable/veddialer"
+          android:stateListAnimator="@null"
+          app:backgroundTint="@android:color/transparent"
+          app:borderWidth="0dp"
+          app:elevation="0dp"
+          app:fabCustomSize="@dimen/bottom_nav_icon_size"
+          app:maxImageSize="@dimen/bottom_nav_icon_size"
+          app:hoveredFocusedTranslationZ="0dp"
+          app:pressedTranslationZ="0dp"
+          app:tint="@color/dialer_label_secondary" />
+
+        <TextView
+          android:id="@+id/fab_label"
+          style="@style/Dialer.BottomNavLabel"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:importantForAccessibility="no"
+          android:text="@string/dialpad_button_content_description"
+          android:textColor="@color/dialer_label_secondary"/>
 
       </LinearLayout>
+    </FrameLayout>
 
     </LinearLayout>
 

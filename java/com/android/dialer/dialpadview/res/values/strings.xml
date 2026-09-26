@@ -20,6 +20,7 @@
 
   <!-- String describing the back button in the dialpad. -->
   <string name="description_dialpad_back">Navigate back</string>
+  <string name="dialpad_hide">Hide</string>
 
   <!-- String describing the overflow menu button in the dialpad. -->
   <string name="description_dialpad_overflow">More options</string>

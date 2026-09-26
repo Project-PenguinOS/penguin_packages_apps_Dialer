@@ -40,8 +40,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -60,8 +58,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.android.contacts.common.widget.SelectPhoneAccountDialogFragment;
 import com.android.dialer.R;
-import com.android.dialer.animation.AnimUtils;
-import com.android.dialer.animation.AnimationListenerAdapter;
 import com.android.dialer.common.Assert;
 import com.android.dialer.common.LogUtil;
 import com.android.dialer.common.concurrent.DialerExecutorComponent;
@@ -70,7 +66,6 @@ import com.android.dialer.preferredsim.PreferredAccountRecorder;
 import com.android.dialer.preferredsim.PreferredAccountWorker;
 import com.android.dialer.preferredsim.PreferredAccountWorker.Result;
 import com.android.dialer.preferredsim.PreferredSimComponent;
-import com.android.dialer.util.ViewUtil;
 import com.android.incallui.answer.bindings.AnswerBindings;
 import com.android.incallui.answer.protocol.AnswerScreen;
 import com.android.incallui.answer.protocol.AnswerScreenDelegate;
@@ -131,8 +126,6 @@ public class InCallActivity extends TransactionSafeFragmentActivity
   private SelectPhoneAccountListener selectPhoneAccountListener;
   private SupportUiListener<Result> preferredAccountWorkerResultListener;
 
-  private Animation dialpadSlideInAnimation;
-  private Animation dialpadSlideOutAnimation;
   private Dialog errorDialog;
   private GradientDrawable backgroundDrawable;
   private InCallOrientationEventListener inCallOrientationEventListener;
@@ -203,42 +196,8 @@ public class InCallActivity extends TransactionSafeFragmentActivity
     setWindowFlags();
     setContentView(R.layout.incall_screen);
 
-    WindowInsetsControllerCompat insetsController =
-            WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-    if (insetsController != null) {
-      boolean isLight =
-          (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-              != Configuration.UI_MODE_NIGHT_YES;
-      insetsController.setAppearanceLightStatusBars(isLight);
-    }
-    updateNavigationBarAppearance(false);
 
     internalResolveIntent(getIntent());
-
-    boolean isLandscape =
-        getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-    boolean isRtl = ViewUtil.isRtl();
-    if (isLandscape) {
-      dialpadSlideInAnimation =
-          AnimationUtils.loadAnimation(
-              this, isRtl ? R.anim.dialpad_slide_in_left : R.anim.dialpad_slide_in_right);
-      dialpadSlideOutAnimation =
-          AnimationUtils.loadAnimation(
-              this, isRtl ? R.anim.dialpad_slide_out_left : R.anim.dialpad_slide_out_right);
-    } else {
-      dialpadSlideInAnimation = AnimationUtils.loadAnimation(this, R.anim.dialpad_slide_in_bottom);
-      dialpadSlideOutAnimation =
-          AnimationUtils.loadAnimation(this, R.anim.dialpad_slide_out_bottom);
-    }
-    dialpadSlideInAnimation.setInterpolator(AnimUtils.EASE_IN);
-    dialpadSlideOutAnimation.setInterpolator(AnimUtils.EASE_OUT);
-    dialpadSlideOutAnimation.setAnimationListener(
-        new AnimationListenerAdapter() {
-          @Override
-          public void onAnimationEnd(Animation animation) {
-            hideDialpadFragment();
-          }
-        });
 
     if (bundle != null && showDialpadRequest == DIALPAD_REQUEST_NONE) {
       // If the dialpad was shown before, set related variables so that it can be shown and
@@ -771,20 +730,11 @@ public class InCallActivity extends TransactionSafeFragmentActivity
     }
   }
 
-  private void updateNavigationBarAppearance(boolean dialpadVisible) {
-    WindowInsetsControllerCompat insetsController =
-        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-    if (insetsController != null) {
-      insetsController.setAppearanceLightNavigationBars(!dialpadVisible);
-    }
-  }
 
   public void showDialpadFragment(boolean show, boolean animate) {
     if (show == isDialpadVisible()) {
       return;
     }
-
-    updateNavigationBarAppearance(show);
 
     FragmentManager dialpadFragmentManager = getDialpadFragmentManager();
     if (dialpadFragmentManager == null) {
@@ -792,20 +742,10 @@ public class InCallActivity extends TransactionSafeFragmentActivity
       return;
     }
 
-    if (!animate) {
-      if (show) {
-        showDialpadFragment();
-      } else {
-        hideDialpadFragment();
-      }
+    if (show) {
+      showDialpadFragment();
     } else {
-      if (show) {
-        showDialpadFragment();
-        getDialpadFragment().animateShowDialpad();
-      }
-      getDialpadFragment()
-          .getView()
-          .startAnimation(show ? dialpadSlideInAnimation : dialpadSlideOutAnimation);
+      hideDialpadFragment();
     }
 
     ProximitySensor sensor = InCallPresenter.getInstance().getProximitySensor();
@@ -922,7 +862,7 @@ public class InCallActivity extends TransactionSafeFragmentActivity
     boolean backgroundDirty = false;
     if (backgroundDrawable == null) {
       backgroundDrawableColors = new int[] {top, middle, bottom};
-      backgroundDrawable = new GradientDrawable(Orientation.TOP_BOTTOM, backgroundDrawableColors);
+      backgroundDrawable = new GradientDrawable(Orientation.TL_BR, backgroundDrawableColors);
       backgroundDirty = true;
     } else {
       if (backgroundDrawableColors[0] != top) {
@@ -944,7 +884,15 @@ public class InCallActivity extends TransactionSafeFragmentActivity
 
     if (backgroundDirty) {
       getWindow().setBackgroundDrawable(backgroundDrawable);
+      updateSystemBarAppearance(top, bottom);
     }
+  }
+
+  private void updateSystemBarAppearance(@ColorInt int top, @ColorInt int bottom) {
+    WindowInsetsControllerCompat insetsController =
+        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+    insetsController.setAppearanceLightStatusBars(ColorUtils.calculateLuminance(top) > 0.5);
+    insetsController.setAppearanceLightNavigationBars(ColorUtils.calculateLuminance(bottom) > 0.5);
   }
 
   public boolean isVisible() {

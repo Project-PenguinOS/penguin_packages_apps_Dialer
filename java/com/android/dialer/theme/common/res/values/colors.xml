@@ -43,5 +43,6 @@
   <color name="dialer_tab_selected_fill">#1F000000</color>
   <color name="dialer_tint">@android:color/system_accent1_600</color>
   <color name="dialer_label_primary">#FF000000</color>
+  <color name="dialer_label_secondary">#993C3C43</color>
   <color name="dialer_system_red">#FF3B30</color>
 </resources>

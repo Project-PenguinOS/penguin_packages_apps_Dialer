@@ -18,12 +18,15 @@
 package com.android.dialer.main.impl.bottomnav;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.RenderEffect;
 import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
@@ -77,6 +80,13 @@ public final class BottomNavBar extends FrameLayout {
   private BottomNavItem voicemail;
   private @TabIndex int selectedTab;
 
+  private View keypadTab;
+  private View keypadContent;
+  private ImageView keypadIcon;
+  private TextView keypadLabel;
+  private boolean keypadActive;
+  @Nullable private Runnable onLeaveKeypad;
+
   public BottomNavBar(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
   }
@@ -100,10 +110,59 @@ public final class BottomNavBar extends FrameLayout {
 
 
 
-    speedDial.setOnClickListener(v -> selectTab(TabIndex.SPEED_DIAL));
-    callLog.setOnClickListener(v -> selectTab(TabIndex.CALL_LOG));
-    contacts.setOnClickListener(v -> selectTab(TabIndex.CONTACTS));
-    voicemail.setOnClickListener(v -> selectTab(TabIndex.VOICEMAIL));
+    speedDial.setOnClickListener(v -> onTabClicked(TabIndex.SPEED_DIAL));
+    callLog.setOnClickListener(v -> onTabClicked(TabIndex.CALL_LOG));
+    contacts.setOnClickListener(v -> onTabClicked(TabIndex.CONTACTS));
+    voicemail.setOnClickListener(v -> onTabClicked(TabIndex.VOICEMAIL));
+
+    keypadTab = findViewById(R.id.keypad_tab);
+    keypadContent = findViewById(R.id.keypad_tab_content);
+    keypadIcon = findViewById(R.id.fab);
+    keypadLabel = findViewById(R.id.fab_label);
+  }
+
+  private void onTabClicked(@TabIndex int tab) {
+    if (keypadActive && onLeaveKeypad != null) {
+      onLeaveKeypad.run();
+    }
+    selectTab(tab);
+  }
+
+  public void setOnLeaveKeypadListener(@Nullable Runnable listener) {
+    onLeaveKeypad = listener;
+  }
+
+  public void setKeypadActive(boolean active) {
+    if (keypadActive == active) {
+      return;
+    }
+    keypadActive = active;
+    if (active) {
+      setSelected(keypadTab);
+    } else {
+      setSelected(viewForTab(selectedTab));
+    }
+    int color = getContext().getColor(
+        active ? R.color.dialer_label_primary : R.color.dialer_label_secondary);
+    keypadContent.setBackgroundResource(active ? R.drawable.bottom_nav_selected_capsule : 0);
+    keypadIcon.setImageTintList(ColorStateList.valueOf(color));
+    keypadLabel.setTextColor(color);
+  }
+
+  @Nullable
+  private View viewForTab(@TabIndex int tab) {
+    switch (tab) {
+      case TabIndex.SPEED_DIAL:
+        return speedDial;
+      case TabIndex.CALL_LOG:
+        return callLog;
+      case TabIndex.CONTACTS:
+        return contacts;
+      case TabIndex.VOICEMAIL:
+        return voicemail;
+      default:
+        return null;
+    }
   }
 
 

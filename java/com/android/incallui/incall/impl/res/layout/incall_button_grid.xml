@@ -14,7 +14,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|center_horizontal"
-    android:background="@drawable/incall_button_pad_glass"
     android:layout_marginStart="32dp"
     android:layout_marginEnd="32dp">
 

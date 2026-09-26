@@ -26,13 +26,10 @@ import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
 import android.widget.EditText;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import com.android.dialer.R;
@@ -93,7 +90,7 @@ public class DialpadFragment extends BaseFragment<DialpadPresenter, DialpadUi>
 
   @Override
   public void onClick(View v) {
-    if (v.getId() == R.id.dialpad_back) {
+    if (v.getId() == R.id.dialpad_hide) {
       getActivity().onBackPressed();
     }
   }
@@ -142,6 +139,7 @@ public class DialpadFragment extends BaseFragment<DialpadPresenter, DialpadUi>
     LayoutInflater layoutInflater = inflater.cloneInContext(contextThemeWrapper);
     final View parent = layoutInflater.inflate(R.layout.incall_dialpad_fragment, container, false);
     dialpadView = parent.findViewById(R.id.dialpad_view);
+    dialpadView.setVisibility(View.VISIBLE);
     dialpadView.setCanDigitsBeEdited(false);
     dtmfDialerField = parent.findViewById(R.id.digits);
     if (dtmfDialerField != null) {
@@ -154,51 +152,14 @@ public class DialpadFragment extends BaseFragment<DialpadPresenter, DialpadUi>
       dtmfDialerField.setElegantTextHeight(false);
       configureKeypadListeners();
     }
-    View backButton = dialpadView.findViewById(R.id.dialpad_back);
-    backButton.setVisibility(View.VISIBLE);
-    backButton.setOnClickListener(this);
     endCallSpace = dialpadView.findViewById(R.id.end_call_space);
-
-    parent.addOnAttachStateChangeListener(
-        new OnAttachStateChangeListener() {
-          @Override
-          public void onViewAttachedToWindow(View v) {
-            extendBelowNavigationBar(v);
-          }
-
-          @Override
-          public void onViewDetachedFromWindow(View v) {}
-        });
+    View hideButton = dialpadView.findViewById(R.id.dialpad_hide);
+    hideButton.setVisibility(View.VISIBLE);
+    hideButton.setOnClickListener(this);
 
     return parent;
   }
 
-  private void extendBelowNavigationBar(View fragmentRoot) {
-    WindowInsets rootInsets = fragmentRoot.getRootWindowInsets();
-    if (rootInsets == null || !(fragmentRoot.getParent() instanceof View)) {
-      return;
-    }
-    int bottomInset = rootInsets.getInsets(WindowInsets.Type.systemBars()).bottom;
-    if (bottomInset == 0) {
-      return;
-    }
-
-    dialpadView.setPadding(
-        dialpadView.getPaddingLeft(),
-        dialpadView.getPaddingTop(),
-        dialpadView.getPaddingRight(),
-        bottomInset);
-
-    View container = (View) fragmentRoot.getParent();
-    ViewGroup.LayoutParams params = container.getLayoutParams();
-    if (params instanceof ViewGroup.MarginLayoutParams) {
-      ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) params;
-      if (marginParams.bottomMargin != -bottomInset) {
-        marginParams.bottomMargin = -bottomInset;
-        container.setLayoutParams(marginParams);
-      }
-    }
-  }
 
   @Override
   public void onResume() {
@@ -231,17 +192,6 @@ public class DialpadFragment extends BaseFragment<DialpadPresenter, DialpadUi>
   }
 
   /** Starts the slide up animation for the Dialpad keys when the Dialpad is revealed. */
-  public void animateShowDialpad() {
-    final DialpadView dialpadView = getView().findViewById(R.id.dialpad_view);
-    dialpadView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-      @Override
-      public boolean onPreDraw() {
-        dialpadView.getViewTreeObserver().removeOnPreDrawListener(this);
-        dialpadView.animateShow();
-        return true; // Allow the current drawing pass to proceed.
-      }
-    });
-  }
 
   @Override
   public void appendDigitsToField(char digit) {

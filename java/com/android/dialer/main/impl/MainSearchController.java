@@ -166,9 +166,7 @@ public class MainSearchController implements SearchBarListener {
 
     activity.findViewById(R.id.top_view).setVisibility(View.GONE);
 
-    fab.hide();
-    searchBackground.setVisibility(View.GONE);
-    searchMagnifyingGlass.setVisibility(View.GONE);
+    bottomNav.setKeypadActive(true);
     toolbar.slideUp(false, fragmentContainer);
     toolbar.expand(false, Optional.empty(), /* requestFocus */ false);
 
@@ -195,7 +193,6 @@ public class MainSearchController implements SearchBarListener {
       transaction.show(dialpadFragment);
     }
     transaction.commitNow();
-    hideBottomNav();
 
     notifyListenersOnSearchOpen();
   }
@@ -234,6 +231,7 @@ public class MainSearchController implements SearchBarListener {
     fab.show();
     searchBackground.setVisibility(View.VISIBLE);
     searchMagnifyingGlass.setVisibility(View.VISIBLE);
+    bottomNav.setKeypadActive(false);
     toolbar.slideDown(false, fragmentContainer);
     toolbar.transferQueryFromDialpad(dialpadFragment.getQuery());
 
@@ -278,7 +276,6 @@ public class MainSearchController implements SearchBarListener {
   public void onDialpadShown() {
     LogUtil.enterBlock("MainSearchController.onDialpadShown");
     dialpadFragment.slideUp(false);
-    hideBottomNav();
   }
 
   /**
@@ -329,6 +326,12 @@ public class MainSearchController implements SearchBarListener {
       return true;
     } else {
       return false;
+    }
+  }
+
+  public void leaveKeypad() {
+    if (isSearchVisible()) {
+      closeSearch(false);
     }
   }
 

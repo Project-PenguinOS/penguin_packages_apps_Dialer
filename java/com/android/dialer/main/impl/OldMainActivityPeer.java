@@ -261,6 +261,16 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
         activity.findViewById(R.id.search_magnifying_glass_main));
     toolbar.setSearchBarListener(searchController);
     activity.findViewById(R.id.search_magnifying_glass_main).setOnClickListener(v -> searchController.onSearchBarClicked());
+    bottomNav.setOnLeaveKeypadListener(searchController::leaveKeypad);
+
+    View dialpadContainer = activity.findViewById(R.id.dialpad_fragment_container);
+    blurView.addOnLayoutChangeListener(
+        (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+          int reserved = ((View) v.getParent()).getHeight() - top;
+          if (dialpadContainer.getPaddingBottom() != reserved) {
+            dialpadContainer.setPadding(0, 0, 0, reserved);
+          }
+        });
 
     onDialpadQueryChangedListener = getNewOnDialpadQueryChangedListener(searchController);
     dialpadListener =

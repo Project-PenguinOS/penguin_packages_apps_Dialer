@@ -87,7 +87,8 @@ final class BottomNavItem extends LinearLayout {
     super.setSelected(selected);
 
 
-    int color = getContext().getColor(R.color.dialer_label_primary);
+    int color = getContext().getColor(
+            selected ? R.color.dialer_label_primary : R.color.dialer_label_secondary);
 
     image.setImageResource(selected ? drawableResSelected : drawableRes);
     image.setImageTintList(ColorStateList.valueOf(color));

@@ -1625,7 +1625,9 @@ public class DialpadFragment extends Fragment
     slideDown.setAnimationListener(listener);
     slideDown.setDuration(animate ? dialpadSlideInDuration : 0);
     getView().startAnimation(slideDown);
-    floatingActionButtonController.scaleOut();
+    if (animate) {
+      floatingActionButtonController.scaleOut();
+    }
   }
 
   /** Animate the dialpad up onto the screen. */

@@ -20,7 +20,6 @@ package com.android.incallui.incall.impl;
 import android.Manifest;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Insets;
@@ -35,7 +34,6 @@ import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowInsets;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
@@ -401,12 +399,11 @@ public class InCallFragment extends Fragment
     if (inCallButtonGridFragment != null) {
       // Update the Android Button's state to isShowing.
       inCallButtonGridFragment.onInCallScreenDialpadVisibilityChange(isShowing);
+      View grid = inCallButtonGridFragment.getView();
+      if (grid != null) {
+        grid.setVisibility(isShowing ? View.INVISIBLE : View.VISIBLE);
+      }
     }
-    Activity activity = getActivity();
-    Window window = activity.getWindow();
-    window.setNavigationBarColor(
-        activity.getColor(
-            isShowing ? android.R.color.background_dark : android.R.color.transparent));
   }
 
   @Override
