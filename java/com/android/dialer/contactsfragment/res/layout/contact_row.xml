@@ -26,10 +26,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_gravity="center_horizontal"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginTop="1dp"
-    android:layout_marginBottom="1dp"
+    android:layout_marginStart="@dimen/dialer_grouped_row_inset"
+    android:layout_marginEnd="@dimen/dialer_grouped_row_inset"
     android:paddingStart="8dp"
     android:paddingEnd="8dp"
     cardCornerRadius="28dp">
@@ -74,7 +72,7 @@
           android:layout_gravity="center_vertical"
           android:src="@drawable/ic_arrow_forward"
           android:tint="?attr/colorIcon"
-          android:visibility="visible"/>
+          android:visibility="gone"/>
     </LinearLayout>
   </androidx.cardview.widget.CardView>
 </FrameLayout>

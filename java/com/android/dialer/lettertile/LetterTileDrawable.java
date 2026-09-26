@@ -23,10 +23,12 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.LinearGradient;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.telecom.TelecomManager;
@@ -102,6 +104,8 @@ public class LetterTileDrawable extends Drawable {
   private final int spamColor;
   private final int defaultColor;
   private final int tileFontColor;
+  private final int gradientTop;
+  private final int gradientBottom;
   private final float letterToTileRatio;
   @NonNull private final Drawable defaultPersonAvatar;
   @NonNull private final Drawable defaultBusinessAvatar;
@@ -124,6 +128,8 @@ public class LetterTileDrawable extends Drawable {
     spamColor = res.getColor(R.color.spam_contact_background, null);
     defaultColor = res.getColor(R.color.letter_tile_default_color, null);
     tileFontColor = res.getColor(R.color.letter_tile_font_color, null);
+    gradientTop = res.getColor(R.color.letter_tile_gradient_top, null);
+    gradientBottom = res.getColor(R.color.letter_tile_gradient_bottom, null);
     letterToTileRatio = res.getFraction(R.dimen.letter_to_tile_ratio, 1, 1);
     defaultPersonAvatar = res.getDrawable(R.drawable.quantum_ic_person_vd_theme_24, null);
     defaultBusinessAvatar = res.getDrawable(R.drawable.quantum_ic_business_vd_theme_24, null);
@@ -195,17 +201,23 @@ public class LetterTileDrawable extends Drawable {
   }
 
   private void drawLetterTile(final Canvas canvas) {
-    // Draw background color.
-    paint.setColor(color);
-
     final Rect bounds = getBounds();
     final int minDimension = Math.min(bounds.width(), bounds.height());
+
+    paint.setColor(color);
+    if (contactType != TYPE_SPAM) {
+      paint.setShader(
+          new LinearGradient(
+              0, bounds.top, 0, bounds.bottom, gradientTop, gradientBottom,
+              Shader.TileMode.CLAMP));
+    }
 
     if (isCircle) {
       canvas.drawCircle(bounds.centerX(), bounds.centerY(), minDimension / 2, paint);
     } else {
       canvas.drawRect(bounds, paint);
     }
+    paint.setShader(null);
 
     // Draw letter/digit only if the first character is an english letter or there's a override
     if (letter != null) {
@@ -215,7 +227,7 @@ public class LetterTileDrawable extends Drawable {
       // Scale text by canvas bounds and user selected scaling factor
       paint.setTextSize(scale * letterToTileRatio * minDimension);
       paint.getTextBounds(firstChar, 0, 1, rect);
-      paint.setTypeface(Typeface.create("@*android:string/config_bodyFontFamily", Typeface.NORMAL));
+      paint.setTypeface(Typeface.create(Typeface.DEFAULT, 500, false));
       paint.setColor(tileFontColor);
 
       // Draw the letter in the canvas, vertically shifted up or down by the user-defined
@@ -236,6 +248,7 @@ public class LetterTileDrawable extends Drawable {
       }
 
       drawable.setBounds(getScaledBounds(scale, offset));
+      drawable.setTint(tileFontColor);
       drawable.draw(canvas);
     }
   }

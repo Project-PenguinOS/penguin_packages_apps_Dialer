@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="?android:attr/colorBackgroundFloating"/>
-    <corners android:topLeftRadius="1dp" android:topRightRadius="1dp" android:bottomLeftRadius="32dp" android:bottomRightRadius="32dp"/>
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item>
+    <shape>
+      <solid android:color="@color/dialer_grouped_cell"/>
+      <corners android:topLeftRadius="0dp" android:topRightRadius="0dp" android:bottomLeftRadius="@dimen/dialer_grouped_row_radius" android:bottomRightRadius="@dimen/dialer_grouped_row_radius"/>
+    </shape>
+  </item>
+</layer-list>

@@ -283,17 +283,13 @@ public class CallTypeIconsView extends View {
       final android.content.res.Resources r = context.getResources();
       android.content.res.Resources.Theme contextTheme = context.getTheme();
 
+      int directionColor = r.getColor(R.color.dialer_label_secondary, contextTheme);
       incoming = getBitmap(context, R.drawable.quantum_ic_call_received_vd_theme_24,
-              r.getColor(R.color.answered_incoming_call, contextTheme), largeIcons);
-
-      // Create a rotated instance of the call arrow for outgoing calls.
+              directionColor, largeIcons);
       outgoing = getBitmap(context, R.drawable.quantum_ic_call_made_vd_theme_24,
-              r.getColor(R.color.answered_outgoing_call, contextTheme), largeIcons);
-
-      // Need to make a copy of the arrow drawable, otherwise the same instance colored
-      // above will be recolored here.
+              directionColor, largeIcons);
       missed = getBitmap(context, R.drawable.quantum_ic_call_missed_vd_theme_24,
-              r.getColor(R.color.dialer_red, contextTheme), largeIcons);
+              directionColor, largeIcons);
 
       Theme theme = ThemeComponent.get(context).theme();
       int iconColor = theme.getColorIcon();

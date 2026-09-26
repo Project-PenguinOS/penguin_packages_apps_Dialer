@@ -20,9 +20,10 @@
   <style name="CallLogCardStyle" parent="CardView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_margin">1dp</item>
+    <item name="android:layout_marginStart">@dimen/dialer_grouped_row_inset</item>
+    <item name="android:layout_marginEnd">@dimen/dialer_grouped_row_inset</item>
     <item name="android:baselineAligned">false</item>
-    <item name="cardCornerRadius">28dp</item>
+    <item name="cardCornerRadius">@dimen/dialer_grouped_row_radius</item>
     <item name="cardBackgroundColor">?android:attr/colorBackground</item>
     <item name="cardElevation">0dp</item>
   </style>

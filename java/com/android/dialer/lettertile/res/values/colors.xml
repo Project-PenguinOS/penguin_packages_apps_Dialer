@@ -35,4 +35,7 @@
   <color name="letter_tile_default_color">#cccccc</color>
 
   <color name="letter_tile_font_color">#ffffff</color>
+
+  <color name="letter_tile_gradient_top">#A5ABB8</color>
+  <color name="letter_tile_gradient_bottom">#858994</color>
 </resources>

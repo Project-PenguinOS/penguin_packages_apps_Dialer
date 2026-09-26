@@ -40,4 +40,8 @@
   <!-- Padding to be applied to the bottom of lists to make space for the floating action
      button -->
   <dimen name="floating_action_button_list_bottom_padding">88dp</dimen>
+  <dimen name="dialer_grouped_row_radius">20dp</dimen>
+  <dimen name="dialer_grouped_row_inset">16dp</dimen>
+  <dimen name="dialer_grouped_row_separator_inset">80dp</dimen>
+  <dimen name="dialer_grouped_separator_height">0.5dp</dimen>
 </resources>

@@ -22,8 +22,8 @@ import com.android.dialer.widget.SwipeAndDragHelper;
 
 public class CallLogSwipeHelper extends SwipeAndDragHelper {
 
-    private static final float CARD_CORNER_RADIUS_DP = 32f;
-    private static final float CARD_INNER_CORNER_RADIUS_DP = 1f;
+    private static final float CARD_CORNER_RADIUS_DP = 20f;
+    private static final float CARD_INNER_CORNER_RADIUS_DP = 0f;
 
     private static final float SWIPE_THRESHOLD = 0.4f;
     private static final float SWIPE_ESCAPE_VELOCITY_MULTIPLIER = 1.5f;
