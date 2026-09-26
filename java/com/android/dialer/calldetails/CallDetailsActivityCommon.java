@@ -31,7 +31,6 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,6 +55,7 @@ import com.android.dialer.precall.PreCall;
 import com.android.dialer.rtt.RttTranscriptActivity;
 import com.android.dialer.rtt.RttTranscriptUtil;
 import com.android.dialer.theme.base.ThemeComponent;
+import com.android.dialer.widget.HigNavigationBar;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
@@ -115,9 +115,10 @@ abstract class CallDetailsActivityCommon extends BaseActivity {
     setTheme(ThemeComponent.get(this).theme().getApplicationThemeRes());
     setContentView(R.layout.call_details_activity);
     setupInsets(findViewById(R.id.main_layout));
-    Toolbar toolbar = findViewById(R.id.toolbar);
-    toolbar.setTitle(R.string.call_details);
-    toolbar.setNavigationOnClickListener(v -> finish());
+    setTitle(R.string.call_details);
+    HigNavigationBar navigationBar =
+        HigNavigationBar.installInToolbar(this, findViewById(R.id.toolbar));
+    navigationBar.setBackLabel(getText(R.string.call_details_back_label));
     checkRttTranscriptAvailabilityListener =
         DialerExecutorComponent.get(this)
             .createUiListener(getSupportFragmentManager(), "Query RTT transcript availability");

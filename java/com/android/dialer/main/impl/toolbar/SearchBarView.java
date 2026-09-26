@@ -115,6 +115,17 @@ public final class SearchBarView extends FrameLayout {
    *
    * @param requestFocus should be false if showing the dialpad
    */
+  @Nullable private ValueAnimator stateAnimator;
+
+  private void replaceStateAnimator(ValueAnimator next) {
+    if (stateAnimator != null) {
+      stateAnimator.removeAllListeners();
+      stateAnimator.removeAllUpdateListeners();
+      stateAnimator.cancel();
+    }
+    stateAnimator = next;
+  }
+
   public void expand(boolean animate, Optional<String> text, boolean requestFocus) {
     if (isExpanded) {
       return;
@@ -124,6 +135,7 @@ public final class SearchBarView extends FrameLayout {
     searchBoxExpanded.setVisibility(VISIBLE);
     AnimUtils.crossFadeViews(searchBoxExpanded, searchBoxCollapsed, duration);
     ValueAnimator animator = ValueAnimator.ofFloat(EXPAND_MARGIN_FRACTION_START, 0f);
+    replaceStateAnimator(animator);
     animator.addUpdateListener(animation -> setMargins((Float) animation.getAnimatedValue()));
     animator.setDuration(duration);
     animator.addListener(
@@ -143,6 +155,7 @@ public final class SearchBarView extends FrameLayout {
             // physical/bluetooth keyboards will type into this box when the dialpad is open.
             if (requestFocus) {
               searchBox.requestFocus();
+              DialerUtils.showInputMethod(searchBox);
             }
           }
         });
@@ -158,6 +171,7 @@ public final class SearchBarView extends FrameLayout {
     int duration = animate ? ANIMATION_DURATION : 0;
     AnimUtils.crossFadeViews(searchBoxCollapsed, searchBoxExpanded, duration);
     ValueAnimator animator = ValueAnimator.ofFloat(0f, EXPAND_MARGIN_FRACTION_START);
+    replaceStateAnimator(animator);
     animator.addUpdateListener(animation -> setMargins((Float) animation.getAnimatedValue()));
     animator.setDuration(duration);
 

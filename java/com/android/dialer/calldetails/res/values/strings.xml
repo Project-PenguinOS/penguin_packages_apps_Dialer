@@ -52,4 +52,5 @@
 
   <!-- String shown when RTT transcript is available. [CHAR LIMIT=NONE] -->
   <string name="rtt_transcript_link">See transcript</string>
+  <string name="call_details_back_label">Recents</string>
 </resources>

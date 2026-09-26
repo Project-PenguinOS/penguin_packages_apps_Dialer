@@ -31,7 +31,6 @@ import android.view.View;
 import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.Toolbar;
 
 import com.android.dialer.R;
 import com.android.dialer.app.AccountSelectionActivity;
@@ -50,6 +49,7 @@ import com.android.dialer.phonenumbercache.ContactInfoHelper;
 import com.android.dialer.phonenumberutil.PhoneNumberHelper;
 import com.android.dialer.util.CallUtil;
 import com.android.dialer.widget.LinearColorBar;
+import com.android.dialer.widget.HigNavigationBar;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -117,9 +117,8 @@ public class CallStatsDetailActivity extends BaseActivity implements
 
     setContentView(R.layout.call_stats_detail);
 
-    Toolbar toolbar = findViewById(R.id.toolbar);
-    toolbar.setNavigationOnClickListener(v -> finish());
-    toolbar.setTitle(R.string.call_stats_detail_title);
+    setTitle(R.string.call_stats_detail_title);
+    HigNavigationBar.installInToolbar(this, findViewById(R.id.toolbar));
 
     mResources = getResources();
     mContactInfoHelper = new ContactInfoHelper(this, GeoUtil.getCurrentCountryIso(this));

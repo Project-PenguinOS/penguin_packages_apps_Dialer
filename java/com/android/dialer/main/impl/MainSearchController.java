@@ -367,6 +367,8 @@ public class MainSearchController implements SearchBarListener {
       fab.show();
     }
     showBottomNav();
+    searchBackground.setVisibility(View.VISIBLE);
+    searchMagnifyingGlass.setVisibility(View.VISIBLE);
     updateStatusBarColor(android.R.attr.statusBarColor);
     toolbar.collapse(animate);
     activity.getSupportFragmentManager().beginTransaction().hide(searchFragment).commit();
@@ -422,6 +424,10 @@ public class MainSearchController implements SearchBarListener {
   @Override
   public void onSearchBarClicked() {
     LogUtil.enterBlock("MainSearchController.onSearchBarClicked");
+    if (isDialpadVisible()) {
+      leaveKeypad();
+      activity.getSupportFragmentManager().executePendingTransactions();
+    }
     openSearch(Optional.empty());
   }
 
@@ -429,6 +435,8 @@ public class MainSearchController implements SearchBarListener {
     LogUtil.enterBlock("MainSearchController.openSearch");
 
     fab.hide();
+    searchBackground.setVisibility(View.GONE);
+    searchMagnifyingGlass.setVisibility(View.GONE);
     toolbar.expand(/* animate=*/ true, query, /* requestFocus */ true);
     toolbar.showKeyboard();
     hideBottomNav();
