@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.dialer.widget.HigNavigationBar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/hig_navigation_bar_height">
+
+  <LinearLayout
+      android:id="@+id/hig_nav_back"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="start|center_vertical"
+      android:background="?android:attr/selectableItemBackgroundBorderless"
+      android:gravity="center_vertical"
+      android:minWidth="@dimen/hig_min_touch_target"
+      android:orientation="horizontal"
+      android:paddingStart="8dp"
+      android:paddingEnd="8dp">
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_nav_back_chevron"
+        app:tint="@color/dialer_tint"/>
+
+    <TextView
+        android:id="@+id/hig_nav_back_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:maxWidth="@dimen/hig_navigation_back_label_max_width"
+        android:textColor="@color/dialer_tint"
+        android:textSize="17sp"/>
+  </LinearLayout>
+
+  <TextView
+      android:id="@+id/hig_nav_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_marginStart="@dimen/hig_navigation_back_label_max_width"
+      android:layout_marginEnd="@dimen/hig_navigation_back_label_max_width"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textAppearance="@style/Dialer.TextAppearance.NavTitle"/>
+</com.android.dialer.widget.HigNavigationBar>

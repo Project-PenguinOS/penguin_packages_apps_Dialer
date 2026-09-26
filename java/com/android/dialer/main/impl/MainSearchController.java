@@ -54,6 +54,7 @@ import com.android.dialer.searchfragment.list.NewSearchFragment.SearchFragmentLi
 import com.android.dialer.smartdial.util.SmartDialNameMatcher;
 import com.android.dialer.util.DialerUtils;
 import com.android.dialer.util.TransactionSafeActivity;
+import com.android.dialer.widget.HigNavigationBar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -489,7 +490,9 @@ public class MainSearchController implements SearchBarListener {
   @Override
   public boolean onMenuItemClicked(MenuItem menuItem) {
     if (menuItem.getItemId() == R.id.settings) {
-      activity.startActivity(new Intent(activity, DialerSettingsActivity.class));
+      activity.startActivity(
+          new Intent(activity, DialerSettingsActivity.class)
+              .putExtra(HigNavigationBar.EXTRA_BACK_LABEL, activity.getTitle()));
       return true;
     } else if (menuItem.getItemId() == R.id.clear_frequents) {
       ClearFrequentsDialog.show(activity.getSupportFragmentManager());

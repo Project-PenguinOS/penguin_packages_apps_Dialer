@@ -27,6 +27,7 @@ import android.provider.BlockedNumberContract;
 import android.provider.Settings;
 import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
+import android.view.View;
 import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -44,6 +46,7 @@ import com.android.dialer.common.LogUtil;
 import com.android.dialer.compat.telephony.TelephonyManagerCompat;
 import com.android.dialer.lookup.LookupSettingsFragment;
 import com.android.dialer.util.PermissionsUtil;
+import com.android.dialer.widget.HigNavigationBar;
 import com.android.dialer.voicemail.settings.VoicemailSettingsFragment;
 import com.android.voicemail.VoicemailClient;
 
@@ -53,6 +56,9 @@ public class DialerSettingsActivity extends BaseActivity implements
 
   protected SharedPreferences preferences;
 
+  @Nullable private HigNavigationBar navigationBar;
+  @Nullable private CharSequence rootBackLabel;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     LogUtil.enterBlock("DialerSettingsActivity.onCreate");
@@ -60,6 +66,18 @@ public class DialerSettingsActivity extends BaseActivity implements
     preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 
     setContentView(R.layout.activity_settings);
+    navigationBar = HigNavigationBar.installInActionBar(this);
+    getSupportFragmentManager().registerFragmentLifecycleCallbacks(
+        new FragmentManager.FragmentLifecycleCallbacks() {
+          @Override
+          public void onFragmentViewCreated(@NonNull FragmentManager fm, @NonNull Fragment f,
+              @NonNull View v, @Nullable Bundle savedInstanceState) {
+            if (f instanceof PreferenceFragmentCompat) {
+              GroupedPreferenceDecoration.apply((PreferenceFragmentCompat) f);
+            }
+          }
+        }, true);
+    rootBackLabel = getIntent().getCharSequenceExtra(HigNavigationBar.EXTRA_BACK_LABEL);
 
     Intent intent = getIntent();
     Uri data = intent.getData();
@@ -95,6 +113,9 @@ public class DialerSettingsActivity extends BaseActivity implements
     getSupportFragmentManager().addOnBackStackChangedListener(() -> {
       if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
         setTitle(R.string.dialer_settings_label);
+        if (navigationBar != null) {
+          navigationBar.setBackLabel(rootBackLabel);
+        }
       }
     });
 
@@ -109,11 +130,25 @@ public class DialerSettingsActivity extends BaseActivity implements
             .instantiate(getClassLoader(), pref.getFragment());
     fragment.setArguments(pref.getExtras());
     getSupportFragmentManager().beginTransaction()
+            .setCustomAnimations(
+                    R.anim.hig_push_enter, R.anim.hig_push_exit,
+                    R.anim.hig_pop_enter, R.anim.hig_pop_exit)
             .replace(R.id.content_frame, fragment, "")
             .addToBackStack(null)
             .commit();
     setTitle(pref.getTitle());
+    if (navigationBar != null) {
+      navigationBar.setBackLabel(getText(R.string.dialer_settings_label));
+    }
     return true;
+  }
+
+  @Override
+  protected void onTitleChanged(CharSequence title, int color) {
+    super.onTitleChanged(title, color);
+    if (navigationBar != null) {
+      navigationBar.setTitle(title);
+    }
   }
 
   public static class PrefsFragment extends PreferenceFragmentCompat implements
