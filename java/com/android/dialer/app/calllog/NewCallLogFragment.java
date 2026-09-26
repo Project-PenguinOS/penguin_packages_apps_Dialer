@@ -6,45 +6,57 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
-import com.android.contacts.common.list.ViewPagerTabStrip;
 import com.android.dialer.R;
 import com.android.dialer.database.CallLogQueryHandler;
+import com.android.dialer.widget.LockableViewPager;
 import com.google.android.material.tabs.TabLayout;
-import android.text.SpannableString;
 
 public class NewCallLogFragment extends Fragment {
 
-private TabLayout tabLayout;
     private static final int TAB_INDEX_ALL = 0;
     private static final int TAB_INDEX_MISSED = 1;
     private static final int TAB_INDEX_COUNT = 2;
 
-    private ViewPager viewPager;
-    private ViewPagerTabStrip viewPagerTabStrip;
-    private ViewPagerAdapter viewPagerAdapter;
-    private String[] tabTitles;
+    private LockableViewPager viewPager;
+    private CharSequence[] tabTitles;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.new_call_log_fragment, container, false);
-
-        tabTitles = new String[TAB_INDEX_COUNT];
-        tabTitles[0] = "All";
-        tabTitles[1] = "Missed";
+        tabTitles = new CharSequence[] {
+            getText(R.string.call_log_all_title), getText(R.string.call_log_missed_title)
+        };
 
         viewPager = view.findViewById(R.id.new_call_log_pager);
-        tabLayout = requireActivity().findViewById(R.id.tabs);
-
-        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setSwipingLocked(true);
+        viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         viewPager.setOffscreenPageLimit(1);
 
-        tabLayout.setupWithViewPager(viewPager);
+        TabLayout tabLayout = requireActivity().findViewById(R.id.tabs);
+        tabLayout.clearOnTabSelectedListeners();
+        tabLayout.removeAllTabs();
+        for (CharSequence title : tabTitles) {
+            tabLayout.addTab(tabLayout.newTab().setText(title), false);
+        }
+        tabLayout.selectTab(tabLayout.getTabAt(viewPager.getCurrentItem()));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(@NonNull TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                viewPager.post(() -> viewPager.setCurrentItem(position, false));
+            }
+
+            @Override
+            public void onTabUnselected(@NonNull TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(@NonNull TabLayout.Tab tab) {}
+        });
 
         return view;
     }
@@ -69,7 +81,7 @@ private TabLayout tabLayout;
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return new SpannableString(tabTitles[position]);
+            return tabTitles[position];
         }
 
         @Override

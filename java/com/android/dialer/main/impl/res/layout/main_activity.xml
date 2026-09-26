@@ -57,6 +57,8 @@
                 android:background="@android:color/transparent"
                 app:tabIndicator="@drawable/tab_indicator"
                 app:tabIndicatorColor="@color/dialer_pill_color"
+                app:tabIndicatorAnimationDuration="250"
+                app:tabIndicatorAnimationMode="elastic"
                 app:tabIndicatorGravity="stretch"
                 app:tabSelectedTextColor="?android:attr/textColorPrimaryInverse"
                 app:tabRippleColor="@android:color/transparent"
