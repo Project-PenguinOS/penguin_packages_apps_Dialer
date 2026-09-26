@@ -103,37 +103,17 @@ public final class SearchContactViewHolder extends RecyclerView.ViewHolder
     numberView.setText(QueryBoldingUtil.getNumberWithQueryBolded(query, secondaryInfo));
     setCallToAction(cursor, query);
 
-    if (shouldShowPhoto(cursor)) {
-      nameOrNumberView.setVisibility(View.VISIBLE);
-      photo.setVisibility(View.VISIBLE);
-      String photoUri = cursor.getString(Projections.PHOTO_URI);
-      ContactPhotoManager.getInstance(context)
-          .loadDialerThumbnailOrPhoto(
-              photo,
-              getContactUri(cursor),
-              cursor.getLong(Projections.PHOTO_ID),
-              photoUri == null ? null : Uri.parse(photoUri),
-              name,
-              LetterTileDrawable.TYPE_DEFAULT);
-    } else {
-      nameOrNumberView.setVisibility(View.GONE);
-      photo.setVisibility(View.INVISIBLE);
-    }
-  }
-
-  // Show the contact photo next to only the first number if a contact has multiple numbers
-  private boolean shouldShowPhoto(SearchCursor cursor) {
-    int currentPosition = cursor.getPosition();
-    String currentLookupKey = cursor.getString(Projections.LOOKUP_KEY);
-    cursor.moveToPosition(currentPosition - 1);
-
-    if (!cursor.isHeader() && !cursor.isBeforeFirst()) {
-      String previousLookupKey = cursor.getString(Projections.LOOKUP_KEY);
-      cursor.moveToPosition(currentPosition);
-      return !currentLookupKey.equals(previousLookupKey);
-    }
-    cursor.moveToPosition(currentPosition);
-    return true;
+    nameOrNumberView.setVisibility(View.VISIBLE);
+    photo.setVisibility(View.VISIBLE);
+    String photoUri = cursor.getString(Projections.PHOTO_URI);
+    ContactPhotoManager.getInstance(context)
+        .loadDialerThumbnailOrPhoto(
+            photo,
+            getContactUri(cursor),
+            cursor.getLong(Projections.PHOTO_ID),
+            photoUri == null ? null : Uri.parse(photoUri),
+            name,
+            LetterTileDrawable.TYPE_DEFAULT);
   }
 
   private static Uri getContactUri(Cursor cursor) {
