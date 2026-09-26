@@ -1024,9 +1024,9 @@ public class CallLogAdapter extends GroupingListAdapter
       // In case ViewHolders were added/removed, update the expanded position if the rowIds
       // match so that we can restore the correct expanded state on rebind.
       currentlyExpandedPosition = views.getAdapterPosition();
-      views.showActions(true);
+      views.showActions(true, false);
     } else {
-      views.showActions(false);
+      views.showActions(false, false);
     }
     views.dayGroupHeader.setVisibility(views.dayGroupHeaderVisibility);
     views.dayGroupHeader.setText(views.dayGroupHeaderText);

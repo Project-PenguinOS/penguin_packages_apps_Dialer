@@ -20,9 +20,7 @@ package com.android.dialer.app.calllog;
 import android.Manifest.permission;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
-import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -42,14 +40,11 @@ import android.telephony.TelephonyManager;
 import android.text.BidiFormatter;
 import android.text.TextDirectionHeuristics;
 import android.text.TextUtils;
-import android.transition.TransitionManager;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,6 +54,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.contacts.common.dialog.CallSubjectDialog;
+import com.android.dialer.animation.AnimUtils;
 import com.android.dialer.R;
 import com.android.dialer.app.calllog.CallLogAdapter.OnActionModeStateChangedListener;
 import com.android.dialer.app.calllog.calllogcache.CallLogCache;
@@ -129,6 +125,9 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
   public boolean isLoaded;
   /** The view containing call log item actions. Null until the ViewStub is inflated. */
   public View actionsView;
+
+  private static final long ACTIONS_ANIMATION_MS = 250;
+  @Nullable private ValueAnimator actionsAnimator;
   /** The button views below are assigned only when the action section is expanded. */
   public VoicemailPlaybackLayout voicemailPlaybackView;
 
@@ -701,6 +700,10 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
    * <p>If the action views have never been shown yet for this view, inflate the view stub.
    */
   public void showActions(boolean show) {
+    showActions(show, true);
+  }
+
+  public void showActions(boolean show, boolean animate) {
     if (show) {
       if (!isLoaded) {
         // a bug for some unidentified reason showActions() can be called before the item is
@@ -712,70 +715,70 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
             new Exception());
         return;
       }
-
-      TransitionManager.beginDelayedTransition((ViewGroup) rootView);
       // Inflate the view stub if necessary, and wire up the event handlers.
       inflateActionViewStub();
       bindActionButtons();
-      animateActions(true);
-      TransitionManager.endTransitions((ViewGroup) rootView);
-    } else {
-      TransitionManager.beginDelayedTransition((ViewGroup) rootView);
+      setActionsExpanded(true, animate);
+    } else if (actionsView != null) {
       // When recycling a view, it is possible the actionsView ViewStub was previously
       // inflated so we should hide it in this case.
-      if (actionsView != null) {
-        animateActions(false);
-      }
-      TransitionManager.endTransitions((ViewGroup) rootView);
+      setActionsExpanded(false, animate);
     }
     updatePrimaryActionButton(show);
   }
 
-  private void animateActions(boolean shouldExpand) {
+  private void setActionsExpanded(boolean expand, boolean animate) {
+    if (actionsAnimator != null) {
+      actionsAnimator.cancel();
+      actionsAnimator = null;
+    }
+    ViewGroup.LayoutParams params = callLogEntryView.getLayoutParams();
     boolean isExpanded = actionsView.getVisibility() == View.VISIBLE;
-    if (shouldExpand == isExpanded) {
+    if (!animate || !callLogEntryView.isLaidOut() || expand == isExpanded) {
+      actionsView.setVisibility(expand ? View.VISIBLE : View.GONE);
+      actionsView.setAlpha(1f);
+      params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+      callLogEntryView.setLayoutParams(params);
       return;
     }
-    actionsView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-    int currentHeight = callLogEntryView.getMeasuredHeight();
-    int additionalHeight = actionsView.getMeasuredHeight();
 
-    int targetHeight;
-    TimeInterpolator interpolator;
-    int targetVisibility;
-    if (shouldExpand) {
-      targetHeight = currentHeight + additionalHeight;
-      interpolator = new AccelerateDecelerateInterpolator();
-      targetVisibility = View.VISIBLE;
-    } else {
-      targetHeight = currentHeight - additionalHeight;
-      interpolator = new DecelerateInterpolator();
-      targetVisibility = View.GONE;
-    }
+    int startHeight = callLogEntryView.getHeight();
+    actionsView.setVisibility(View.VISIBLE);
+    int widthSpec =
+        View.MeasureSpec.makeMeasureSpec(callLogEntryView.getWidth(), View.MeasureSpec.EXACTLY);
+    int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+    actionsView.measure(widthSpec, heightSpec);
+    int actionsHeight = actionsView.getMeasuredHeight();
+    int endHeight = expand ? startHeight + actionsHeight : startHeight - actionsHeight;
+    View content = ((ViewGroup) callLogEntryView).getChildAt(0);
+    ViewGroup.LayoutParams contentParams = content.getLayoutParams();
+    contentParams.height = Math.max(startHeight, endHeight);
+    content.setLayoutParams(contentParams);
+    float startAlpha = expand ? 0f : 1f;
+    float endAlpha = expand ? 1f : 0f;
 
-    ValueAnimator heightAnimator = ValueAnimator.ofInt(currentHeight, targetHeight);
-    heightAnimator.addUpdateListener(animation -> {
-      callLogEntryView.getLayoutParams().height = (int) animation.getAnimatedValue();
-      callLogEntryView.requestLayout();
+    ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+    animator.setDuration(ACTIONS_ANIMATION_MS);
+    animator.setInterpolator(AnimUtils.EASE_OUT_EASE_IN);
+    animator.addUpdateListener(animation -> {
+      float t = (float) animation.getAnimatedValue();
+      params.height = Math.round(startHeight + (endHeight - startHeight) * t);
+      actionsView.setAlpha(startAlpha + (endAlpha - startAlpha) * t);
+      callLogEntryView.setLayoutParams(params);
     });
-    heightAnimator.setInterpolator(interpolator);
-    heightAnimator.setDuration(200);
-
-    AnimatorSet animatorSet = new AnimatorSet();
-    animatorSet.play(heightAnimator);
-    animatorSet.addListener(new AnimatorListenerAdapter() {
+    animator.addListener(new AnimatorListenerAdapter() {
       @Override
       public void onAnimationEnd(Animator animation) {
-        super.onAnimationEnd(animation);
-        actionsView.setVisibility(targetVisibility);
-
-        // we need to set this so we can expand again
-        ViewGroup.LayoutParams params = callLogEntryView.getLayoutParams();
+        actionsView.setVisibility(expand ? View.VISIBLE : View.GONE);
+        actionsView.setAlpha(1f);
+        contentParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        content.setLayoutParams(contentParams);
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         callLogEntryView.setLayoutParams(params);
       }
     });
-    animatorSet.start();
+    actionsAnimator = animator;
+    animator.start();
   }
 
   public void updatePhoto() {
