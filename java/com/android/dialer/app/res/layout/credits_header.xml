@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="24dp"
+    android:paddingBottom="8dp">
+
+  <ImageView
+      android:layout_width="72dp"
+      android:layout_height="72dp"
+      android:importantForAccessibility="no"
+      android:src="@drawable/ic_penguinos_logo"/>
+
+  <TextView
+      android:id="@android:id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="12dp"
+      android:textAppearance="@style/Dialer.TextAppearance.NavTitle"
+      android:textSize="22sp"
+      android:textStyle="bold"/>
+
+  <TextView
+      android:id="@android:id/summary"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="4dp"
+      android:textColor="?android:attr/textColorSecondary"
+      android:textSize="15sp"/>
+</LinearLayout>

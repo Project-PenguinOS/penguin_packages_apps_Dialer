@@ -37,6 +37,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
@@ -50,6 +51,8 @@ import com.android.dialer.widget.HigNavigationBar;
 import com.android.dialer.voicemail.settings.VoicemailSettingsFragment;
 import com.android.voicemail.VoicemailClient;
 
+import java.util.ArrayDeque;
+
 /** Activity for dialer settings. */
 public class DialerSettingsActivity extends BaseActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -58,6 +61,7 @@ public class DialerSettingsActivity extends BaseActivity implements
 
   @Nullable private HigNavigationBar navigationBar;
   @Nullable private CharSequence rootBackLabel;
+  private final ArrayDeque<CharSequence> pushedTitles = new ArrayDeque<>();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -111,11 +115,12 @@ public class DialerSettingsActivity extends BaseActivity implements
     }
 
     getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-      if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-        setTitle(R.string.dialer_settings_label);
-        if (navigationBar != null) {
-          navigationBar.setBackLabel(rootBackLabel);
-        }
+      int depth = getSupportFragmentManager().getBackStackEntryCount();
+      while (pushedTitles.size() > depth) {
+        setTitle(pushedTitles.pop());
+      }
+      if (navigationBar != null) {
+        navigationBar.setBackLabel(pushedTitles.isEmpty() ? rootBackLabel : pushedTitles.peek());
       }
     });
 
@@ -136,9 +141,11 @@ public class DialerSettingsActivity extends BaseActivity implements
             .replace(R.id.content_frame, fragment, "")
             .addToBackStack(null)
             .commit();
+    CharSequence coveredTitle = getTitle();
+    pushedTitles.push(coveredTitle);
     setTitle(pref.getTitle());
     if (navigationBar != null) {
-      navigationBar.setBackLabel(getText(R.string.dialer_settings_label));
+      navigationBar.setBackLabel(coveredTitle);
     }
     return true;
   }
@@ -229,6 +236,23 @@ public class DialerSettingsActivity extends BaseActivity implements
         accessibilitySettings.setIconSpaceReserved(false);
         getPreferenceScreen().addPreference(accessibilitySettings);
       }
+
+      PreferenceCategory about = new PreferenceCategory(getContext());
+      about.setTitle(R.string.about_category_title);
+      about.setIconSpaceReserved(false);
+      getPreferenceScreen().addPreference(about);
+
+      CardPreference credits = new CardPreference(getContext());
+      credits.setTitle(R.string.credits_title);
+      credits.setFragment(CreditsFragment.class.getName());
+      credits.setIconSpaceReserved(false);
+      about.addPreference(credits);
+
+      CardPreference licenses = new CardPreference(getContext());
+      licenses.setTitle(R.string.licenses_title);
+      licenses.setFragment(LicensesFragment.class.getName());
+      licenses.setIconSpaceReserved(false);
+      about.addPreference(licenses);
     }
 
     @Override

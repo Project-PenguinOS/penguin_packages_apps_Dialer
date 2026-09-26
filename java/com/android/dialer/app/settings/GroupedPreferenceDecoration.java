@@ -44,7 +44,10 @@ public final class GroupedPreferenceDecoration extends GroupedListDecoration {
       return false;
     }
     Preference preference = ((PreferenceGroupAdapter) parent.getAdapter()).getItem(position);
-    return preference != null && !(preference instanceof PreferenceCategory);
+    return preference != null
+        && !(preference instanceof PreferenceCategory)
+        && preference.getLayoutResource() != R.layout.credits_header
+        && preference.getLayoutResource() != R.layout.preference_footnote;
   }
 
   @Override

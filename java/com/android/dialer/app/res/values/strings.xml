@@ -526,4 +526,14 @@
   <string name="call_log_swipe_actions_key" translatable="false">call_log_swipe_actions</string>
   <string name="call_log_swipe_actions_title">Swipe actions in call history</string>
   <string name="call_log_swipe_actions_summary">Swipe right to call, swipe left to delete. You\'ll be asked to confirm.</string>
+
+  <string name="about_category_title">About</string>
+  <string name="credits_title">Credits</string>
+  <string name="licenses_title">Open-source licenses</string>
+  <string name="credits_app_name" translatable="false">PenguinOS Dialer</string>
+  <string name="credits_version">Version <xliff:g id="version_name" example="1.6">%1$s</xliff:g> (<xliff:g id="version_code" example="260926">%2$d</xliff:g>)</string>
+  <string name="credits_team_category">PenguinOS team</string>
+  <string name="credits_open_telegram">Open <xliff:g id="handle" example="\@Whoraj">%1$s</xliff:g> in Telegram</string>
+  <string name="credits_kitsune">our kitsune</string>
+  <string name="licenses_footer">This app is based on the AOSP and LineageOS Dialer and includes the open-source components listed here.</string>
 </resources>
