@@ -40,6 +40,7 @@ import com.android.dialer.phonenumbercache.CachedNumberLookupService;
 import com.android.dialer.phonenumbercache.PhoneNumberCache;
 import com.android.dialer.phonenumberutil.PhoneNumberHelper;
 import com.android.dialer.theme.base.ThemeComponent;
+import com.android.dialer.universaldialer.UniversalDialer;
 import com.android.dialer.util.DialerUtils;
 
 import java.util.ArrayList;
@@ -382,6 +383,18 @@ public class PhoneCallDetailsHelper {
 
   @Nullable
   private CharSequence getListLabel(PhoneCallDetails details) {
+    if (details.accountHandle != null
+        && UniversalDialer.isVoipAccount(details.accountHandle.getComponentName().flattenToString())) {
+      CharSequence app = UniversalDialer.accountLabel(context, details.accountHandle);
+      if (app != null) {
+        boolean video = (details.features & Calls.FEATURES_VIDEO) == Calls.FEATURES_VIDEO;
+        return resources.getString(
+            video
+                ? R.string.universal_dialer_call_label_video
+                : R.string.universal_dialer_call_label_audio,
+            app);
+      }
+    }
     CharSequence label = getCallTypeOrLocation(details);
     if (label != null
         && !details.isSpam

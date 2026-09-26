@@ -538,4 +538,13 @@
   <string name="licenses_footer">This app is based on the AOSP and LineageOS Dialer and includes the open-source components listed here.</string>
   <string name="call_log_item_label_and_count"><xliff:g id="label" example="mobile">%1$s</xliff:g> (<xliff:g id="count" example="2">%2$d</xliff:g>)</string>
   <string name="my_card_label">My Card</string>
+
+  <string name="experimental_category_title">Experimental</string>
+  <string name="universal_dialer_key" translatable="false">universal_dialer</string>
+  <string name="universal_dialer_title">Universal dialer</string>
+  <string name="universal_dialer_summary">Show calls from apps like WhatsApp in Recents and answer them here when their app isn\'t open. Works with apps that use Android\'s calling system.</string>
+  <string name="universal_dialer_usage_access_title">Allow usage access</string>
+  <string name="universal_dialer_usage_access_summary">Needed to leave calls to their app while you\'re using it.</string>
+  <string name="universal_dialer_call_label_audio"><xliff:g id="app" example="WhatsApp">%1$s</xliff:g> audio</string>
+  <string name="universal_dialer_call_label_video"><xliff:g id="app" example="WhatsApp">%1$s</xliff:g> video</string>
 </resources>

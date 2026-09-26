@@ -77,6 +77,7 @@ import com.android.dialer.phonenumbercache.ContactInfo;
 import com.android.dialer.phonenumbercache.PhoneNumberCache;
 import com.android.dialer.phonenumberutil.PhoneNumberHelper;
 import com.android.dialer.telecom.TelecomUtil;
+import com.android.dialer.universaldialer.UniversalDialer;
 import com.android.dialer.util.CallUtil;
 import com.android.dialer.util.DialerUtils;
 import com.android.dialer.util.UriUtils;
@@ -421,6 +422,19 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
       } else {
         primaryActionButtonView.setVisibility(View.GONE);
       }
+      return;
+    }
+
+    if (accountHandle != null
+        && callIds != null
+        && callIds.length > 0
+        && UniversalDialer.isVoipAccount(accountHandle.getComponentName().flattenToString())) {
+      primaryActionButtonView.setTag(IntentProvider.getVoipCallBackIntentProvider(callIds[0]));
+      primaryActionButtonView.setContentDescription(
+          TextUtils.expandTemplate(
+              context.getString(R.string.description_call_action), validNameOrNumber));
+      primaryActionButtonView.setImageResource(R.drawable.quantum_ic_call_vd_theme_24);
+      primaryActionButtonView.setVisibility(View.VISIBLE);
       return;
     }
 

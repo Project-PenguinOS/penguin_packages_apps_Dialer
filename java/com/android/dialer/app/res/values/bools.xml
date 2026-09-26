@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <bool name="call_log_swipe_actions_default">false</bool>
+  <bool name="universal_dialer_default">false</bool>
 </resources>

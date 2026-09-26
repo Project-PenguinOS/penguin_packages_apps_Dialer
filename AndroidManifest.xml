@@ -95,6 +95,21 @@
     <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" />
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
+    <queries>
+        <package android:name="com.whatsapp" />
+        <package android:name="com.whatsapp.w4b" />
+        <package android:name="org.telegram.messenger" />
+        <package android:name="org.thoughtcrime.securesms" />
+        <package android:name="com.google.android.apps.tachyon" />
+        <package android:name="com.google.android.gm" />
+        <package android:name="com.instagram.android" />
+        <package android:name="com.facebook.orca" />
+    </queries>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
 
     <uses-permission android:name="lineageos.permission.WRITE_SETTINGS" />
@@ -573,6 +588,9 @@
                 android:value="false" />
             <meta-data
                 android:name="android.telecom.INCLUDE_EXTERNAL_CALLS"
+                android:value="true" />
+            <meta-data
+                android:name="android.telecom.INCLUDE_SELF_MANAGED_CALLS"
                 android:value="true" />
 
             <intent-filter>

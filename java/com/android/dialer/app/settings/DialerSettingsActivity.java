@@ -41,12 +41,14 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.android.dialer.R;
 import com.android.dialer.app.BaseActivity;
 import com.android.dialer.common.LogUtil;
 import com.android.dialer.compat.telephony.TelephonyManagerCompat;
 import com.android.dialer.lookup.LookupSettingsFragment;
+import com.android.dialer.universaldialer.UniversalDialer;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.widget.HigNavigationBar;
 import com.android.dialer.voicemail.settings.VoicemailSettingsFragment;
@@ -246,6 +248,37 @@ public class DialerSettingsActivity extends BaseActivity implements
         accessibilitySettings.setIconSpaceReserved(false);
         getPreferenceScreen().addPreference(accessibilitySettings);
       }
+
+      PreferenceCategory experimental = new PreferenceCategory(getContext());
+      experimental.setTitle(R.string.experimental_category_title);
+      experimental.setIconSpaceReserved(false);
+      getPreferenceScreen().addPreference(experimental);
+
+      SwitchPreferenceCompat universalDialer = new SwitchPreferenceCompat(getContext());
+      universalDialer.setKey(getString(R.string.universal_dialer_key));
+      universalDialer.setTitle(R.string.universal_dialer_title);
+      universalDialer.setSummary(R.string.universal_dialer_summary);
+      universalDialer.setDefaultValue(
+          getResources().getBoolean(R.bool.universal_dialer_default));
+      universalDialer.setIconSpaceReserved(false);
+      experimental.addPreference(universalDialer);
+
+      CardPreference usageAccess = new CardPreference(getContext());
+      usageAccess.setTitle(R.string.universal_dialer_usage_access_title);
+      usageAccess.setSummary(R.string.universal_dialer_usage_access_summary);
+      usageAccess.setIntent(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+      usageAccess.setIconSpaceReserved(false);
+      experimental.addPreference(usageAccess);
+      Runnable updateUsageAccess = () -> usageAccess.setVisible(
+          UniversalDialer.isEnabled(getContext())
+              && !UniversalDialer.canDetectForegroundApp(getContext()));
+      updateUsageAccess.run();
+      universalDialer.setOnPreferenceChangeListener((preference, newValue) -> {
+        preference.getPreferenceManager().getSharedPreferences()
+            .edit().putBoolean(preference.getKey(), (Boolean) newValue).apply();
+        updateUsageAccess.run();
+        return true;
+      });
 
       PreferenceCategory about = new PreferenceCategory(getContext());
       about.setTitle(R.string.about_category_title);

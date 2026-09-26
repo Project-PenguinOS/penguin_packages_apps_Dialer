@@ -17,10 +17,12 @@
 
 package com.android.dialer.app.calllog;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.CallLog.Calls;
 import android.provider.ContactsContract;
 import android.telecom.PhoneAccountHandle;
 import android.telephony.TelephonyManager;
@@ -66,6 +68,16 @@ public abstract class IntentProvider {
       public Intent getLongClickIntent(Context context) {
         return AccountSelectionActivity.createIntent(context, number,
             CallInitiationType.Type.CALL_LOG);
+      }
+    };
+  }
+
+  public static IntentProvider getVoipCallBackIntentProvider(final long callLogId) {
+    return new IntentProvider() {
+      @Override
+      public Intent getClickIntent(Context context) {
+        return new Intent(
+            Intent.ACTION_CALL, ContentUris.withAppendedId(Calls.CONTENT_URI, callLogId));
       }
     };
   }

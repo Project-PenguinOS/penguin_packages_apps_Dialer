@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Trace;
 import android.provider.BlockedNumberContract;
+import android.provider.CallLog.Calls;
 import android.provider.CallLog;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.telecom.PhoneAccountHandle;
@@ -77,6 +78,7 @@ import com.android.dialer.phonenumbercache.ContactInfoHelper;
 import com.android.dialer.phonenumberutil.PhoneNumberHelper;
 import com.android.dialer.telecom.TelecomUtil;
 import android.content.Intent;
+import com.android.dialer.universaldialer.UniversalDialer;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.widget.HigAlertDialogs;
 import com.android.dialer.widget.SwipeAndDragHelper;
@@ -1341,6 +1343,10 @@ public class CallLogAdapter extends GroupingListAdapter
     String number = cursor.getString(CallLogQuery.NUMBER);
     String contactLabel = getSwipeContactLabel(cursor, number);
     long[] callIds = isDelete ? getCallIds(cursor, getGroupSize(position)) : null;
+    Uri callBackUri =
+        UniversalDialer.isVoipAccount(cursor.getString(CallLogQuery.ACCOUNT_COMPONENT_NAME))
+            ? ContentUris.withAppendedId(Calls.CONTENT_URI, cursor.getLong(CallLogQuery.ID))
+            : null;
 
     AlertDialog.Builder builder = new AlertDialog.Builder(activity)
         .setTitle(
@@ -1354,6 +1360,8 @@ public class CallLogAdapter extends GroupingListAdapter
             (dialog, which) -> {
               if (isDelete) {
                 CallLogAsyncTaskUtil.deleteCalls(activity, callIds, null);
+              } else if (callBackUri != null) {
+                activity.startActivity(new Intent(Intent.ACTION_CALL, callBackUri));
               } else {
                 activity.startActivity(new Intent(Intent.ACTION_CALL, CallUtil.getCallUri(number)));
               }
