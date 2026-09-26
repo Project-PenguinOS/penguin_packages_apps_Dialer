@@ -1,6 +1,7 @@
 package com.android.dialer.app.calllog;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -12,6 +13,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,16 +34,24 @@ public class CallLogSwipeHelper extends SwipeAndDragHelper {
     private final Path backgroundPath = new Path();
     private final float[] radii = new float[8];
 
+    private final SharedPreferences prefs;
+    private final String swipeActionsKey;
+    private final boolean swipeActionsDefault;
+
     public CallLogSwipeHelper(Context context, ActionCompletionContract contract) {
         super(contract);
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        swipeActionsKey = context.getString(R.string.call_log_swipe_actions_key);
+        swipeActionsDefault = context.getResources().getBoolean(R.bool.call_log_swipe_actions_default);
     }
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        if (viewHolder instanceof CallLogListItemViewHolder) {
-            return makeMovementFlags(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        if (!(viewHolder instanceof CallLogListItemViewHolder)
+                || !prefs.getBoolean(swipeActionsKey, swipeActionsDefault)) {
+            return 0;
         }
-        return 0;
+        return makeMovementFlags(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
     }
 
     @Override

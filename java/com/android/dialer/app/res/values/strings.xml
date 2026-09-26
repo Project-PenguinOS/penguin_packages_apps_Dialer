@@ -522,4 +522,8 @@
   <string name="call_log_swipe_delete">Delete</string>
   <string name="call_log_swipe_call">Call</string>
   <string name="call_log_swipe_unknown_contact">this number</string>
+
+  <string name="call_log_swipe_actions_key" translatable="false">call_log_swipe_actions</string>
+  <string name="call_log_swipe_actions_title">Swipe actions in call history</string>
+  <string name="call_log_swipe_actions_summary">Swipe right to call, swipe left to delete. You\'ll be asked to confirm.</string>
 </resources>
