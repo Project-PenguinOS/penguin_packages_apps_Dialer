@@ -324,6 +324,7 @@
             android:label="@string/main_activity_label"
             android:launchMode="singleTask"
             android:resizeableActivity="true"
+            android:enableOnBackInvokedCallback="true"
             android:theme="@style/LaunchTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustNothing">
 

@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.view.ViewOutlineProvider;
 import android.graphics.drawable.Drawable;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -130,6 +131,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
   // Dialpad and Search
   private MainDialpadFragmentHost dialpadFragmentHostInterface;
   private MainSearchController searchController;
+  @Nullable private OnBackPressedCallback searchBackCallback;
   private MainOnDialpadQueryChangedListener onDialpadQueryChangedListener;
   private MainDialpadListener dialpadListener;
   private MainSearchFragmentListener searchFragmentListener;
@@ -262,6 +264,29 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
     toolbar.setSearchBarListener(searchController);
     activity.findViewById(R.id.search_magnifying_glass_main).setOnClickListener(v -> searchController.onSearchBarClicked());
     bottomNav.setOnLeaveKeypadListener(searchController::leaveKeypad);
+
+    OnBackPressedCallback searchBackCallback =
+        new OnBackPressedCallback(searchController.isInSearch()) {
+          @Override
+          public void handleOnBackPressed() {
+            searchController.onBackPressed();
+            setEnabled(searchController.isInSearch());
+          }
+        };
+    activity.getOnBackPressedDispatcher().addCallback(activity, searchBackCallback);
+    searchController.addOnSearchShowListener(
+        new MainSearchController.OnSearchShowListener() {
+          @Override
+          public void onSearchOpen() {
+            searchBackCallback.setEnabled(true);
+          }
+
+          @Override
+          public void onSearchClose() {
+            searchBackCallback.setEnabled(false);
+          }
+        });
+    this.searchBackCallback = searchBackCallback;
 
     View dialpadContainer = activity.findViewById(R.id.dialpad_fragment_container);
     blurView.addOnLayoutChangeListener(
@@ -418,6 +443,9 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
   public void onActivityResume() {
     LogUtil.enterBlock("MainBottomNavBarBottomNavTabListener.onActivityResume");
     callLogFragmentListener.onActivityResume();
+    if (searchBackCallback != null) {
+      searchBackCallback.setEnabled(searchController.isInSearch());
+    }
     // Start the thread that updates the smart dial database if the activity is recreated with a
     // language change.
     boolean forceUpdate =

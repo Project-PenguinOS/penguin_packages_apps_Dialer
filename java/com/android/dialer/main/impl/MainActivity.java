@@ -113,14 +113,6 @@ public class MainActivity extends TransactionSafeActivity
   }
 
   @Override
-  public void onBackPressed() {
-    if (activePeer.onBackPressed()) {
-      return;
-    }
-    super.onBackPressed();
-  }
-
-  @Override
   public MainActivityPeer getPeer() {
     return activePeer;
   }

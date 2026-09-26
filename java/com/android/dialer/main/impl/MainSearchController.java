@@ -295,17 +295,11 @@ public class MainSearchController implements SearchBarListener {
   public void onSearchListTouch() {
     LogUtil.enterBlock("MainSearchController.onSearchListTouched");
     if (isDialpadVisible()) {
-      if (TextUtils.isEmpty(dialpadFragment.getQuery())) {
-        closeSearch(true);
-      } else {
+      if (!TextUtils.isEmpty(dialpadFragment.getQuery())) {
         hideDialpad(/* animate=*/ true);
       }
     } else if (isSearchVisible()) {
-      if (TextUtils.isEmpty(toolbar.getQuery())) {
-        closeSearch(true);
-      } else {
-        closeKeyboard();
-      }
+      closeKeyboard();
     }
   }
 
@@ -593,6 +587,10 @@ public class MainSearchController implements SearchBarListener {
   private void updateStatusBarColor(@AttrRes int colorAttribute) {
       int color = DialerUtils.resolveColor(activity, colorAttribute);
       activity.getWindow().setStatusBarColor(color);
+  }
+
+  public void addOnSearchShowListener(OnSearchShowListener listener) {
+    onSearchShowListenerList.add(listener);
   }
 
   private void notifyListenersOnSearchOpen() {
