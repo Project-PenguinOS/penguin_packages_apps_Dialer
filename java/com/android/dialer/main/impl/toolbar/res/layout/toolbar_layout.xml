@@ -83,9 +83,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
-          android:paddingLeft="16dp"
-          android:scaleType="center"
-          android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+          android:paddingStart="16dp"
+          android:textAppearance="@style/Dialer.TextAppearance.LargeTitle" />
 
         <TextView
             android:id="@+id/search_box_start_search"

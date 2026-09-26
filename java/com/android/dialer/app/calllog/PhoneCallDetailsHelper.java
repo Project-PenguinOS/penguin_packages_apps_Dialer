@@ -162,6 +162,12 @@ public class PhoneCallDetailsHelper {
 
     setNameView(views, details);
 
+    boolean isMissed = count > 0 && details.callTypes[0] == Calls.MISSED_TYPE;
+    views.nameView.setTextColor(
+        isMissed
+            ? context.getColor(R.color.dialer_system_red)
+            : ThemeComponent.get(context).theme().getTextColorPrimary());
+
     // Bold if not read
     Typeface typeface = details.isRead ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD;
     views.nameView.setTypeface(typeface);

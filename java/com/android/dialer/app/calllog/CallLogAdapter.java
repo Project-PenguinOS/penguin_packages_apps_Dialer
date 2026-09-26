@@ -78,6 +78,7 @@ import com.android.dialer.phonenumberutil.PhoneNumberHelper;
 import com.android.dialer.telecom.TelecomUtil;
 import android.content.Intent;
 import com.android.dialer.util.PermissionsUtil;
+import com.android.dialer.widget.HigAlertDialogs;
 import com.android.dialer.widget.SwipeAndDragHelper;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import com.android.dialer.util.CallUtil;
@@ -1338,8 +1339,8 @@ public class CallLogAdapter extends GroupingListAdapter
     String contactLabel = getSwipeContactLabel(cursor, number);
     long[] callIds = isDelete ? getCallIds(cursor, getGroupSize(position)) : null;
 
-    new AlertDialog.Builder(activity)
-        .setMessage(
+    AlertDialog.Builder builder = new AlertDialog.Builder(activity)
+        .setTitle(
             activity.getString(
                 isDelete
                     ? R.string.call_log_swipe_delete_confirmation
@@ -1355,8 +1356,8 @@ public class CallLogAdapter extends GroupingListAdapter
               }
             })
         .setNegativeButton(android.R.string.cancel, null)
-        .setOnDismissListener(dialog -> restoreSwipedItem(position))
-        .show();
+        .setOnDismissListener(dialog -> restoreSwipedItem(position));
+    HigAlertDialogs.showConfirmation(builder, isDelete);
   }
 
   private String getSwipeContactLabel(Cursor cursor, String number) {

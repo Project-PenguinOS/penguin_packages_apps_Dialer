@@ -19,6 +19,7 @@
   <dimen name="dialpad_key_star_size">55sp</dimen>
   <dimen name="dialpad_key_height">99dp</dimen>
   <dimen name="dialpad_key_circle_size">80dp</dimen>
+  <dimen name="dialpad_call_icon_size">32dp</dimen>
   <dimen name="dialpad_key_number_gap">5dp</dimen>
   <dimen name="dialpad_key_sublabel_height">9dp</dimen>
   <dimen name="dialpad_digits_text_min_size">24sp</dimen>

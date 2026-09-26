@@ -23,4 +23,12 @@
   <color name="dialer_call_icon_color">@android:color/black</color>
 
   <color name="dialpad_key_circle_bg">#26FFFFFF</color>
+
+  <color name="dialer_grouped_background">#000000</color>
+  <color name="dialer_grouped_cell">#1C1C1E</color>
+  <color name="dialer_grouped_separator">#99545458</color>
+  <color name="dialer_tab_selected_fill">#3DFFFFFF</color>
+  <color name="dialer_tint">@android:color/system_accent1_200</color>
+  <color name="dialer_label_primary">#FFFFFFFF</color>
+  <color name="dialer_system_red">#FF453A</color>
 </resources>

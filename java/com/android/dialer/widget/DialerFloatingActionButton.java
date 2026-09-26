@@ -19,6 +19,7 @@ package com.android.dialer.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
@@ -47,6 +48,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  */
 public class DialerFloatingActionButton extends FloatingActionButton {
 
+  private static final long LABEL_FADE_MS = 150;
+
+  @Nullable private View label;
+
   public DialerFloatingActionButton(Context context, AttributeSet attributeSet) {
     super(context, attributeSet);
     setElevation(0);
@@ -54,28 +59,53 @@ public class DialerFloatingActionButton extends FloatingActionButton {
     setTranslationZ(0);
   }
 
+  public void setLabel(@Nullable View label) {
+    this.label = label;
+    updateLabel(getVisibility() == View.VISIBLE);
+  }
+
+  private void updateLabel(boolean visible) {
+    if (label == null) {
+      return;
+    }
+    label.animate().cancel();
+    if (visible) {
+      label.setVisibility(View.VISIBLE);
+      label.animate().alpha(1f).setDuration(LABEL_FADE_MS);
+    } else {
+      label.animate()
+          .alpha(0f)
+          .setDuration(LABEL_FADE_MS)
+          .withEndAction(() -> label.setVisibility(View.INVISIBLE));
+    }
+  }
+
   @Override
   public void show() {
     super.show();
     setClickable(true);
+    updateLabel(true);
   }
 
   @Override
   public void show(@Nullable OnVisibilityChangedListener onVisibilityChangedListener) {
     super.show(onVisibilityChangedListener);
     setClickable(true);
+    updateLabel(true);
   }
 
   @Override
   public void hide() {
     super.hide();
     setClickable(false);
+    updateLabel(false);
   }
 
   @Override
   public void hide(@Nullable OnVisibilityChangedListener onVisibilityChangedListener) {
     super.hide(onVisibilityChangedListener);
     setClickable(false);
+    updateLabel(false);
   }
 
   @Override

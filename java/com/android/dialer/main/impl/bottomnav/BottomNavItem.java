@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,14 +29,12 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.Px;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
 import com.android.dialer.R;
 import com.android.dialer.common.Assert;
 import com.android.dialer.common.MathUtil;
-import com.android.dialer.util.DialerUtils;
 import com.android.incallui.answer.impl.utils.Interpolators;
 
 import com.google.android.material.navigation.NavigationBarItemView;
@@ -46,6 +43,7 @@ final class BottomNavItem extends LinearLayout {
 
   @Nullable
   private View activeIndicatorView;
+  private View content;
   private ValueAnimator activeIndicatorAnimator;
   private ImageView image;
   private TextView text;
@@ -65,7 +63,7 @@ final class BottomNavItem extends LinearLayout {
   protected void onFinishInflate() {
     super.onFinishInflate();
     activeIndicatorView = findViewById(R.id.active_indicator);
-    activeIndicatorView.setBackgroundResource(R.drawable.pill);
+    content = findViewById(R.id.bottom_nav_item_content);
     image = findViewById(R.id.bottom_nav_item_image);
     text = findViewById(R.id.bottom_nav_item_text);
     notificationBadge = findViewById(R.id.notification_badge);
@@ -73,17 +71,27 @@ final class BottomNavItem extends LinearLayout {
   }
 
   @Override
+  protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    super.onLayout(changed, left, top, right, bottom);
+    if (activeIndicatorView != null) {
+      activeIndicatorView.measure(
+          MeasureSpec.makeMeasureSpec(content.getWidth(), MeasureSpec.EXACTLY),
+          MeasureSpec.makeMeasureSpec(content.getHeight(), MeasureSpec.EXACTLY));
+      activeIndicatorView.layout(
+          content.getLeft(), content.getTop(), content.getRight(), content.getBottom());
+    }
+  }
+
+  @Override
   public void setSelected(boolean selected) {
     super.setSelected(selected);
 
 
-    int colorId = selected
-            ? DialerUtils.resolveColor(getContext(), android.R.attr.textColorPrimaryInverse)
-            : DialerUtils.resolveColor(getContext(), android.R.attr.textColorPrimary);
+    int color = getContext().getColor(R.color.dialer_label_primary);
 
     image.setImageResource(selected ? drawableResSelected : drawableRes);
-    image.setImageTintList(ColorStateList.valueOf(colorId));
-    text.setTextColor(colorId);
+    image.setImageTintList(ColorStateList.valueOf(color));
+    text.setTextColor(color);
 
     float newIndicatorProgress = selected ? 1F : 0F;
     maybeAnimateActiveIndicatorToProgress(newIndicatorProgress);
@@ -124,6 +132,7 @@ final class BottomNavItem extends LinearLayout {
     this.drawableRes = drawableRes;
     this.drawableResSelected = drawableResSelected;
     text.setText(stringRes);
+    setContentDescription(getContext().getText(stringRes));
     image.setImageResource(drawableRes);
   }
 
@@ -139,20 +148,6 @@ final class BottomNavItem extends LinearLayout {
       }
       notificationBadge.setVisibility(View.VISIBLE);
       notificationBadge.setText(countString);
-
-      @Px int margin;
-      if (countString.length() == 1) {
-        margin = getContext().getResources().getDimensionPixelSize(R.dimen.badge_margin_length_1);
-      } else if (countString.length() == 2) {
-        margin = getContext().getResources().getDimensionPixelSize(R.dimen.badge_margin_length_2);
-      } else {
-        margin = getContext().getResources().getDimensionPixelSize(R.dimen.badge_margin_length_3);
-      }
-
-      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) image.getLayoutParams();
-      params.setMarginStart(margin);
-      params.setMarginEnd(margin);
-      image.setLayoutParams(params);
     }
   }
 

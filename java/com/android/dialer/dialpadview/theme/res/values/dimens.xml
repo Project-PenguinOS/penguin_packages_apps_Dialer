@@ -23,5 +23,5 @@
   <dimen name="dialpad_digits_text_size">34sp</dimen>
   <dimen name="dialpad_digits_height">60dp</dimen>
   <!-- The bottom space of the dialpad to account for the dial button -->
-  <dimen name="dialpad_bottom_space_height">80dp</dimen>
+  <dimen name="dialpad_bottom_space_height">116dp</dimen>
 </resources>

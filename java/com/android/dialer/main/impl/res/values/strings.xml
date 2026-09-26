@@ -28,5 +28,5 @@
 
   <!-- Content description for the button that displays the dialpad
        [CHAR LIMIT=NONE] -->
-  <string name="dialpad_button_content_description">key pad</string>
+  <string name="dialpad_button_content_description">Keypad</string>
 </resources>

@@ -21,7 +21,7 @@
   android:id="@+id/bottom_nav_bar"
   android:orientation="horizontal"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
+  android:layout_height="wrap_content"
   android:gravity="center_vertical"
   android:background="@drawable/bottom_nav_background_glass">
 
@@ -61,16 +61,28 @@
       android:visibility="gone"
       layout="@layout/bottom_nav_item"/>
 
-    <FrameLayout
+    <LinearLayout
+      android:id="@+id/keypad_tab"
       android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1">
+      android:layout_height="wrap_content"
+      android:minHeight="@dimen/bottom_nav_min_touch_height"
+      android:layout_weight="1"
+      android:clickable="true"
+      android:focusable="true"
+      android:contentDescription="@string/dialpad_button_content_description"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:paddingTop="@dimen/bottom_nav_item_padding_vertical"
+      android:paddingBottom="@dimen/bottom_nav_item_padding_vertical">
 
       <com.android.dialer.widget.DialerFloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:clickable="false"
+        android:duplicateParentState="true"
+        android:focusable="false"
+        android:importantForAccessibility="no"
         android:contentDescription="@string/dialpad_button_content_description"
         android:forceDarkAllowed="false"
         android:src="@drawable/veddialer"
@@ -78,12 +90,22 @@
         app:backgroundTint="@android:color/transparent"
         app:borderWidth="0dp"
         app:elevation="0dp"
-        app:fabCustomSize="36dp"
+        app:fabCustomSize="@dimen/bottom_nav_icon_size"
+        app:maxImageSize="@dimen/bottom_nav_icon_size"
         app:hoveredFocusedTranslationZ="0dp"
         app:pressedTranslationZ="0dp"
-        app:tint="@color/dialer_fab_icon_color" />
+        app:tint="@color/dialer_label_primary" />
 
-      </FrameLayout>
+      <TextView
+        android:id="@+id/fab_label"
+        style="@style/Dialer.BottomNavLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        android:text="@string/dialpad_button_content_description"
+        android:textColor="@color/dialer_label_primary"/>
+
+      </LinearLayout>
 
     </LinearLayout>
 

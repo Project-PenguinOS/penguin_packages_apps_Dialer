@@ -19,68 +19,67 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center">
+    android:gravity="center"
+    android:minHeight="@dimen/bottom_nav_min_touch_height">
 
   <FrameLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp">
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:minWidth="@dimen/bottom_nav_item_min_width">
 
     <View
         android:id="@+id/active_indicator"
-        android:layout_width="48dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:layout_gravity="center"
-        android:background="@drawable/pill"
-        android:gravity="center"
-        android:visibility="visible"/>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bottom_nav_selected_capsule"/>
 
-    <ImageView
-        android:id="@+id/bottom_nav_item_image"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_gravity="center"
-        tools:src="@drawable/quantum_ic_star_vd_theme_24"/>
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/notification_badge"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/bottom_nav_item_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="2dp"
-        android:paddingStart="6dp"
-        android:paddingEnd="6dp"
-        android:paddingBottom="1dp"
-        android:minHeight="20dp"
-        android:minWidth="20dp"
-        android:gravity="center"
-        android:textSize="12sp"
-        android:textColor="?android:attr/textColorPrimaryInverse"
-        android:background="@drawable/notification_badge"
-        android:fontFamily="@*android:string/config_headlineFontFamilyMedium"
-        android:visibility="invisible"/>
-  </FrameLayout>
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/bottom_nav_item_padding_vertical"
+        android:paddingBottom="@dimen/bottom_nav_item_padding_vertical"
+        android:paddingStart="@dimen/bottom_nav_item_padding_horizontal"
+        android:paddingEnd="@dimen/bottom_nav_item_padding_horizontal">
 
-  <TextView
-      android:id="@+id/bottom_nav_item_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="16dp"
-      android:gravity="center_horizontal"
-      android:textSize="12sp"
-      style="@style/Dialer.TextAppearance.OVERLINE"
-      android:textColor="?android:attr/textColorPrimary"
-      android:visibility="gone" />
+      <FrameLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/bottom_nav_item_image"
+            android:layout_width="@dimen/bottom_nav_icon_size"
+            android:layout_height="@dimen/bottom_nav_icon_size"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            tools:src="@drawable/quantum_ic_star_vd_theme_24"/>
+
+        <TextView
+            android:id="@+id/notification_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:minHeight="18dp"
+            android:minWidth="18dp"
+            android:gravity="center"
+            android:textSize="11sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/notification_badge"
+            android:fontFamily="@*android:string/config_headlineFontFamilyMedium"
+            android:visibility="invisible"/>
+      </FrameLayout>
+
+      <TextView
+          android:id="@+id/bottom_nav_item_text"
+          style="@style/Dialer.BottomNavLabel"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:importantForAccessibility="no"
+          tools:text="Recents"/>
+    </LinearLayout>
+  </FrameLayout>
 </com.android.dialer.main.impl.bottomnav.BottomNavItem>

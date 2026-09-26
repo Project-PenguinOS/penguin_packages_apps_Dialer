@@ -110,7 +110,8 @@
             android:src="@drawable/quantum_ic_search_vd_theme_24"
             android:tint="@color/dialer_fab_icon_color"
             app:tint="@color/dialer_fab_icon_color"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/dialer_hint_find_contact"/>
 
 </eightbitlab.com.blurview.BlurView>
     <!-- Holds Dialpad fragment -->

@@ -15,7 +15,10 @@
   ~ limitations under the License
   -->
 <resources>
-  <dimen name="badge_margin_length_1">10dp</dimen>
-  <dimen name="badge_margin_length_2">14dp</dimen>
-  <dimen name="badge_margin_length_3">22dp</dimen>
+  <dimen name="bottom_nav_icon_size">24dp</dimen>
+  <dimen name="bottom_nav_min_touch_height">64dp</dimen>
+  <dimen name="bottom_nav_item_min_width">72dp</dimen>
+  <dimen name="bottom_nav_item_padding_vertical">6dp</dimen>
+  <dimen name="bottom_nav_item_padding_horizontal">12dp</dimen>
+  <dimen name="bottom_nav_capsule_radius">24dp</dimen>
 </resources>

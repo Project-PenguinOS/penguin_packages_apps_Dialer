@@ -1632,6 +1632,11 @@ public class DialpadFragment extends Fragment
   public void slideUp(boolean animate) {
     Assert.checkArgument(!isDialpadSlideUp);
     isDialpadSlideUp = true;
+    if (!animate) {
+      getView().clearAnimation();
+      floatingActionButtonController.showImmediately();
+      return;
+    }
     int animation;
     if (isLandscape) {
       animation = isLayoutRtl ? R.anim.dialpad_slide_in_left : R.anim.dialpad_slide_in_right;

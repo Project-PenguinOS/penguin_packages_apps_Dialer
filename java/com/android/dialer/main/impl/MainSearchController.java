@@ -169,8 +169,8 @@ public class MainSearchController implements SearchBarListener {
     fab.hide();
     searchBackground.setVisibility(View.GONE);
     searchMagnifyingGlass.setVisibility(View.GONE);
-    toolbar.slideUp(animate, fragmentContainer);
-    toolbar.expand(animate, Optional.empty(), /* requestFocus */ false);
+    toolbar.slideUp(false, fragmentContainer);
+    toolbar.expand(false, Optional.empty(), /* requestFocus */ false);
 
     activity.setTitle(R.string.dialpad_activity_title);
 
@@ -180,7 +180,6 @@ public class MainSearchController implements SearchBarListener {
     if (searchFragment == null) {
       searchFragment = NewSearchFragment.newInstance();
       transaction.add(R.id.search_fragment_container, searchFragment, SEARCH_FRAGMENT_TAG);
-      transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
     } else if (!isSearchVisible()) {
       transaction.show(searchFragment);
     }
@@ -195,7 +194,8 @@ public class MainSearchController implements SearchBarListener {
       dialpadFragment.setStartedFromNewIntent(fromNewIntent);
       transaction.show(dialpadFragment);
     }
-    transaction.commit();
+    transaction.commitNow();
+    hideBottomNav();
 
     notifyListenersOnSearchOpen();
   }
@@ -234,7 +234,7 @@ public class MainSearchController implements SearchBarListener {
     fab.show();
     searchBackground.setVisibility(View.VISIBLE);
     searchMagnifyingGlass.setVisibility(View.VISIBLE);
-    toolbar.slideDown(animate, fragmentContainer);
+    toolbar.slideDown(false, fragmentContainer);
     toolbar.transferQueryFromDialpad(dialpadFragment.getQuery());
 
     if (bottomNav.getSelectedTab() == BottomNavBar.TabIndex.CONTACTS) {
@@ -243,9 +243,9 @@ public class MainSearchController implements SearchBarListener {
       activity.setTitle(R.string.dialer_title);
     }
 
-    dialpadFragment.setAnimate(animate);
+    dialpadFragment.setAnimate(false);
     dialpadFragment.slideDown(
-        animate,
+        false,
         new AnimationListener() {
           @Override
           public void onAnimationStart(Animation animation) {}
@@ -277,7 +277,7 @@ public class MainSearchController implements SearchBarListener {
   /** Should be called when {@link DialpadListener#onDialpadShown()} is called. */
   public void onDialpadShown() {
     LogUtil.enterBlock("MainSearchController.onDialpadShown");
-    dialpadFragment.slideUp(true);
+    dialpadFragment.slideUp(false);
     hideBottomNav();
   }
 

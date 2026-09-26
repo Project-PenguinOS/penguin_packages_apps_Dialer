@@ -153,11 +153,11 @@
         android:layout_margin="@dimen/dialpad_overflow_margin"
         android:background="@drawable/btn_dialpad_key"
         android:contentDescription="@string/description_delete_button"
-        android:src="@drawable/quantum_ic_backspace_vd_theme_24"
+        android:src="@drawable/ic_dialpad_delete"
         android:visibility="visible"
         android:layout_alignParentEnd="true"
         android:tintMode="src_in"
-        app:tint="@color/dialer_theme_color_light" />
+        app:tint="?attr/dialpad_text_color_secondary" />
   </RelativeLayout>
 
   <View

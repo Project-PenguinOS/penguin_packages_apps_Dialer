@@ -92,6 +92,7 @@ import com.android.dialer.theme.base.Theme;
 import com.android.dialer.theme.base.ThemeComponent;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.util.TransactionSafeActivity;
+import com.android.dialer.widget.DialerFloatingActionButton;
 import com.android.dialer.voicemailstatus.VisualVoicemailEnabledChecker;
 import com.android.dialer.voicemailstatus.VoicemailStatusHelper;
 import com.android.voicemail.VoicemailComponent;
@@ -210,7 +211,13 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
     BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
-    FloatingActionButton fab = activity.findViewById(R.id.fab);
+    DialerFloatingActionButton fab = activity.findViewById(R.id.fab);
+    fab.setLabel(activity.findViewById(R.id.fab_label));
+    activity.findViewById(R.id.keypad_tab).setOnClickListener(v -> {
+      if (fab.getVisibility() == View.VISIBLE) {
+        fab.performClick();
+      }
+    });
     fab.setOnClickListener(
         v -> {
           searchController.showDialpad(true);
