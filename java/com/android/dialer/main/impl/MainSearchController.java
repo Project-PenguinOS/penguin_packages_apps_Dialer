@@ -97,6 +97,8 @@ public class MainSearchController implements SearchBarListener {
 
   private final List<OnSearchShowListener> onSearchShowListenerList = new ArrayList<>();
 
+  private static final long KEYBOARD_AFTER_KEYPAD_DELAY_MS = 50;
+
   /**
    * True when an action happens that closes search (like leaving the app or placing a call). We
    * want to wait until onPause is called otherwise the transition will look extremely janky.
@@ -367,7 +369,7 @@ public class MainSearchController implements SearchBarListener {
     searchBackground.setVisibility(View.VISIBLE);
     searchMagnifyingGlass.setVisibility(View.VISIBLE);
     updateStatusBarColor(android.R.attr.statusBarColor);
-    toolbar.collapse(animate);
+    toolbar.collapse(false);
     activity.getSupportFragmentManager().beginTransaction().hide(searchFragment).commit();
     // Clear the dialpad so the phone number isn't persisted between search sessions.
     if (dialpadFragment != null) {
@@ -421,11 +423,15 @@ public class MainSearchController implements SearchBarListener {
   @Override
   public void onSearchBarClicked() {
     LogUtil.enterBlock("MainSearchController.onSearchBarClicked");
-    if (isDialpadVisible()) {
-      leaveKeypad();
+    boolean fromKeypad = isDialpadVisible();
+    if (fromKeypad) {
+      hideDialpad(false);
       activity.getSupportFragmentManager().executePendingTransactions();
     }
     openSearch(Optional.empty());
+    if (fromKeypad) {
+      toolbar.postDelayed(toolbar::showKeyboard, KEYBOARD_AFTER_KEYPAD_DELAY_MS);
+    }
   }
 
   private void openSearch(Optional<String> query) {
@@ -434,7 +440,7 @@ public class MainSearchController implements SearchBarListener {
     fab.hide();
     searchBackground.setVisibility(View.GONE);
     searchMagnifyingGlass.setVisibility(View.GONE);
-    toolbar.expand(/* animate=*/ true, query, /* requestFocus */ true);
+    toolbar.expand(/* animate=*/ false, query, /* requestFocus */ true);
     toolbar.showKeyboard();
     hideBottomNav();
     updateStatusBarColor(android.R.attr.colorBackgroundFloating);
@@ -445,7 +451,6 @@ public class MainSearchController implements SearchBarListener {
     if (searchFragment == null) {
       searchFragment = NewSearchFragment.newInstance();
       transaction.add(R.id.search_fragment_container, searchFragment, SEARCH_FRAGMENT_TAG);
-      transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
     } else if (!isSearchVisible()) {
       transaction.show(searchFragment);
     }
@@ -453,7 +458,7 @@ public class MainSearchController implements SearchBarListener {
     searchFragment.setQuery(query.orElse(""), CallInitiationType.Type.REGULAR_SEARCH);
 
     if (activity.isSafeToCommitTransactions()) {
-      transaction.commit();
+      transaction.commitNow();
     }
 
     notifyListenersOnSearchOpen();

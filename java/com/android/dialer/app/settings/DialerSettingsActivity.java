@@ -35,6 +35,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -78,6 +79,9 @@ public class DialerSettingsActivity extends BaseActivity implements
               @NonNull View v, @Nullable Bundle savedInstanceState) {
             if (f instanceof PreferenceFragmentCompat) {
               GroupedPreferenceDecoration.apply((PreferenceFragmentCompat) f);
+            }
+            if (v.getBackground() == null) {
+              v.setBackgroundColor(getColor(R.color.dialer_grouped_background));
             }
           }
         }, true);
@@ -134,7 +138,13 @@ public class DialerSettingsActivity extends BaseActivity implements
             .getFragmentFactory()
             .instantiate(getClassLoader(), pref.getFragment());
     fragment.setArguments(pref.getExtras());
+    FragmentContainerView container = findViewById(R.id.content_frame);
+    container.setDrawDisappearingViewsLast(false);
+    container.postDelayed(
+            () -> container.setDrawDisappearingViewsLast(true),
+            getResources().getInteger(R.integer.hig_navigation_duration) + 50L);
     getSupportFragmentManager().beginTransaction()
+            .setReorderingAllowed(true)
             .setCustomAnimations(
                     R.anim.hig_push_enter, R.anim.hig_push_exit,
                     R.anim.hig_pop_enter, R.anim.hig_pop_exit)

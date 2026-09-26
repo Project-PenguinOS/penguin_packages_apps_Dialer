@@ -33,4 +33,5 @@
   <dimen name="fast_scroller_bottom_right_corner_radius">0px</dimen>
   <dimen name="fast_scroller_bottom_left_corner_radius">44dp</dimen>
   <dimen name="contacts_section_header_height">36dp</dimen>
+  <dimen name="contacts_list_top_padding">64dp</dimen>
 </resources>
