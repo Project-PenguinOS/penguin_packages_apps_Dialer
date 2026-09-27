@@ -766,6 +766,9 @@ public class DialpadFragment extends Fragment
       // A sanity-check: the "dialpad chooser" UI should not be visible if the phone is idle.
       showDialpadChooser(false);
     }
+    if (isDialpadSlideUp && !isDialpadChooserVisible()) {
+      floatingActionButtonController.showImmediately();
+    }
 
     // Populate the overflow menu in onResume instead of onCreate, so that if the SMS activity
     // is disabled while Dialer is paused, the "Send a text message" option can be correctly

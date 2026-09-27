@@ -335,8 +335,27 @@ final class ContactFilterCursor implements Cursor {
       queryFilteredPositions.addAll(contactTree.get(query.toLowerCase(Locale.getDefault())));
     }
     Collections.sort(queryFilteredPositions);
+    putNumberMatchesFirst(query);
     currentPosition = 0;
     cursor.moveToFirst();
+  }
+
+  private void putNumberMatchesFirst(String query) {
+    String digits = QueryFilteringUtil.digitsOnly(query);
+    if (digits.isEmpty() || digits.length() != query.length()) {
+      return;
+    }
+    List<Integer> numberMatches = new ArrayList<>();
+    List<Integer> nameMatches = new ArrayList<>();
+    for (int position : queryFilteredPositions) {
+      cursor.moveToPosition(position);
+      String rawNumber = cursor.getString(Projections.PHONE_NUMBER);
+      String number = rawNumber == null ? "" : QueryFilteringUtil.digitsOnly(rawNumber);
+      (number.contains(digits) ? numberMatches : nameMatches).add(position);
+    }
+    queryFilteredPositions.clear();
+    queryFilteredPositions.addAll(numberMatches);
+    queryFilteredPositions.addAll(nameMatches);
   }
 
   @Override

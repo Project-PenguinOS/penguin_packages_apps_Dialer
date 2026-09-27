@@ -134,10 +134,35 @@ public class MainSearchController implements SearchBarListener {
     searchFragment = (NewSearchFragment) activity.getSupportFragmentManager()
             .findFragmentByTag(SEARCH_FRAGMENT_TAG);
 
+    activity
+        .findViewById(R.id.search_fragment_container)
+        .getViewTreeObserver()
+        .addOnGlobalLayoutListener(this::fitSearchAboveDialpad);
+
     mVoiceSearchLauncher = activity.registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
               onVoiceResults(result.getResultCode(), result.getData());
             });
+  }
+
+  private void fitSearchAboveDialpad() {
+    View container = activity.findViewById(R.id.search_fragment_container);
+    int inset = 0;
+    View dialpadView =
+        isDialpadVisible() && dialpadFragment.getView() != null
+            ? dialpadFragment.getView().findViewById(R.id.dialpad_view)
+            : null;
+    if (dialpadView != null && dialpadView.isShown() && dialpadView.getHeight() > 0) {
+      int[] dialpadLocation = new int[2];
+      int[] containerLocation = new int[2];
+      dialpadView.getLocationInWindow(dialpadLocation);
+      container.getLocationInWindow(containerLocation);
+      inset = Math.max(0, container.getHeight() - (dialpadLocation[1] - containerLocation[1]));
+    }
+    if (container.getPaddingBottom() != inset) {
+      container.setPadding(
+          container.getPaddingLeft(), container.getPaddingTop(), container.getPaddingRight(), inset);
+    }
   }
 
   /** Should be called if we're showing the dialpad because of a new ACTION_DIAL intent. */
@@ -170,8 +195,6 @@ public class MainSearchController implements SearchBarListener {
     activity.findViewById(R.id.top_view).setVisibility(View.GONE);
 
     bottomNav.setKeypadActive(true);
-    activity.findViewById(R.id.dialpad_fragment_container).setBackgroundColor(
-        DialerUtils.resolveColor(activity, android.R.attr.colorBackground));
     toolbar.slideUp(false, null);
     toolbar.expand(false, Optional.empty(), /* requestFocus */ false);
 
@@ -237,7 +260,6 @@ public class MainSearchController implements SearchBarListener {
     searchBackground.setVisibility(View.VISIBLE);
     searchMagnifyingGlass.setVisibility(View.VISIBLE);
     bottomNav.setKeypadActive(false);
-    activity.findViewById(R.id.dialpad_fragment_container).setBackground(null);
     toolbar.slideDown(false, fragmentContainer);
     toolbar.transferQueryFromDialpad(dialpadFragment.getQuery());
 
@@ -297,10 +319,9 @@ public class MainSearchController implements SearchBarListener {
   public void onSearchListTouch() {
     LogUtil.enterBlock("MainSearchController.onSearchListTouched");
     if (isDialpadVisible()) {
-      if (!TextUtils.isEmpty(dialpadFragment.getQuery())) {
-        hideDialpad(/* animate=*/ true);
-      }
-    } else if (isSearchVisible()) {
+      return;
+    }
+    if (isSearchVisible()) {
       closeKeyboard();
     }
   }

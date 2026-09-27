@@ -835,6 +835,7 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
     final String looseQuery = query + "%";
 
     final ArrayList<ContactNumber> result = new ArrayList<>();
+    final ArrayList<ContactNumber> nameOnlyMatches = new ArrayList<>();
 
     final String currentTimeStamp = Long.toString(System.currentTimeMillis());
 
@@ -923,15 +924,17 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
         if (nameMatches || numberMatches) {
           /** If a contact has not been added, add it to the result and the hash set. */
           duplicates.add(contactMatch);
-          result.add(
-              new ContactNumber(
-                  id, dataID, displayName, phoneNumber, lookupKey, photoId, carrierPresence));
+          (numberMatches ? result : nameOnlyMatches)
+              .add(
+                  new ContactNumber(
+                      id, dataID, displayName, phoneNumber, lookupKey, photoId, carrierPresence));
           counter++;
         }
       }
     } finally {
       cursor.close();
     }
+    result.addAll(nameOnlyMatches);
     return result;
   }
 
