@@ -17,7 +17,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     coreApp="true"
     package="com.android.dialer"
-    android:versionCode="260926"
+    android:versionCode="260927"
     android:versionName="1.6">
 
     <uses-feature
