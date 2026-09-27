@@ -169,8 +169,7 @@ import java.util.Set;
 
   private static void createVoicemailChannelForAccount(
       @NonNull Context context, @NonNull PhoneAccountHandle handle) {
-    PhoneAccount phoneAccount =
-        context.getSystemService(TelecomManager.class).getPhoneAccount(handle);
+    PhoneAccount phoneAccount = getPhoneAccount(context, handle);
     if (phoneAccount == null) {
       return;
     }
@@ -193,8 +192,7 @@ import java.util.Set;
 
   private static boolean isChannelAllowedForAccount(
       @NonNull Context context, @NonNull PhoneAccountHandle handle) {
-    PhoneAccount phoneAccount =
-        context.getSystemService(TelecomManager.class).getPhoneAccount(handle);
+    PhoneAccount phoneAccount = getPhoneAccount(context, handle);
     if (phoneAccount == null) {
       return false;
     }
@@ -202,6 +200,17 @@ import java.util.Set;
       return false;
     }
     return true;
+  }
+
+  @Nullable
+  private static PhoneAccount getPhoneAccount(
+      @NonNull Context context, @NonNull PhoneAccountHandle handle) {
+    try {
+      return context.getSystemService(TelecomManager.class).getPhoneAccount(handle);
+    } catch (SecurityException e) {
+      LogUtil.w("VoicemailChannelUtils.getPhoneAccount", "no permission: " + e.getMessage());
+      return null;
+    }
   }
 
   private static NotificationChannel newChannel(
