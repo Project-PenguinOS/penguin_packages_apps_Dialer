@@ -35,8 +35,6 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.android.dialer.R;
-import com.android.dialer.theme.base.Theme;
-import com.android.dialer.theme.base.ThemeComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -291,8 +289,7 @@ public class CallTypeIconsView extends View {
       missed = getBitmap(context, R.drawable.quantum_ic_call_missed_vd_theme_24,
               directionColor, largeIcons);
 
-      Theme theme = ThemeComponent.get(context).theme();
-      int iconColor = theme.getColorIcon();
+      int iconColor = directionColor;
 
       voicemail = getBitmap(context, R.drawable.quantum_ic_voicemail_vd_theme_24, iconColor,
               largeIcons);

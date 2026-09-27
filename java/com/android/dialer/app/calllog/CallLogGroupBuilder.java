@@ -30,6 +30,7 @@ import com.android.dialer.calllogutils.CallbackActionHelper.CallbackAction;
 import com.android.dialer.compat.telephony.TelephonyManagerCompat;
 import com.android.dialer.phonenumbercache.CallLogQuery;
 import com.android.dialer.phonenumberutil.PhoneNumberHelper;
+import com.android.dialer.universaldialer.UniversalDialer;
 
 import java.time.ZoneId;
 
@@ -161,15 +162,15 @@ public class CallLogGroupBuilder {
         groupDayGroup = getDayGroup(date, currentTime);
 
         if (groupDayGroup != currentDayGroup) {
-          if (!numberInDayGroup.containsKey(groupNumber)) {
+          if (!numberInDayGroup.containsKey(dayGroupKey(groupNumber, groupAccountComponentName))) {
             groupCreator.addGroup(cursor.getPosition() - groupSize, groupSize);
           }
           numberInDayGroup.clear();
           currentDayGroup = groupDayGroup;
         } else {
-          if (!numberInDayGroup.containsKey(groupNumber)) {
+          if (!numberInDayGroup.containsKey(dayGroupKey(groupNumber, groupAccountComponentName))) {
             groupCreator.addGroup(cursor.getPosition() - groupSize, groupSize);
-            numberInDayGroup.put(groupNumber, true);
+            numberInDayGroup.put(dayGroupKey(groupNumber, groupAccountComponentName), true);
           }
         }
 
@@ -194,7 +195,7 @@ public class CallLogGroupBuilder {
     }
 
     // Create a group for the last set of calls.
-    if (!numberInDayGroup.containsKey(groupNumber)) {
+    if (!numberInDayGroup.containsKey(dayGroupKey(groupNumber, groupAccountComponentName))) {
       groupCreator.addGroup(count - groupSize, groupSize);
     }
   }
@@ -218,6 +219,12 @@ public class CallLogGroupBuilder {
     }
 
     return PhoneNumberUtils.compare(number1, number2);
+  }
+
+  private static String dayGroupKey(String number, @Nullable String accountComponentName) {
+    return UniversalDialer.isVoipAccount(accountComponentName)
+        ? number + '\n' + accountComponentName
+        : number;
   }
 
   private boolean isSameAccount(String name1, String name2, String id1, String id2) {

@@ -18,6 +18,7 @@
 package com.android.dialer.app.calllog;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -78,7 +79,9 @@ import com.android.dialer.phonenumbercache.ContactInfoHelper;
 import com.android.dialer.phonenumberutil.PhoneNumberHelper;
 import com.android.dialer.telecom.TelecomUtil;
 import android.content.Intent;
+import com.android.dialer.universaldialer.AppCalls;
 import com.android.dialer.universaldialer.UniversalDialer;
+import com.android.dialer.util.DialerUtils;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.widget.HigAlertDialogs;
 import com.android.dialer.widget.SwipeAndDragHelper;
@@ -1343,10 +1346,8 @@ public class CallLogAdapter extends GroupingListAdapter
     String number = cursor.getString(CallLogQuery.NUMBER);
     String contactLabel = getSwipeContactLabel(cursor, number);
     long[] callIds = isDelete ? getCallIds(cursor, getGroupSize(position)) : null;
-    Uri callBackUri =
-        UniversalDialer.isVoipAccount(cursor.getString(CallLogQuery.ACCOUNT_COMPONENT_NAME))
-            ? ContentUris.withAppendedId(Calls.CONTENT_URI, cursor.getLong(CallLogQuery.ID))
-            : null;
+    String accountComponent = cursor.getString(CallLogQuery.ACCOUNT_COMPONENT_NAME);
+    long callId = cursor.getLong(CallLogQuery.ID);
 
     AlertDialog.Builder builder = new AlertDialog.Builder(activity)
         .setTitle(
@@ -1360,8 +1361,19 @@ public class CallLogAdapter extends GroupingListAdapter
             (dialog, which) -> {
               if (isDelete) {
                 CallLogAsyncTaskUtil.deleteCalls(activity, callIds, null);
-              } else if (callBackUri != null) {
-                activity.startActivity(new Intent(Intent.ACTION_CALL, callBackUri));
+              } else if (UniversalDialer.isNotificationEntry(accountComponent)) {
+                Intent intent =
+                    AppCalls.callBackIntent(
+                        activity,
+                        ComponentName.unflattenFromString(accountComponent).getPackageName(),
+                        number);
+                if (intent != null) {
+                  DialerUtils.startActivityWithErrorToast(activity, intent);
+                }
+              } else if (UniversalDialer.isVoipAccount(accountComponent)) {
+                activity.startActivity(
+                    new Intent(
+                        Intent.ACTION_CALL, ContentUris.withAppendedId(Calls.CONTENT_URI, callId)));
               } else {
                 activity.startActivity(new Intent(Intent.ACTION_CALL, CallUtil.getCallUri(number)));
               }
