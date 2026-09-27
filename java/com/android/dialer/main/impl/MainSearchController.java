@@ -413,6 +413,10 @@ public class MainSearchController implements SearchBarListener {
     return dialpadFragment;
   }
 
+  public boolean hidesBottomNav() {
+    return isInSearch() && !isDialpadVisible();
+  }
+
   private boolean isDialpadVisible() {
     return dialpadFragment != null
         && dialpadFragment.isAdded()

@@ -531,7 +531,7 @@
   <string name="credits_title">Credits</string>
   <string name="licenses_title">Open-source licenses</string>
   <string name="credits_app_name" translatable="false">PenguinOS Dialer</string>
-  <string name="credits_version">Version <xliff:g id="version_name" example="1.6">%1$s</xliff:g> (<xliff:g id="version_code" example="260927">%2$d</xliff:g>)</string>
+  <string name="credits_version">Version <xliff:g id="version_name" example="1.6.1">%1$s</xliff:g> (<xliff:g id="version_code" example="20260928">%2$d</xliff:g>)</string>
   <string name="credits_team_category">PenguinOS team</string>
   <string name="credits_open_telegram">Open <xliff:g id="handle" example="\@Whoraj">%1$s</xliff:g> in Telegram</string>
   <string name="credits_kitsune">our kitsune</string>

@@ -452,7 +452,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
         !LocaleUtils.getLocale(activity).getISO3Language().equals(savedLanguageCode);
     Database.get(activity).getDatabaseHelper(activity).startSmartDialUpdateThread(forceUpdate);
 
-    if (searchController.isInSearch()
+    if (searchController.hidesBottomNav()
         || callLogAdapterOnActionModeStateChangedListener.isActionModeStateEnabled()) {
       bottomNav.setVisibility(View.GONE);
     } else {

@@ -170,6 +170,9 @@ public final class BottomNavBar extends FrameLayout {
 
 
   private void setSelected(View view) {
+    if (keypadActive && view != keypadTab) {
+      return;
+    }
     speedDial.setSelected(view == speedDial);
     callLog.setSelected(view == callLog);
     contacts.setSelected(view == contacts);
