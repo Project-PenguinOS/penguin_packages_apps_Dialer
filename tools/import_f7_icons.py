@@ -10,6 +10,9 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "java/com/android/dialer/icons/res/drawable"
 
 ICONS = {
+    "quantum_ic_access_time_vd_theme_24": "clock_fill",
+    "quantum_ic_people_vd_theme_24": "person_crop_circle_fill",
+    "veddialer": "circle_grid_3x3_fill",
     "quantum_ic_call_vd_theme_24": "phone_fill",
     "quantum_ic_phone_vd_theme_24": "phone_fill",
     "quantum_ic_videocam_vd_theme_24": "videocam_fill",
