@@ -195,6 +195,8 @@ public class MainSearchController implements SearchBarListener {
     activity.findViewById(R.id.top_view).setVisibility(View.GONE);
 
     bottomNav.setKeypadActive(true);
+    activity.findViewById(R.id.search_fragment_container).setBackgroundColor(
+        DialerUtils.resolveColor(activity, android.R.attr.colorBackground));
     toolbar.slideUp(false, null);
     toolbar.expand(false, Optional.empty(), /* requestFocus */ false);
 
@@ -260,6 +262,7 @@ public class MainSearchController implements SearchBarListener {
     searchBackground.setVisibility(View.VISIBLE);
     searchMagnifyingGlass.setVisibility(View.VISIBLE);
     bottomNav.setKeypadActive(false);
+    activity.findViewById(R.id.search_fragment_container).setBackground(null);
     toolbar.slideDown(false, fragmentContainer);
     toolbar.transferQueryFromDialpad(dialpadFragment.getQuery());
 

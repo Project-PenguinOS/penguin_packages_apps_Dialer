@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnScrollChangeListener;
@@ -57,6 +58,8 @@ import com.android.dialer.widget.PlainListSeparatorDecoration;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import android.graphics.drawable.Drawable;
 import android.view.ViewOutlineProvider;
 
@@ -289,11 +292,18 @@ public class ContactsFragment extends Fragment
 
   private void loadMyCard() {
     Context appContext = requireContext().getApplicationContext();
+    boolean filtered = !TextUtils.isEmpty(query);
+    boolean withPhoneNumbersOnly = hasPhoneNumbers;
     new Thread(() -> {
       MyCard card = MyCard.load(appContext);
+      List<FavoriteContact> favorites =
+          filtered
+              ? Collections.emptyList()
+              : FavoriteContact.load(appContext, withPhoneNumbersOnly);
       recyclerView.post(() -> {
         if (adapter != null && isAdded()) {
           adapter.setMyCard(card);
+          adapter.setFavorites(favorites);
         }
       });
     }, "ContactsFragment.loadMyCard").start();

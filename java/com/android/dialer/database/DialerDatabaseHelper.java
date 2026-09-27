@@ -43,6 +43,7 @@ import com.android.dialer.common.concurrent.DefaultFutureCallback;
 import com.android.dialer.common.concurrent.DialerExecutorComponent;
 import com.android.dialer.common.concurrent.DialerFutureSerializer;
 import com.android.dialer.common.database.Selection;
+import com.android.dialer.searchfragment.common.QueryFilteringUtil;
 import com.android.dialer.smartdial.util.SmartDialNameMatcher;
 import com.android.dialer.smartdial.util.SmartDialPrefix;
 import com.android.dialer.util.PermissionsUtil;
@@ -835,7 +836,8 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
     final String looseQuery = query + "%";
 
     final ArrayList<ContactNumber> result = new ArrayList<>();
-    final ArrayList<ContactNumber> nameOnlyMatches = new ArrayList<>();
+    final ArrayList<ContactNumber> wordMatches = new ArrayList<>();
+    final ArrayList<ContactNumber> looseMatches = new ArrayList<>();
 
     final String currentTimeStamp = Long.toString(System.currentTimeMillis());
 
@@ -889,9 +891,8 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
       final int columnCarrierPresence = 6;
 
       final Set<ContactMatch> duplicates = new HashSet<>();
-      int counter = 0;
       /** Iterates the cursor to find top contact suggestions without duplication. */
-      while ((cursor.moveToNext()) && (counter < MAX_ENTRIES)) {
+      while (cursor.moveToNext()) {
         if (cursor.isNull(columnDataId)) {
           LogUtil.i(
               "DialerDatabaseHelper.getLooseMatches",
@@ -924,18 +925,35 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
         if (nameMatches || numberMatches) {
           /** If a contact has not been added, add it to the result and the hash set. */
           duplicates.add(contactMatch);
-          (numberMatches ? result : nameOnlyMatches)
-              .add(
-                  new ContactNumber(
-                      id, dataID, displayName, phoneNumber, lookupKey, photoId, carrierPresence));
-          counter++;
+          ArrayList<ContactNumber> bucket =
+              numberMatches
+                  ? result
+                  : nameWordStartsWith(context, displayName, query) ? wordMatches : looseMatches;
+          bucket.add(
+              new ContactNumber(
+                  id, dataID, displayName, phoneNumber, lookupKey, photoId, carrierPresence));
         }
       }
     } finally {
       cursor.close();
     }
-    result.addAll(nameOnlyMatches);
-    return result;
+    result.addAll(wordMatches);
+    result.addAll(looseMatches);
+    return result.size() > MAX_ENTRIES
+        ? new ArrayList<>(result.subList(0, MAX_ENTRIES))
+        : result;
+  }
+
+  private static boolean nameWordStartsWith(Context context, String name, String digits) {
+    if (TextUtils.isEmpty(name) || TextUtils.isEmpty(digits)) {
+      return false;
+    }
+    for (String word : name.split("[\\s\\p{Punct}]+")) {
+      if (QueryFilteringUtil.getT9Representation(word, context).startsWith(digits)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public interface Tables {

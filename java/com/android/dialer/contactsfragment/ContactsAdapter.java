@@ -43,6 +43,8 @@ import com.android.dialer.lettertile.LetterTileDrawable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Collections;
+import java.util.List;
 
 /** List adapter for the union of all contacts associated with every account on the device. */
 final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -69,6 +71,7 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
   // Cursor with list of contacts
   private Cursor cursor;
   @Nullable private MyCard myCard;
+  private List<FavoriteContact> favorites = Collections.emptyList();
 
   ContactsAdapter(
       Context context, @Header int header, OnContactSelectedListener onContactSelectedListener) {
@@ -82,8 +85,21 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     notifyDataSetChanged();
   }
 
+  void setFavorites(List<FavoriteContact> favorites) {
+    this.favorites = favorites;
+    notifyDataSetChanged();
+  }
+
   private int leadingRows() {
     return (header != Header.NONE ? 1 : 0) + (myCard != null ? 1 : 0);
+  }
+
+  private int rowsBeforeCursor() {
+    return leadingRows() + favorites.size();
+  }
+
+  private boolean isFavoriteRow(int position) {
+    return position >= leadingRows() && position < rowsBeforeCursor();
   }
 
   void updateCursor(Cursor cursor) {
@@ -136,18 +152,35 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     ContactViewHolder contactViewHolder = (ContactViewHolder) viewHolder;
     holderMap.put(contactViewHolder, position);
-    cursor.moveToPosition(position - leadingRows());
 
-    String name = getDisplayName(cursor);
+    String name;
+    Uri contactUri;
+    long contactId;
+    long photoId;
+    Uri photoUri;
+    if (isFavoriteRow(position)) {
+      FavoriteContact favorite = favorites.get(position - leadingRows());
+      name = favorite.name;
+      contactUri = favorite.lookupUri;
+      contactId = favorite.contactId;
+      photoId = favorite.photoId;
+      photoUri = favorite.photoUri;
+    } else {
+      cursor.moveToPosition(position - rowsBeforeCursor());
+      name = getDisplayName(cursor);
+      contactUri = getContactUri(cursor);
+      contactId = getContactId(cursor);
+      photoId = getPhotoId(cursor);
+      photoUri = getPhotoUri(cursor);
+    }
     String header = getHeaderString(position);
-    Uri contactUri = getContactUri(cursor);
 
     ContactPhotoManager.getInstance(context)
         .loadDialerThumbnailOrPhoto(
             contactViewHolder.getPhoto(),
             contactUri,
-            getPhotoId(cursor),
-            getPhotoUri(cursor),
+            photoId,
+            photoUri,
             name,
             LetterTileDrawable.TYPE_DEFAULT);
 
@@ -159,7 +192,7 @@ final class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // the same sublists.
     boolean showHeader = isFirstInSection(position);
 
-contactViewHolder.bind(header, name, contactUri, getContactId(cursor), showHeader);
+contactViewHolder.bind(header, name, contactUri, contactId, showHeader);
 
 boolean isFirstInGroup = (position == 1);
 boolean isLastInGroup = (position == getItemCount() - 1);
@@ -233,7 +266,7 @@ contactViewHolder.itemView.findViewById(R.id.contact_row).setBackgroundResource(
   }
 
   int getPositionForSection(String title) {
-    int position = leadingRows();
+    int position = rowsBeforeCursor();
     for (int i = 0; i < headers.length; i++) {
       if (headers[i].equals(title)) {
         return position;
@@ -250,7 +283,7 @@ contactViewHolder.itemView.findViewById(R.id.contact_row).setBackgroundResource(
   @Override
   public int getItemCount() {
     int count = cursor == null || cursor.isClosed() ? 0 : cursor.getCount();
-    return count + leadingRows();
+    return count + rowsBeforeCursor();
   }
 
   private static String getDisplayName(Cursor cursor) {
@@ -280,7 +313,10 @@ contactViewHolder.itemView.findViewById(R.id.contact_row).setBackgroundResource(
     if (position < leadingRows()) {
       return "+";
     }
-    position -= leadingRows();
+    if (isFavoriteRow(position)) {
+      return context.getString(R.string.contacts_favourites_header);
+    }
+    position -= rowsBeforeCursor();
 
     int index = -1;
     int sum = 0;
