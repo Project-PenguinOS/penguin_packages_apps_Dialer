@@ -17,8 +17,14 @@ import com.android.dialer.R;
 
 public class CreditsFragment extends PreferenceFragmentCompat {
 
-  private static final String[] TEAM = {
-    "jendermine", "redducc", "@Venkat3620", "@pranayadmn", "candy paneer", "@Primakre", "@Whoraj",
+  private static final String[][] TEAM = {
+    {"jendermine", "jendermine"},
+    {"redducc", "redducc"},
+    {"@Venkat3620", "Venkat3620"},
+    {"@pranayadmn", "pranayadmn"},
+    {"candy paneer", null},
+    {"@Primakre", "Primakre"},
+    {"@Whoraj", "Whoraj"},
   };
 
   @Override
@@ -37,14 +43,15 @@ public class CreditsFragment extends PreferenceFragmentCompat {
     team.setTitle(R.string.credits_team_category);
     team.setIconSpaceReserved(false);
     screen.addPreference(team);
-    for (String member : TEAM) {
-      team.addPreference(memberPreference(context, member));
+    for (String[] member : TEAM) {
+      team.addPreference(memberPreference(context, member[0], member[1]));
     }
 
     setPreferenceScreen(screen);
   }
 
-  private static Preference memberPreference(Context context, String member) {
+  private static Preference memberPreference(
+      Context context, String member, @Nullable String telegram) {
     Preference preference = new Preference(context);
     preference.setTitle(member);
     preference.setIconSpaceReserved(false);
@@ -52,9 +59,8 @@ public class CreditsFragment extends PreferenceFragmentCompat {
     if (member.equals("candy paneer")) {
       preference.setSummary(R.string.credits_kitsune);
     }
-    if (member.startsWith("@")) {
-      preference.setIntent(
-          new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/" + member.substring(1))));
+    if (telegram != null) {
+      preference.setIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/" + telegram)));
     }
     return preference;
   }
