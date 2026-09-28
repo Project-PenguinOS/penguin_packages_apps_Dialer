@@ -163,6 +163,10 @@ public class FloatingActionButtonController {
 
   public void showImmediately() {
     fab.animate().cancel();
+    if (fab.isOrWillBeHidden()) {
+      fab.show();
+      return;
+    }
     fab.setScaleX(1f);
     fab.setScaleY(1f);
     fab.setAlpha(1f);
