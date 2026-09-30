@@ -80,6 +80,9 @@ public final class UniversalCallNotificationListener extends NotificationListene
         return;
       }
     }
+    if (UniversalDialer.isPhoneApp(this, appPackage)) {
+      return;
+    }
 
     int type = extras.getInt(Notification.EXTRA_CALL_TYPE, 0);
     TrackedCall call;

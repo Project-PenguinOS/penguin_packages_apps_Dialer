@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui_default_package" translatable="false">com.penguin.dialer</string>
+    <string name="dialer_default_class" translatable="false">com.android.dialer.main.impl.MainActivity</string>
+    <string name="incall_default_class" translatable="false">com.android.incallui.InCallServiceImpl</string>
+</resources>

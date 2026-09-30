@@ -5,9 +5,11 @@ import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.PowerManager;
 import android.telecom.Call;
 import android.telecom.PhoneAccount;
@@ -109,7 +111,18 @@ public final class UniversalDialer {
   }
 
   public static boolean isSelfManaged(Call call) {
-    return call.getDetails().hasProperty(Call.Details.PROPERTY_SELF_MANAGED);
+    Call.Details details = call.getDetails();
+    return details.hasProperty(Call.Details.PROPERTY_SELF_MANAGED)
+        || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+            && details.hasProperty(Call.Details.PROPERTY_IS_TRANSACTIONAL));
+  }
+
+  public static boolean isPhoneApp(Context context, String packageName) {
+    if (TELEPHONY_PACKAGE.equals(packageName) || "com.android.server.telecom".equals(packageName)) {
+      return true;
+    }
+    Intent dial = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:")).setPackage(packageName);
+    return !context.getPackageManager().queryIntentActivities(dial, 0).isEmpty();
   }
 
   public static boolean shouldHandle(Context context, Call call) {
