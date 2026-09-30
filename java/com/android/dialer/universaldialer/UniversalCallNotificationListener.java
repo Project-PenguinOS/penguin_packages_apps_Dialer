@@ -8,6 +8,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.CallLog.Calls;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.service.notification.NotificationListenerService;
@@ -59,6 +61,132 @@ public final class UniversalCallNotificationListener extends NotificationListene
     }
   }
 
+  private static final long HIDE_SPAN_MS = 10_000;
+
+  private static final long SNOOZED_CHECK_MS = 1_000;
+
+  private static final Set<String> hiddenKeys = new HashSet<>();
+
+  private static final Set<String> hiddenTelecomPackages = new HashSet<>();
+
+  private static final Set<String> snoozedKeys = new HashSet<>();
+
+  @Nullable private static UniversalCallNotificationListener connected;
+
+  private final Handler handler = new Handler(Looper.getMainLooper());
+
+  public static void onTelecomCallShown(String appPackage, boolean shown) {
+    UniversalCallNotificationListener listener;
+    synchronized (UniversalCallNotificationListener.class) {
+      if (shown) {
+        hiddenTelecomPackages.add(appPackage);
+      } else {
+        hiddenTelecomPackages.remove(appPackage);
+      }
+      listener = connected;
+    }
+    if (shown && listener != null) {
+      listener.handler.post(() -> listener.hideCallNotificationsOf(appPackage));
+    }
+  }
+
+  static synchronized void stopHiding(String key) {
+    hiddenKeys.remove(key);
+  }
+
+  @Override
+  public void onListenerConnected() {
+    synchronized (UniversalCallNotificationListener.class) {
+      connected = this;
+    }
+  }
+
+  @Override
+  public void onListenerDisconnected() {
+    synchronized (UniversalCallNotificationListener.class) {
+      if (connected == this) {
+        connected = null;
+      }
+    }
+  }
+
+  private static boolean isCallStyle(Notification notification) {
+    return Notification.CallStyle.class
+        .getName()
+        .equals(notification.extras.getString(Notification.EXTRA_TEMPLATE));
+  }
+
+  private void hideCallNotificationsOf(String appPackage) {
+    StatusBarNotification[] active;
+    try {
+      active = getActiveNotifications();
+    } catch (RuntimeException e) {
+      return;
+    }
+    if (active == null) {
+      return;
+    }
+    for (StatusBarNotification sbn : active) {
+      if (sbn.getPackageName().equals(appPackage) && isCallStyle(sbn.getNotification())) {
+        hide(sbn.getKey());
+      }
+    }
+  }
+
+  private void hide(String key) {
+    try {
+      snoozeNotification(key, HIDE_SPAN_MS);
+    } catch (RuntimeException e) {
+      LogUtil.e("UniversalCallNotificationListener.hide", "snooze failed", e);
+      return;
+    }
+    boolean startChecking;
+    synchronized (UniversalCallNotificationListener.class) {
+      startChecking = snoozedKeys.isEmpty();
+      snoozedKeys.add(key);
+    }
+    if (startChecking) {
+      handler.postDelayed(this::checkSnoozed, SNOOZED_CHECK_MS);
+    }
+  }
+
+  private void checkSnoozed() {
+    Set<String> present = new HashSet<>();
+    try {
+      StatusBarNotification[] snoozed = getSnoozedNotifications();
+      if (snoozed != null) {
+        for (StatusBarNotification sbn : snoozed) {
+          present.add(sbn.getKey());
+        }
+      }
+      StatusBarNotification[] active = getActiveNotifications();
+      if (active != null) {
+        for (StatusBarNotification sbn : active) {
+          present.add(sbn.getKey());
+        }
+      }
+    } catch (RuntimeException e) {
+      return;
+    }
+    Set<String> gone = new HashSet<>();
+    boolean more;
+    synchronized (UniversalCallNotificationListener.class) {
+      for (String key : snoozedKeys) {
+        if (!present.contains(key)) {
+          gone.add(key);
+        }
+      }
+      snoozedKeys.removeAll(gone);
+      more = !snoozedKeys.isEmpty();
+    }
+    for (String key : gone) {
+      endCall(key);
+    }
+    if (more) {
+      handler.postDelayed(this::checkSnoozed, SNOOZED_CHECK_MS);
+    }
+  }
+
   @Nullable
   static synchronized TrackedCall get(String key) {
     return calls.get(key);
@@ -76,7 +204,13 @@ public final class UniversalCallNotificationListener extends NotificationListene
     }
     String appPackage = sbn.getPackageName();
     synchronized (UniversalCallNotificationListener.class) {
-      if (appPackage.equals(getPackageName()) || telecomCallPackages.contains(appPackage)) {
+      if (appPackage.equals(getPackageName())) {
+        return;
+      }
+      if (telecomCallPackages.contains(appPackage)) {
+        if (hiddenTelecomPackages.contains(appPackage)) {
+          handler.post(() -> hide(sbn.getKey()));
+        }
         return;
       }
     }
@@ -124,15 +258,37 @@ public final class UniversalCallNotificationListener extends NotificationListene
 
     if (isNew && call.incoming && UniversalDialer.shouldHandleVoip(this, appPackage)) {
       LogUtil.i("UniversalCallNotificationListener", "showing incoming %s call", appPackage);
+      synchronized (UniversalCallNotificationListener.class) {
+        hiddenKeys.add(call.key);
+      }
       IncomingVoipCallNotifier.show(this, call);
+    }
+    boolean keepHidden;
+    synchronized (UniversalCallNotificationListener.class) {
+      keepHidden = hiddenKeys.contains(call.key);
+    }
+    if (keepHidden) {
+      hide(call.key);
     }
   }
 
   @Override
-  public void onNotificationRemoved(StatusBarNotification sbn) {
+  public void onNotificationRemoved(
+      StatusBarNotification sbn, RankingMap rankingMap, int reason) {
+    if (reason == REASON_SNOOZED) {
+      return;
+    }
+    synchronized (UniversalCallNotificationListener.class) {
+      snoozedKeys.remove(sbn.getKey());
+    }
+    endCall(sbn.getKey());
+  }
+
+  private void endCall(String key) {
     TrackedCall call;
     synchronized (UniversalCallNotificationListener.class) {
-      call = calls.remove(sbn.getKey());
+      call = calls.remove(key);
+      hiddenKeys.remove(key);
     }
     if (call == null) {
       return;

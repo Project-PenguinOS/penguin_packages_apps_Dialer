@@ -71,6 +71,7 @@ public class InCallServiceImpl extends InCallService {
       return;
     }
     InCallPresenter.getInstance().onCallAdded(call);
+    UniversalDialer.onCallShown(call, true);
     Trace.endSection();
   }
 
@@ -83,6 +84,7 @@ public class InCallServiceImpl extends InCallService {
       return;
     }
     InCallPresenter.getInstance().onCallRemoved(call);
+    UniversalDialer.onCallShown(call, false);
     Trace.endSection();
   }
 

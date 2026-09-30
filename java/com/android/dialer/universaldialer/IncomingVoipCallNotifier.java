@@ -59,6 +59,7 @@ final class IncomingVoipCallNotifier {
   }
 
   static void dismiss(Context context, UniversalCallNotificationListener.TrackedCall call) {
+    UniversalCallNotificationListener.stopHiding(call.key);
     context.getSystemService(NotificationManager.class).cancel(TAG, id(call));
     UniversalIncomingCallActivity.finishFor(call.key);
   }

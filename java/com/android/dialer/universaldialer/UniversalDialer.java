@@ -84,6 +84,13 @@ public final class UniversalDialer {
     return appLabel(context, handle.getComponentName().flattenToString());
   }
 
+  public static void onCallShown(Call call, boolean shown) {
+    String owner = selfManagedOwner(call);
+    if (owner != null) {
+      UniversalCallNotificationListener.onTelecomCallShown(owner, shown);
+    }
+  }
+
   public static void onCallAdded(Call call) {
     String owner = selfManagedOwner(call);
     if (owner != null) {
