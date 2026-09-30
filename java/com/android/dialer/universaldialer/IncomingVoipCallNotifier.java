@@ -6,6 +6,9 @@ import android.app.PendingIntent;
 import android.app.Person;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Icon;
+import android.text.TextUtils;
 
 import com.android.dialer.R;
 import com.android.dialer.notification.NotificationChannelId;
@@ -43,18 +46,47 @@ final class IncomingVoipCallNotifier {
                 context, call.key, UniversalIncomingCallActivity.ACTION_DECLINE),
             PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-    Person caller = new Person.Builder().setName(name).setImportant(true).build();
-    Notification notification =
+    Person.Builder caller = new Person.Builder().setName(name).setImportant(true);
+    Bitmap photo =
+        UniversalIncomingCallActivity.toBitmap(
+            UniversalIncomingCallActivity.loadIcon(context, call.callerIcon));
+    if (photo != null) {
+      caller.setIcon(Icon.createWithBitmap(photo));
+    }
+    Notification.CallStyle style =
+        Notification.CallStyle.forIncomingCall(caller.build(), decline, answer)
+            .setIsVideo(call.video);
+    if (!TextUtils.isEmpty(call.verificationText)) {
+      style.setVerificationText(call.verificationText);
+      Bitmap verified =
+          UniversalIncomingCallActivity.toBitmap(
+              UniversalIncomingCallActivity.loadIcon(context, call.verificationIcon));
+      if (verified != null) {
+        style.setVerificationIcon(Icon.createWithBitmap(verified));
+      }
+    }
+    Bitmap glyph =
+        UniversalIncomingCallActivity.toBitmap(
+            UniversalIncomingCallActivity.loadIcon(context, call.appSmallIcon));
+    Notification.Builder builder =
         new Notification.Builder(context, NotificationChannelId.INCOMING_CALL)
-            .setSmallIcon(R.drawable.quantum_ic_call_vd_theme_24)
+            .setSmallIcon(
+                glyph != null
+                    ? Icon.createWithBitmap(glyph)
+                    : Icon.createWithResource(context, R.drawable.quantum_ic_call_vd_theme_24))
             .setContentTitle(name)
-            .setContentText(subtitle)
+            .setContentText(
+                !TextUtils.isEmpty(call.statusText) ? call.statusText : subtitle)
+            .setSubText(subtitle)
             .setCategory(Notification.CATEGORY_CALL)
             .setOngoing(true)
             .setFullScreenIntent(fullScreen, true)
             .setContentIntent(fullScreen)
-            .setStyle(Notification.CallStyle.forIncomingCall(caller, decline, answer))
-            .build();
+            .setStyle(style);
+    if (call.appColor != 0) {
+      builder.setColor(call.appColor);
+    }
+    Notification notification = builder.build();
     context.getSystemService(NotificationManager.class).notify(TAG, id(call), notification);
   }
 

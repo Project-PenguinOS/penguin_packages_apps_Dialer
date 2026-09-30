@@ -6,6 +6,7 @@ import android.app.Person;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +41,12 @@ public final class UniversalCallNotificationListener extends NotificationListene
     boolean declinedHere;
     @Nullable PendingIntent answerIntent;
     @Nullable PendingIntent declineIntent;
+    @Nullable Icon callerIcon;
+    @Nullable CharSequence statusText;
+    @Nullable CharSequence verificationText;
+    @Nullable Icon verificationIcon;
+    @Nullable Icon appSmallIcon;
+    int appColor;
 
     TrackedCall(String key, String appPackage, boolean incoming, long startMillis) {
       this.key = key;
@@ -246,6 +253,25 @@ public final class UniversalCallNotificationListener extends NotificationListene
       call.number = numberFor(this, person, call.name);
     }
     call.video = extras.getBoolean(Notification.EXTRA_CALL_IS_VIDEO, call.video);
+    Icon callerIcon = person != null ? person.getIcon() : null;
+    if (callerIcon == null) {
+      callerIcon = notification.getLargeIcon();
+    }
+    if (callerIcon != null) {
+      call.callerIcon = callerIcon;
+    }
+    CharSequence statusText = extras.getCharSequence(Notification.EXTRA_TEXT);
+    if (!TextUtils.isEmpty(statusText)) {
+      call.statusText = statusText;
+    }
+    call.verificationText = extras.getCharSequence(Notification.EXTRA_VERIFICATION_TEXT);
+    call.verificationIcon = extras.getParcelable(Notification.EXTRA_VERIFICATION_ICON, Icon.class);
+    if (notification.getSmallIcon() != null) {
+      call.appSmallIcon = notification.getSmallIcon();
+    }
+    if (notification.color != Notification.COLOR_DEFAULT) {
+      call.appColor = notification.color;
+    }
     call.answerIntent = extras.getParcelable(Notification.EXTRA_ANSWER_INTENT, PendingIntent.class);
     call.declineIntent =
         extras.getParcelable(Notification.EXTRA_DECLINE_INTENT, PendingIntent.class);

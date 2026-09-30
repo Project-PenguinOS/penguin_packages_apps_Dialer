@@ -5,11 +5,21 @@ import android.app.ActivityOptions;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.android.dialer.R;
 import com.android.dialer.common.LogUtil;
@@ -42,6 +52,64 @@ public final class UniversalIncomingCallActivity extends Activity {
             ? R.string.universal_dialer_call_label_video
             : R.string.universal_dialer_call_label_audio,
         app == null ? call.appPackage : app);
+  }
+
+  @Nullable
+  static Drawable appIcon(Context context, String appPackage) {
+    try {
+      return context.getPackageManager().getApplicationIcon(appPackage);
+    } catch (PackageManager.NameNotFoundException e) {
+      return null;
+    }
+  }
+
+  static Drawable avatar(Context context, UniversalCallNotificationListener.TrackedCall call) {
+    Bitmap photo = toBitmap(loadIcon(context, call.callerIcon));
+    if (photo != null) {
+      RoundedBitmapDrawable round =
+          RoundedBitmapDrawableFactory.create(context.getResources(), photo);
+      round.setCircular(true);
+      return round;
+    }
+    LetterTileDrawable tile = new LetterTileDrawable(context.getResources());
+    tile.setCanonicalDialerLetterTileDetails(
+        call.name == null ? "" : call.name.toString(),
+        call.key,
+        LetterTileDrawable.SHAPE_CIRCLE,
+        LetterTileDrawable.TYPE_DEFAULT);
+    return tile;
+  }
+
+  @Nullable
+  static Drawable loadIcon(Context context, @Nullable Icon icon) {
+    if (icon == null) {
+      return null;
+    }
+    try {
+      return icon.loadDrawable(context);
+    } catch (RuntimeException e) {
+      return null;
+    }
+  }
+
+  @Nullable
+  static Bitmap toBitmap(@Nullable Drawable drawable) {
+    if (drawable == null) {
+      return null;
+    }
+    if (drawable instanceof BitmapDrawable && ((BitmapDrawable) drawable).getBitmap() != null) {
+      return ((BitmapDrawable) drawable).getBitmap();
+    }
+    int width = Math.max(1, drawable.getIntrinsicWidth());
+    int height = Math.max(1, drawable.getIntrinsicHeight());
+    if (width == 1 && height == 1) {
+      width = height = 256;
+    }
+    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(bitmap);
+    drawable.setBounds(0, 0, width, height);
+    drawable.draw(canvas);
+    return bitmap;
   }
 
   static void finishFor(String key) {
@@ -94,11 +162,27 @@ public final class UniversalIncomingCallActivity extends Activity {
     CharSequence name = call.name == null ? "" : call.name;
     ((TextView) findViewById(R.id.universal_call_name)).setText(name);
     ((TextView) findViewById(R.id.universal_call_subtitle)).setText(subtitle(this, call));
-    LetterTileDrawable avatar = new LetterTileDrawable(getResources());
-    avatar.setCanonicalDialerLetterTileDetails(
-        name.toString(), call.key, LetterTileDrawable.SHAPE_CIRCLE,
-        LetterTileDrawable.TYPE_DEFAULT);
-    ((ImageView) findViewById(R.id.universal_call_avatar)).setImageDrawable(avatar);
+    Drawable appIcon = appIcon(this, call.appPackage);
+    ((ImageView) findViewById(R.id.universal_call_app_icon)).setImageDrawable(appIcon);
+    ((ImageView) findViewById(R.id.universal_call_app_badge)).setImageDrawable(appIcon);
+    ((ImageView) findViewById(R.id.universal_call_avatar)).setImageDrawable(avatar(this, call));
+
+    TextView status = findViewById(R.id.universal_call_status);
+    boolean showStatus =
+        !TextUtils.isEmpty(call.statusText) && !TextUtils.equals(call.statusText, name);
+    status.setText(showStatus ? call.statusText : null);
+    status.setVisibility(showStatus ? View.VISIBLE : View.GONE);
+
+    TextView verification = findViewById(R.id.universal_call_verification);
+    boolean verified = !TextUtils.isEmpty(call.verificationText);
+    verification.setText(verified ? call.verificationText : null);
+    Drawable badge = verified ? loadIcon(this, call.verificationIcon) : null;
+    if (badge != null) {
+      int size = Math.round(16 * getResources().getDisplayMetrics().density);
+      badge.setBounds(0, 0, size, size);
+    }
+    verification.setCompoundDrawablesRelative(badge, null, null, null);
+    verification.setVisibility(verified ? View.VISIBLE : View.GONE);
     findViewById(R.id.universal_call_answer).setOnClickListener(v -> answer(call));
     findViewById(R.id.universal_call_decline).setOnClickListener(v -> decline(call));
   }
