@@ -91,6 +91,7 @@ import com.android.dialer.storage.StorageComponent;
 import com.android.dialer.telecom.TelecomUtil;
 import com.android.dialer.theme.base.Theme;
 import com.android.dialer.theme.base.ThemeComponent;
+import com.android.dialer.util.GlassPanel;
 import com.android.dialer.util.LiquidGlass;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.util.TransactionSafeActivity;
@@ -292,14 +293,24 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
         });
     this.searchBackCallback = searchBackCallback;
 
+    View rootLayout = activity.findViewById(R.id.root_layout);
     View dialpadContainer = activity.findViewById(R.id.dialpad_fragment_container);
+    int barMarginBottom = ((ViewGroup.MarginLayoutParams) blurView.getLayoutParams()).bottomMargin;
     blurView.addOnLayoutChangeListener(
         (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-          int reserved = ((View) v.getParent()).getHeight() - top;
+          int reserved = v.getHeight() + barMarginBottom + rootLayout.getPaddingBottom();
           if (dialpadContainer.getPaddingBottom() != reserved) {
             dialpadContainer.setPadding(0, 0, 0, reserved);
           }
         });
+
+    if (LiquidGlass.isEnabled(activity)) {
+      View searchBackground = activity.findViewById(R.id.search_background_main);
+      LiquidGlass.apply(
+          searchBackground, activity.getDrawable(R.drawable.bottom_nav_background_glass));
+      GlassPanel.host(activity, rootLayout, blurView);
+      GlassPanel.host(activity, rootLayout, searchBackground);
+    }
 
     onDialpadQueryChangedListener = getNewOnDialpadQueryChangedListener(searchController);
     dialpadListener =
