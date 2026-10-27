@@ -76,6 +76,13 @@
         android:layout_alignParentTop="true"
         layout="@layout/toolbar_layout"/>
 
+    <View
+        android:id="@+id/bottom_gradient_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_shadow_gradient" />
+
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/bottom_nav_blur_view"
         android:layout_width="match_parent"
