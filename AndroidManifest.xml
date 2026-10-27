@@ -136,6 +136,7 @@
         android:appCategory="social"
         android:extractNativeLibs="false"
         android:hardwareAccelerated="true"
+        android:usesNonSdkApi="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/applicationLabel"
         android:supportsRtl="true"

@@ -91,6 +91,7 @@ import com.android.dialer.storage.StorageComponent;
 import com.android.dialer.telecom.TelecomUtil;
 import com.android.dialer.theme.base.Theme;
 import com.android.dialer.theme.base.ThemeComponent;
+import com.android.dialer.util.LiquidGlass;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.util.TransactionSafeActivity;
 import com.android.dialer.widget.DialerFloatingActionButton;
@@ -198,12 +199,15 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
     Drawable windowBackground = activity.getWindow().getDecorView().getBackground();
     eightbitlab.com.blurview.BlurView blurView = activity.findViewById(R.id.bottom_nav_blur_view);
     eightbitlab.com.blurview.BlurTarget target = activity.findViewById(R.id.main_content_blur_target);
-    blurView.setupWith(target)
-            .setFrameClearDrawable(windowBackground)
-            .setBlurRadius(blurRadius);
-    blurView.setBackgroundResource(R.drawable.bottom_nav_background_glass);
-    blurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-    blurView.setClipToOutline(true);
+    if (!LiquidGlass.apply(
+        blurView, activity.getDrawable(R.drawable.bottom_nav_background_glass))) {
+      blurView.setupWith(target)
+              .setFrameClearDrawable(windowBackground)
+              .setBlurRadius(blurRadius);
+      blurView.setBackgroundResource(R.drawable.bottom_nav_background_glass);
+      blurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+      blurView.setClipToOutline(true);
+    }
 
     onContactSelectedListener = new MainOnContactSelectedListener(activity);
     dialpadFragmentHostInterface = new MainDialpadFragmentHost();

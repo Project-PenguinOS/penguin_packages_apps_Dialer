@@ -66,6 +66,7 @@ import com.android.dialer.database.CallLogQueryHandler.Listener;
 import com.android.dialer.location.GeoUtil;
 import com.android.dialer.oem.CequintCallerIdManager;
 import com.android.dialer.phonenumbercache.ContactInfoHelper;
+import com.android.dialer.util.LiquidGlass;
 import com.android.dialer.util.PermissionsUtil;
 import com.android.dialer.widget.EmptyContentView;
 import com.android.dialer.widget.EmptyContentView.OnEmptyViewActionButtonClickedListener;
@@ -388,12 +389,15 @@ public class CallLogFragment extends Fragment
 
     float blurRadius = 10f;
     Drawable windowBackground = requireActivity().getWindow().getDecorView().getBackground();
-    blurView.setupWith(target)
-            .setFrameClearDrawable(windowBackground)
-            .setBlurRadius(blurRadius);
-    blurView.setBackgroundResource(R.drawable.bottom_nav_background_glass);
-    blurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-    blurView.setClipToOutline(true);
+    if (!LiquidGlass.apply(
+        blurView, requireContext().getDrawable(R.drawable.bottom_nav_background_glass))) {
+      blurView.setupWith(target)
+              .setFrameClearDrawable(windowBackground)
+              .setBlurRadius(blurRadius);
+      blurView.setBackgroundResource(R.drawable.bottom_nav_background_glass);
+      blurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+      blurView.setClipToOutline(true);
+    }
 
     setupData();
     updateSelectAllState(savedInstanceState);
