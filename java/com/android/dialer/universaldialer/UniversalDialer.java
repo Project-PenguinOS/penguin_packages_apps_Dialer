@@ -133,15 +133,22 @@ public final class UniversalDialer {
   }
 
   public static boolean shouldHandle(Context context, Call call) {
-    if (!isSelfManaged(call)) {
+    PhoneAccountHandle handle = call.getDetails().getAccountHandle();
+    if (handle == null && isSelfManaged(call)) {
+      return isEnabled(context);
+    }
+    return shouldHandleAccount(context, handle);
+  }
+
+  public static boolean shouldHandleAccount(Context context, @Nullable PhoneAccountHandle handle) {
+    if (handle == null) {
       return true;
     }
-    if (!isEnabled(context)) {
-      return false;
+    String owner = handle.getComponentName().getPackageName();
+    if (TELEPHONY_PACKAGE.equals(owner) || context.getPackageName().equals(owner)) {
+      return true;
     }
-    PhoneAccountHandle handle = call.getDetails().getAccountHandle();
-    String owner = handle == null ? null : handle.getComponentName().getPackageName();
-    return owner == null || shouldHandleVoip(context, owner);
+    return isEnabled(context) && shouldHandleVoip(context, owner);
   }
 
   public static boolean shouldHandleVoip(Context context, String ownerPackage) {

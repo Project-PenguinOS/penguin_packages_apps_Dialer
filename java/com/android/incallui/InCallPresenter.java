@@ -52,6 +52,7 @@ import com.android.dialer.common.LogUtil;
 import com.android.dialer.common.concurrent.DialerExecutorComponent;
 import com.android.dialer.postcall.PostCall;
 import com.android.dialer.telecom.TelecomUtil;
+import com.android.dialer.universaldialer.UniversalDialer;
 import com.android.dialer.util.EmergencyCallUtil;
 import com.android.dialer.util.TouchPointManager;
 import com.android.incallui.InCallOrientationEventListener.ScreenOrientation;
@@ -1494,6 +1495,9 @@ public class InCallPresenter implements CallList.Listener, AudioModeProvider.Aud
     final PhoneAccountHandle accountHandle =
             intent.getParcelableExtra(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE,
                     PhoneAccountHandle.class);
+    if (!UniversalDialer.shouldHandleAccount(context, accountHandle)) {
+      return;
+    }
     final Point touchPoint = extras.getParcelable(TouchPointManager.TOUCH_POINT, Point.class);
 
     setBoundAndWaitingForOutgoingCall(true, accountHandle);
