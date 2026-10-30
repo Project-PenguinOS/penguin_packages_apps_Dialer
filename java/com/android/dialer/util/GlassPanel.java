@@ -5,6 +5,7 @@ import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -31,7 +32,10 @@ public final class GlassPanel {
     marginStart = lp.getMarginStart();
     marginEnd = lp.getMarginEnd();
     marginBottom = lp.bottomMargin;
-    alignEnd = lp.getRules()[RelativeLayout.ALIGN_PARENT_END] != 0;
+    int[] rules = lp.getRules();
+    alignEnd =
+        rules[RelativeLayout.ALIGN_PARENT_END] != 0
+            || rules[RelativeLayout.ALIGN_PARENT_RIGHT] != 0;
     translationX = view.getTranslationX();
 
     ((ViewGroup) view.getParent()).removeView(view);
@@ -56,6 +60,7 @@ public final class GlassPanel {
 
     View decor = activity.getWindow().getDecorView();
     root.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> update());
+    root.getViewTreeObserver().addOnGlobalLayoutListener(this::updateVisibility);
     Runnable add =
         () -> {
           params.token = decor.getWindowToken();
@@ -87,6 +92,12 @@ public final class GlassPanel {
 
   public static GlassPanel host(Activity activity, View root, View view) {
     return new GlassPanel(activity, root, view);
+  }
+
+  private void updateVisibility() {
+    WindowInsets insets = root.getRootWindowInsets();
+    boolean ime = insets != null && insets.isVisible(WindowInsets.Type.ime());
+    container.setVisibility(ime ? View.GONE : View.VISIBLE);
   }
 
   private void update() {

@@ -1,8 +1,15 @@
 package com.android.dialer.util;
 
 import android.content.Context;
-import android.content.res.Configuration;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.LinearGradient;
 import android.graphics.Outline;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PixelFormat;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.provider.Settings;
@@ -17,7 +24,7 @@ import java.util.WeakHashMap;
 public final class LiquidGlass {
 
   private static final String SETTING = "penguin_liquid_glass";
-  private static final float BLUR_RADIUS_DP = 30f;
+  private static final float BLUR_RADIUS_DP = 4f;
 
   private static Method getViewRootImpl;
   private static Method createBlurDrawable;
@@ -37,7 +44,7 @@ public final class LiquidGlass {
         && isAvailable();
   }
 
-  public static boolean apply(View view, Drawable overlay) {
+  public static boolean apply(View view) {
     if (applied.contains(view)) {
       return true;
     }
@@ -46,14 +53,14 @@ public final class LiquidGlass {
     }
     applied.add(view);
     if (view.isAttachedToWindow()) {
-      attach(view, overlay);
+      attach(view);
     } else {
       view.addOnAttachStateChangeListener(
           new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
               v.removeOnAttachStateChangeListener(this);
-              attach(v, overlay);
+              attach(v);
             }
 
             @Override
@@ -81,7 +88,7 @@ public final class LiquidGlass {
     return available;
   }
 
-  private static void attach(View view, Drawable overlay) {
+  private static void attach(View view) {
     try {
       Object viewRoot = getViewRootImpl.invoke(view);
       if (viewRoot == null) {
@@ -90,7 +97,7 @@ public final class LiquidGlass {
       Drawable blur = (Drawable) createBlurDrawable.invoke(viewRoot);
       float density = view.getResources().getDisplayMetrics().density;
       setBlurRadius.invoke(blur, Math.round(BLUR_RADIUS_DP * density));
-      setColor.invoke(blur, tint(view.getContext()));
+      setColor.invoke(blur, 0);
       setCornerRadius.invoke(blur, view.getHeight() / 2f);
       view.addOnLayoutChangeListener(
           (v, l, t, r, b, ol, ot, or, ob) -> {
@@ -102,8 +109,8 @@ public final class LiquidGlass {
               }
             }
           });
-      view.setBackground(
-          overlay == null ? blur : new LayerDrawable(new Drawable[] {blur, overlay}));
+      view.setBackground(new LayerDrawable(new Drawable[] {blur, new RimDrawable(density)}));
+      view.setElevation(0);
       view.setOutlineProvider(
           new ViewOutlineProvider() {
             @Override
@@ -117,10 +124,65 @@ public final class LiquidGlass {
     }
   }
 
-  private static int tint(Context context) {
-    boolean night =
-        (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-            == Configuration.UI_MODE_NIGHT_YES;
-    return night ? 0x1AFFFFFF : 0x40FFFFFF;
+  private static int white(float alpha) {
+    return (Math.round(alpha * 255f) << 24) | 0xFFFFFF;
+  }
+
+  private static final class RimDrawable extends Drawable {
+    private final Paint rim = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint sheen = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Path path = new Path();
+    private final RectF bounds = new RectF();
+
+    RimDrawable(float density) {
+      rim.setStyle(Paint.Style.STROKE);
+      rim.setStrokeWidth(1.4f * density);
+    }
+
+    @Override
+    protected void onBoundsChange(android.graphics.Rect rect) {
+      bounds.set(rect);
+      float radius = bounds.height() / 2f;
+      path.reset();
+      path.addRoundRect(bounds, radius, radius, Path.Direction.CW);
+      rim.setShader(
+          new LinearGradient(
+              bounds.left,
+              bounds.top,
+              bounds.right,
+              bounds.bottom,
+              new int[] {white(0.55f), white(0.08f), 0, white(0.05f), white(0.30f)},
+              new float[] {0f, 0.22f, 0.5f, 0.78f, 1f},
+              Shader.TileMode.CLAMP));
+      sheen.setShader(
+          new LinearGradient(
+              0f,
+              bounds.top,
+              0f,
+              bounds.top + bounds.height() * 0.3f,
+              white(0.05f),
+              0,
+              Shader.TileMode.CLAMP));
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+      int count = canvas.save();
+      canvas.clipPath(path);
+      canvas.drawPath(path, rim);
+      canvas.drawRect(bounds, sheen);
+      canvas.restoreToCount(count);
+    }
+
+    @Override
+    public void setAlpha(int alpha) {}
+
+    @Override
+    public void setColorFilter(ColorFilter colorFilter) {}
+
+    @Override
+    public int getOpacity() {
+      return PixelFormat.TRANSLUCENT;
+    }
   }
 }

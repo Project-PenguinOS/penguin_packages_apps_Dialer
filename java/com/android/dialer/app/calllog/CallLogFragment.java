@@ -389,9 +389,7 @@ public class CallLogFragment extends Fragment
 
     float blurRadius = 10f;
     Drawable windowBackground = requireActivity().getWindow().getDecorView().getBackground();
-    if (blurView != null
-        && !LiquidGlass.apply(
-            blurView, requireContext().getDrawable(R.drawable.bottom_nav_background_glass))) {
+    if (blurView != null && !LiquidGlass.apply(blurView)) {
       blurView.setupWith(target)
               .setFrameClearDrawable(windowBackground)
               .setBlurRadius(blurRadius);
