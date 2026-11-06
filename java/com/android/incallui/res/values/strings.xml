@@ -90,6 +90,10 @@
        scenarios such as declining an incoming call or declining a video call request.
        [CHAR LIMIT=12] -->
   <string name="notification_action_dismiss">Decline</string>
+  <!-- Notification action to mute the microphone during a call. [CHAR LIMIT=20] -->
+  <string name="notification_action_mute">Mute</string>
+  <!-- Notification action to unmute the microphone during a call. [CHAR LIMIT=20] -->
+  <string name="notification_action_unmute">Unmute</string>
   <string name="notification_action_speaker_on">Turn speaker on</string>
   <string name="notification_action_speaker_off">Turn speaker off</string>
 

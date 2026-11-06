@@ -63,6 +63,8 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
   public static final String ACTION_TURN_ON_SPEAKER = "com.android.incallui.ACTION_TURN_ON_SPEAKER";
   public static final String ACTION_TURN_OFF_SPEAKER =
       "com.android.incallui.ACTION_TURN_OFF_SPEAKER";
+  public static final String ACTION_MUTE = "com.android.incallui.ACTION_MUTE";
+  public static final String ACTION_UNMUTE = "com.android.incallui.ACTION_UNMUTE";
 
   public static final String ACTION_PULL_EXTERNAL_CALL =
       "com.android.incallui.ACTION_PULL_EXTERNAL_CALL";
@@ -97,6 +99,10 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
       TelecomAdapter.getInstance().setAudioRoute(CallAudioState.ROUTE_SPEAKER);
     } else if (action.equals(ACTION_TURN_OFF_SPEAKER)) {
       TelecomAdapter.getInstance().setAudioRoute(CallAudioState.ROUTE_WIRED_OR_EARPIECE);
+    } else if (action.equals(ACTION_MUTE)) {
+      TelecomAdapter.getInstance().mute(true);
+    } else if (action.equals(ACTION_UNMUTE)) {
+      TelecomAdapter.getInstance().mute(false);
     }
   }
 
