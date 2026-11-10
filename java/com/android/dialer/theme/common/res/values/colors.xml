@@ -54,7 +54,7 @@
   <color name="dialer_tab_bar_scrim_start">#F5FFFFFF</color>
   <color name="dialer_tab_bar_scrim_center">#B0FFFFFF</color>
   <color name="dialer_tab_bar_scrim_end">#00FFFFFF</color>
-  <color name="dialer_glass_tint">@android:color/transparent</color>
+  <color name="dialer_glass_tint">#338E8E93</color>
   <color name="dialer_glass_stroke">#33CCCCCC</color>
   <color name="dialer_fill_tertiary">#1F767680</color>
 </resources>

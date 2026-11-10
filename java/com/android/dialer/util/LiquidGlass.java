@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import com.android.dialer.R;
 import eightbitlab.com.blurview.BlurTarget;
 import eightbitlab.com.blurview.BlurView;
 import java.lang.reflect.Method;
@@ -167,7 +168,11 @@ public final class LiquidGlass {
     view.setClipToOutline(true);
     BlurView backdrop = new BlurView(view.getContext());
     view.addView(backdrop, 0, new FrameLayout.LayoutParams(0, 0));
-    backdrop.setupWith(target, 1f, false).setFrameClearDrawable(frameClear).setBlurRadius(FALLBACK_BLUR_RADIUS);
+    backdrop
+        .setupWith(target, 1f, false)
+        .setFrameClearDrawable(frameClear)
+        .setBlurRadius(FALLBACK_BLUR_RADIUS)
+        .setOverlayColor(view.getContext().getColor(R.color.dialer_glass_tint));
     view.addOnLayoutChangeListener(
         (v, l, t, r, b, ol, ot, or, ob) -> {
           int width = r - l;
