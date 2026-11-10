@@ -401,11 +401,8 @@ public class CallLogFragment extends Fragment
     eightbitlab.com.blurview.BlurTarget target = requireActivity().findViewById(R.id.main_content_blur_target);
     RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
     Drawable windowBackground = requireActivity().getWindow().getDecorView().getBackground();
-    if (blurView != null && !LiquidGlass.apply(blurView)) {
-      LiquidGlass.blur(blurView, target, windowBackground);
-      blurView.setBackgroundResource(R.drawable.bottom_nav_background_glass);
-      blurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-      blurView.setClipToOutline(true);
+    if (blurView != null) {
+      LiquidGlass.install(blurView, target, windowBackground);
     }
 
     setupData();

@@ -87,6 +87,8 @@ public final class LiquidGlass {
           + "  half4 g = content.eval(xy + d * (1.0 - dispersion));\n"
           + "  half4 b = content.eval(xy + d * (1.0 - 2.0 * dispersion));\n"
           + "  half3 rgb = half3(r.r, g.g, b.b);\n"
+          + "  half luma = dot(rgb, half3(0.2126, 0.7152, 0.0722));\n"
+          + "  rgb = clamp(mix(half3(luma), rgb, half(1.4)), half3(0.0), half3(1.0));\n"
           + "  rgb += (half3(1.0) - rgb) * half(clamp(light, 0.0, 1.0));\n"
           + "  return half4(rgb, g.a);\n"
           + "}\n";
@@ -98,6 +100,7 @@ public final class LiquidGlass {
   private static Method setColor;
   private static Boolean available;
   private static final Set<View> applied = Collections.newSetFromMap(new WeakHashMap<>());
+  private static final Set<View> lensed = Collections.newSetFromMap(new WeakHashMap<>());
 
   private LiquidGlass() {}
 
@@ -135,7 +138,33 @@ public final class LiquidGlass {
     return true;
   }
 
-  public static void blur(BlurView view, BlurTarget target, Drawable frameClear) {
+  public static boolean bends() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
+  }
+
+  public static boolean install(BlurView view, BlurTarget target, Drawable frameClear) {
+    if (!bends() && apply(view)) {
+      return true;
+    }
+    lens(view, target, frameClear);
+    return false;
+  }
+
+  private static void lens(BlurView view, BlurTarget target, Drawable frameClear) {
+    if (!lensed.add(view)) {
+      return;
+    }
+    view.setBackground(null);
+    view.setForeground(new RimDrawable(view.getResources().getDisplayMetrics().density));
+    view.setOutlineProvider(
+        new ViewOutlineProvider() {
+          @Override
+          public void getOutline(View v, Outline outline) {
+            outline.setRoundRect(
+                0, 0, v.getWidth(), v.getHeight(), Math.min(v.getWidth(), v.getHeight()) / 2f);
+          }
+        });
+    view.setClipToOutline(true);
     BlurView backdrop = new BlurView(view.getContext());
     view.addView(backdrop, 0, new FrameLayout.LayoutParams(0, 0));
     backdrop.setupWith(target).setFrameClearDrawable(frameClear).setBlurRadius(FALLBACK_BLUR_RADIUS);

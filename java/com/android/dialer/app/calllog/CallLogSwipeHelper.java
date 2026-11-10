@@ -85,8 +85,8 @@ public class CallLogSwipeHelper extends SwipeAndDragHelper {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && dX != 0) {
             boolean isSwipingRight = dX > 0;
 
-            float backgroundLeft = isSwipingRight ? cardLeft : cardRight + dX;
-            float backgroundRight = isSwipingRight ? cardLeft + dX : cardRight;
+            float backgroundLeft = cardLeft;
+            float backgroundRight = cardRight;
 
             c.save();
             c.clipRect(backgroundLeft, cardTop, backgroundRight, cardBottom);

@@ -199,12 +199,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
     Drawable windowBackground = activity.getWindow().getDecorView().getBackground();
     eightbitlab.com.blurview.BlurView blurView = activity.findViewById(R.id.bottom_nav_blur_view);
     eightbitlab.com.blurview.BlurTarget target = activity.findViewById(R.id.main_content_blur_target);
-    if (!LiquidGlass.apply(blurView)) {
-      LiquidGlass.blur(blurView, target, windowBackground);
-      blurView.setBackgroundResource(R.drawable.bottom_nav_background_glass);
-      blurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-      blurView.setClipToOutline(true);
-    }
+    boolean glassWindows = LiquidGlass.install(blurView, target, windowBackground);
 
     onContactSelectedListener = new MainOnContactSelectedListener(activity);
     dialpadFragmentHostInterface = new MainDialpadFragmentHost();
@@ -300,11 +295,12 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
           }
         });
 
-    if (LiquidGlass.isEnabled(activity)) {
-      View searchBackground = activity.findViewById(R.id.search_background_main);
-      LiquidGlass.apply(searchBackground);
-      bottomNav.setBackground(null);
-      activity.findViewById(R.id.bottom_gradient_shadow).setVisibility(View.GONE);
+    eightbitlab.com.blurview.BlurView searchBackground =
+        activity.findViewById(R.id.search_background_main);
+    LiquidGlass.install(searchBackground, target, windowBackground);
+    bottomNav.setBackground(null);
+    activity.findViewById(R.id.bottom_gradient_shadow).setVisibility(View.GONE);
+    if (glassWindows) {
       GlassPanel.host(activity, rootLayout, blurView);
       GlassPanel.host(activity, rootLayout, searchBackground);
     }
