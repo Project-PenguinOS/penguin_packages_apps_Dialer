@@ -41,7 +41,7 @@
           android:paddingTop="1dp"
           android:paddingBottom="1dp"
           android:visibility="invisible"
-          android:background="#4D8E8E93"/>
+          android:background="@color/dialer_grouped_separator"/>
 
       <TextView
           android:id="@+id/call_detail_action_copy"
@@ -61,7 +61,7 @@
           android:layout_marginTop="4dp"
           android:layout_marginBottom="4dp"
           android:visibility="visible"
-          android:background="#4D8E8E93"/>
+          android:background="@color/dialer_grouped_separator"/>
 
       <TextView
           android:id="@+id/call_detail_action_edit_before_call"
@@ -81,7 +81,7 @@
           android:layout_marginTop="4dp"
           android:layout_marginBottom="4dp"
           android:visibility="visible"
-          android:background="#4D8E8E93"/>
+          android:background="@color/dialer_grouped_separator"/>
 
       <TextView
           android:id="@+id/call_detail_action_report_caller_id"

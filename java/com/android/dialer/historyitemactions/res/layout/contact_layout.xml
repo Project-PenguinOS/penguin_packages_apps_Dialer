@@ -24,7 +24,7 @@
     android:paddingEnd="8dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:background="#FFFFFF"
+    android:background="?android:attr/colorBackgroundFloating"
     android:focusable="true">
 
   <com.android.dialer.widget.ContactPhotoView

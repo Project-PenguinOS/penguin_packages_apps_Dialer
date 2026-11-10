@@ -47,7 +47,6 @@
         android:layout_marginTop="40dp"
         android:gravity="center_horizontal"
         android:textAppearance="@style/Dialer.TextAppearance.Primary"
-        android:textAllCaps="true"
         android:text="@string/change_greeting_text"/>
   </LinearLayout>
 

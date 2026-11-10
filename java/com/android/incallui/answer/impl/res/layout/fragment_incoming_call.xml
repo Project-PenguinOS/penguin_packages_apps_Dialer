@@ -132,7 +132,6 @@
           android:gravity="center"
           android:maxLines="1"
           android:text="@string/call_incoming_important"
-          android:textAllCaps="true"
           android:textColor="?android:attr/colorBackground"
           android:textSize="14sp"/>
 

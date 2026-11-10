@@ -94,7 +94,7 @@
         android:clickable="true"
         android:focusable="true"
         android:elevation="8dp"
-        app:blurOverlayColor="#4DFFFFFF"> <!-- Tint color for the glass effect -->
+        app:blurOverlayColor="@color/dialer_glass_tint">
 
         <include layout="@layout/bottom_nav_bar_layout"/>
 
@@ -111,7 +111,7 @@
         android:translationX="12dp"
         android:visibility="gone"
         android:background="@drawable/icon_background_circle"
-        app:blurOverlayColor="#4DFFFFFF">
+        app:blurOverlayColor="@color/dialer_glass_tint">
 
         <ImageButton
             android:id="@+id/search_magnifying_glass_main"

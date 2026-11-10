@@ -42,7 +42,7 @@
   <dimen name="floating_action_button_list_bottom_padding">88dp</dimen>
   <dimen name="dialer_grouped_row_radius">0dp</dimen>
   <dimen name="dialer_grouped_row_inset">0dp</dimen>
-  <dimen name="dialer_plain_row_separator_inset">76dp</dimen>
+  <dimen name="dialer_plain_row_separator_inset">68dp</dimen>
   <dimen name="dialer_grouped_separator_height">0.5dp</dimen>
-  <dimen name="call_log_round_button_size">36dp</dimen>
+  <dimen name="call_log_round_button_size">44dp</dimen>
 </resources>

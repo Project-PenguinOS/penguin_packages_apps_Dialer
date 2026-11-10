@@ -24,7 +24,7 @@
     android:paddingBottom="8dp"
     android:paddingStart="16dp"
     android:paddingEnd="24dp"
-    android:background="#FAFAFA"
+    android:background="?android:attr/colorBackgroundFloating"
     android:clickable="true"
     android:elevation="0dp"
     android:orientation="horizontal"

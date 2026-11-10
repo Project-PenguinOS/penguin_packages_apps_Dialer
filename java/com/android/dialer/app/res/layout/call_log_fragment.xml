@@ -47,7 +47,6 @@
         android:paddingStart="@dimen/select_all_text_left_padding"
         android:gravity="center_vertical"
         android:text="@string/select_all"
-        android:textAllCaps="true"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/select_all_text_size"/>
   </LinearLayout>

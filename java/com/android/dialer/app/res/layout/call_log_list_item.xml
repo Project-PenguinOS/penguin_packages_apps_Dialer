@@ -33,7 +33,9 @@
     android:layout_marginEnd="@dimen/call_log_outer_margin"
     android:paddingTop="@dimen/call_log_day_group_padding_top"
     android:paddingBottom="@dimen/call_log_day_group_padding_bottom"
-    style="@style/Dialer.TextAppearance.OVERLINE.Ellipsize"/>
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:textAppearance="@style/Dialer.TextAppearance.Hig.SectionHeader"/>
 
   <androidx.cardview.widget.CardView
     android:id="@+id/call_log_row"
@@ -163,12 +165,13 @@
           android:layout_width="@dimen/call_log_round_button_size"
           android:layout_height="@dimen/call_log_round_button_size"
           android:layout_gravity="center_vertical"
-          android:layout_marginStart="10dp"
-          android:background="@drawable/call_log_round_button"
-          android:padding="9dp"
+          android:layout_marginStart="4dp"
+          android:layout_marginEnd="-8dp"
+          android:background="?android:attr/selectableItemBackgroundBorderless"
+          android:padding="10dp"
           android:scaleType="fitCenter"
           android:visibility="gone"
-          app:tint="@color/dialer_label_primary" />
+          app:tint="@color/dialer_link_color" />
 
       </LinearLayout>
 

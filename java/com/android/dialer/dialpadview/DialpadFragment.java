@@ -417,6 +417,13 @@ public class DialpadFragment extends Fragment
     }
 
     delete = dialpadView.getDeleteButton();
+    View deleteBesideCallButton = fragmentView.findViewById(R.id.dialpad_delete_button);
+    if (deleteBesideCallButton != null) {
+      if (delete != null) {
+        delete.setVisibility(View.GONE);
+      }
+      delete = deleteBesideCallButton;
+    }
 
     if (delete != null) {
       delete.setOnClickListener(this);
@@ -1031,7 +1038,7 @@ public class DialpadFragment extends Fragment
     if (resId == R.id.dialpad_floating_action_button) {
       view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
       handleDialButtonPressed();
-    } else if (resId == R.id.deleteButton) {
+    } else if (resId == R.id.deleteButton || resId == R.id.dialpad_delete_button) {
       keyPressed(KeyEvent.KEYCODE_DEL);
     } else if (resId == R.id.digits) {
       if (!isDigitsEmpty()) {
@@ -1048,7 +1055,7 @@ public class DialpadFragment extends Fragment
   public boolean onLongClick(View view) {
     final Editable digits = this.digits.getText();
     final int id = view.getId();
-    if (id == R.id.deleteButton) {
+    if (id == R.id.deleteButton || id == R.id.dialpad_delete_button) {
       digits.clear();
       return true;
     } else if (id == R.id.one) {

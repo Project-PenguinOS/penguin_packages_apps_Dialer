@@ -7,5 +7,5 @@
     <corners android:radius="56dp" />
     <stroke
         android:width="0.5dp"
-        android:color="#33CCCCCC" />
+        android:color="@color/dialer_glass_stroke" />
 </shape>

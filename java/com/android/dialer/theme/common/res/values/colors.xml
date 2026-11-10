@@ -16,10 +16,10 @@
   -->
 <!-- The colors in this file aren't configured at the theme level. -->
 <resources>
-  <color name="dialer_call_green">#008D3D</color>
-  <color name="dialer_end_call_button_color">#FF0000</color>
+  <color name="dialer_call_green">#34C759</color>
+  <color name="dialer_end_call_button_color">@color/dialer_system_red</color>
   <color name="dialer_divider_line_color">#D8D8D8</color>
-  <color name="dialer_link_color">#2A56C6</color>
+  <color name="dialer_link_color">#007AFF</color>
   <color name="dialer_snackbar_action_text_color">@android:color/system_accent1_600</color>
   <color name="dialer_call_icon_color">@android:color/white</color>
 
@@ -28,7 +28,7 @@
   <color name="notification_action_dismiss">#A52714</color>
   <color name="notification_action_answer_video">#097138</color>
 
-  <color name="dialer_red">#FF0000</color>
+  <color name="dialer_red">@color/dialer_system_red</color>
 
   <!-- Legacy -->
   <color name="blue_grey_100">#CFD8DC</color>
@@ -50,4 +50,11 @@
   <color name="dialer_segmented_thumb">#FFFFFFFF</color>
   <color name="dialer_round_button_fill">#FFE9E9EB</color>
   <color name="dialer_system_red">#FF3B30</color>
+
+  <color name="dialer_tab_bar_scrim_start">#F5FFFFFF</color>
+  <color name="dialer_tab_bar_scrim_center">#B0FFFFFF</color>
+  <color name="dialer_tab_bar_scrim_end">#00FFFFFF</color>
+  <color name="dialer_glass_tint">#4DFFFFFF</color>
+  <color name="dialer_glass_stroke">#33CCCCCC</color>
+  <color name="dialer_fill_tertiary">#1F767680</color>
 </resources>

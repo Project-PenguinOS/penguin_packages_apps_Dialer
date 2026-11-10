@@ -16,9 +16,9 @@
   -->
 <!-- The colors in this file aren't configured at the theme level. -->
 <resources>
-  <color name="dialer_call_green">#008D3D</color>
-  <color name="dialer_end_call_button_color">#FF0000</color>
-  <color name="dialer_link_color">#b5c4ff</color>
+  <color name="dialer_call_green">#30D158</color>
+  <color name="dialer_end_call_button_color">@color/dialer_system_red</color>
+  <color name="dialer_link_color">#0A84FF</color>
   <color name="dialer_snackbar_action_text_color">@android:color/system_accent1_600</color>
   <color name="dialer_call_icon_color">@android:color/black</color>
 
@@ -37,4 +37,11 @@
   <color name="dialer_segmented_thumb">#FF636366</color>
   <color name="dialer_round_button_fill">#FF1C1C1E</color>
   <color name="dialer_system_red">#FF453A</color>
+
+  <color name="dialer_tab_bar_scrim_start">#F5000000</color>
+  <color name="dialer_tab_bar_scrim_center">#B0000000</color>
+  <color name="dialer_tab_bar_scrim_end">#00000000</color>
+  <color name="dialer_glass_tint">#1FFFFFFF</color>
+  <color name="dialer_glass_stroke">#33CCCCCC</color>
+  <color name="dialer_fill_tertiary">#3D767680</color>
 </resources>
