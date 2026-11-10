@@ -1,0 +1,34 @@
+#!/bin/sh
+set -eu
+
+cd "$(dirname "$0")/.."
+
+cpus="${GRADLE_CPUS:-2}"
+mem="${GRADLE_MEM_MB:-2048}"
+
+if [ -z "${GRADLE_LOWPRIO_INNER:-}" ]; then
+    export GRADLE_LOWPRIO_INNER=1
+    if command -v systemd-run >/dev/null 2>&1 \
+        && systemctl --user is-system-running >/dev/null 2>&1; then
+        exec systemd-run --user --scope --quiet --collect \
+            -p CPUQuota="$((cpus * 100))%" \
+            -p CPUWeight=idle \
+            -p IOWeight=1 \
+            -p MemoryHigh="$((mem * 9 / 10))M" \
+            -p MemoryMax="${mem}M" \
+            -p MemorySwapMax=4G \
+            -- tools/gradlew-lowprio "$@"
+    fi
+fi
+
+low="nice -n 39"
+command -v ionice >/dev/null 2>&1 && low="$low ionice -c 3"
+command -v chrt >/dev/null 2>&1 && chrt --idle 0 true 2>/dev/null && low="$low chrt --idle 0"
+
+marker="${XDG_RUNTIME_DIR:-/tmp}/dialer-gradle-lowprio"
+if [ ! -e "$marker" ]; then
+    $low ./gradlew --stop >/dev/null 2>&1 || true
+    : > "$marker"
+fi
+
+exec $low ./gradlew --max-workers="$cpus" "$@"

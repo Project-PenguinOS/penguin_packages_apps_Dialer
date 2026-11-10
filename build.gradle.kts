@@ -307,7 +307,9 @@ tasks.withType<JavaCompile>().configureEach {
     exclude("com/android/dialer/rootcomponentgenerator/**")
     options.compilerArgs.addAll(listOf("-Xlint:-deprecation", "-Xlint:-unchecked", "-Xmaxerrs", "2000"))
     options.isFork = true
-    options.forkOptions.memoryMaximumSize = "4g"
+    options.forkOptions.memoryMaximumSize =
+        providers.gradleProperty("penguin.javacHeap").getOrElse("2g")
+    options.forkOptions.jvmArgs = listOf("-XX:+UseSerialGC", "-XX:ActiveProcessorCount=2")
 }
 
 dependencies {
