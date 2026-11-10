@@ -32,9 +32,9 @@ public final class LiquidGlass {
 
   private static final String SETTING = "penguin_liquid_glass";
   private static final float BLUR_RADIUS_DP = 4f;
-  private static final float FALLBACK_BLUR_RADIUS = 6f;
-  private static final float BEZEL_DP = 20f;
-  private static final float THICKNESS_DP = 16f;
+  private static final float FALLBACK_BLUR_RADIUS = 2f;
+  private static final float BEZEL_DP = 32f;
+  private static final float THICKNESS_DP = 30f;
   private static final float DISPERSION = 0.08f;
   private static final float SPECULAR = 0.35f;
 
@@ -167,7 +167,7 @@ public final class LiquidGlass {
     view.setClipToOutline(true);
     BlurView backdrop = new BlurView(view.getContext());
     view.addView(backdrop, 0, new FrameLayout.LayoutParams(0, 0));
-    backdrop.setupWith(target).setFrameClearDrawable(frameClear).setBlurRadius(FALLBACK_BLUR_RADIUS);
+    backdrop.setupWith(target, 1f, false).setFrameClearDrawable(frameClear).setBlurRadius(FALLBACK_BLUR_RADIUS);
     view.addOnLayoutChangeListener(
         (v, l, t, r, b, ol, ot, or, ob) -> {
           int width = r - l;
