@@ -165,13 +165,12 @@
           android:layout_width="@dimen/call_log_round_button_size"
           android:layout_height="@dimen/call_log_round_button_size"
           android:layout_gravity="center_vertical"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="-8dp"
-          android:background="?android:attr/selectableItemBackgroundBorderless"
-          android:padding="10dp"
+          android:layout_marginStart="10dp"
+          android:background="@drawable/call_log_round_button"
+          android:padding="9dp"
           android:scaleType="fitCenter"
           android:visibility="gone"
-          app:tint="@color/dialer_link_color" />
+          app:tint="@color/dialer_label_primary" />
 
       </LinearLayout>
 
