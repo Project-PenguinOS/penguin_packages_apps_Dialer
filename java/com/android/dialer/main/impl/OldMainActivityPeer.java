@@ -196,14 +196,11 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
   }
 
   private void initLayout(Bundle savedInstanceState) {
-    float blurRadius = 10f;
     Drawable windowBackground = activity.getWindow().getDecorView().getBackground();
     eightbitlab.com.blurview.BlurView blurView = activity.findViewById(R.id.bottom_nav_blur_view);
     eightbitlab.com.blurview.BlurTarget target = activity.findViewById(R.id.main_content_blur_target);
     if (!LiquidGlass.apply(blurView)) {
-      blurView.setupWith(target)
-              .setFrameClearDrawable(windowBackground)
-              .setBlurRadius(blurRadius);
+      LiquidGlass.blur(blurView, target, windowBackground);
       blurView.setBackgroundResource(R.drawable.bottom_nav_background_glass);
       blurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
       blurView.setClipToOutline(true);
@@ -307,6 +304,7 @@ public class OldMainActivityPeer implements MainActivityPeer, FragmentUtilListen
       View searchBackground = activity.findViewById(R.id.search_background_main);
       LiquidGlass.apply(searchBackground);
       bottomNav.setBackground(null);
+      activity.findViewById(R.id.bottom_gradient_shadow).setVisibility(View.GONE);
       GlassPanel.host(activity, rootLayout, blurView);
       GlassPanel.host(activity, rootLayout, searchBackground);
     }

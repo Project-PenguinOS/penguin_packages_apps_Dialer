@@ -9,13 +9,20 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
+import android.graphics.RenderEffect;
+import android.graphics.RuntimeShader;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.provider.Settings;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import eightbitlab.com.blurview.BlurTarget;
+import eightbitlab.com.blurview.BlurView;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Set;
@@ -25,6 +32,64 @@ public final class LiquidGlass {
 
   private static final String SETTING = "penguin_liquid_glass";
   private static final float BLUR_RADIUS_DP = 4f;
+  private static final float FALLBACK_BLUR_RADIUS = 6f;
+  private static final float BEZEL_DP = 20f;
+  private static final float THICKNESS_DP = 16f;
+  private static final float DISPERSION = 0.08f;
+  private static final float SPECULAR = 0.35f;
+
+  private static final String BEND_SHADER =
+      "uniform shader content;\n"
+          + "uniform float2 size;\n"
+          + "uniform float radius;\n"
+          + "uniform float bezel;\n"
+          + "uniform float thickness;\n"
+          + "uniform float dispersion;\n"
+          + "uniform float specular;\n"
+          + "float surface(float t) {\n"
+          + "  return pow(1.0 - pow(1.0 - t, 4.0), 0.25);\n"
+          + "}\n"
+          + "float bend(float t) {\n"
+          + "  float c = clamp(t, 0.001, 0.999);\n"
+          + "  float dt = 0.015625;\n"
+          + "  float slope = (surface(min(1.0, c + dt)) - surface(max(0.0, c - dt))) / (2.0 * dt);\n"
+          + "  float incident = atan(slope);\n"
+          + "  float refracted = asin(sin(incident) / 1.5);\n"
+          + "  return min(1.0, surface(c) * tan(incident - refracted) / 0.459);\n"
+          + "}\n"
+          + "half4 main(float2 xy) {\n"
+          + "  float2 half_size = size * 0.5;\n"
+          + "  float2 p = xy - half_size;\n"
+          + "  float2 q = abs(p) - (half_size - float2(radius));\n"
+          + "  float2 s = float2(p.x < 0.0 ? -1.0 : 1.0, p.y < 0.0 ? -1.0 : 1.0);\n"
+          + "  float inside = 0.0;\n"
+          + "  float2 n = float2(0.0);\n"
+          + "  if (q.x > 0.0 && q.y > 0.0) {\n"
+          + "    float len = max(length(q), 0.0001);\n"
+          + "    inside = radius - len;\n"
+          + "    n = q / len * s;\n"
+          + "  } else if (q.x > q.y) {\n"
+          + "    inside = radius - q.x;\n"
+          + "    n = float2(s.x, 0.0);\n"
+          + "  } else {\n"
+          + "    inside = radius - q.y;\n"
+          + "    n = float2(0.0, s.y);\n"
+          + "  }\n"
+          + "  float2 d = float2(0.0);\n"
+          + "  float light = 0.0;\n"
+          + "  if (inside >= 0.0 && inside < bezel) {\n"
+          + "    float t = inside / bezel;\n"
+          + "    d = -n * bend(t) * thickness;\n"
+          + "    float facing = dot(n, float2(-0.6, -0.8));\n"
+          + "    light = pow(1.0 - t, 6.0) * (max(facing, 0.0) + max(-facing, 0.0) * 0.45) * specular;\n"
+          + "  }\n"
+          + "  half4 r = content.eval(xy + d);\n"
+          + "  half4 g = content.eval(xy + d * (1.0 - dispersion));\n"
+          + "  half4 b = content.eval(xy + d * (1.0 - 2.0 * dispersion));\n"
+          + "  half3 rgb = half3(r.r, g.g, b.b);\n"
+          + "  rgb += (half3(1.0) - rgb) * half(clamp(light, 0.0, 1.0));\n"
+          + "  return half4(rgb, g.a);\n"
+          + "}\n";
 
   private static Method getViewRootImpl;
   private static Method createBlurDrawable;
@@ -68,6 +133,47 @@ public final class LiquidGlass {
           });
     }
     return true;
+  }
+
+  public static void blur(BlurView view, BlurTarget target, Drawable frameClear) {
+    BlurView backdrop = new BlurView(view.getContext());
+    view.addView(backdrop, 0, new FrameLayout.LayoutParams(0, 0));
+    backdrop.setupWith(target).setFrameClearDrawable(frameClear).setBlurRadius(FALLBACK_BLUR_RADIUS);
+    view.addOnLayoutChangeListener(
+        (v, l, t, r, b, ol, ot, or, ob) -> {
+          int width = r - l;
+          int height = b - t;
+          ViewGroup.LayoutParams lp = backdrop.getLayoutParams();
+          if (lp.width != width || lp.height != height) {
+            lp.width = width;
+            lp.height = height;
+            backdrop.post(
+                () -> {
+                  backdrop.setLayoutParams(lp);
+                  bend(backdrop, width, height);
+                });
+          }
+        });
+  }
+
+  private static void bend(View backdrop, int width, int height) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || width <= 0 || height <= 0) {
+      return;
+    }
+    try {
+      float density = backdrop.getResources().getDisplayMetrics().density;
+      float half = Math.min(width, height) / 2f;
+      RuntimeShader shader = new RuntimeShader(BEND_SHADER);
+      shader.setFloatUniform("size", width, height);
+      shader.setFloatUniform("radius", half);
+      shader.setFloatUniform("bezel", Math.min(BEZEL_DP * density, half));
+      shader.setFloatUniform("thickness", THICKNESS_DP * density);
+      shader.setFloatUniform("dispersion", DISPERSION);
+      shader.setFloatUniform("specular", SPECULAR);
+      backdrop.setRenderEffect(RenderEffect.createRuntimeShaderEffect(shader, "content"));
+    } catch (RuntimeException e) {
+      backdrop.setRenderEffect(null);
+    }
   }
 
   private static synchronized boolean isAvailable() {

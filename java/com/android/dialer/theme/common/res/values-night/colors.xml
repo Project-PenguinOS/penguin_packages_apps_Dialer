@@ -41,7 +41,7 @@
   <color name="dialer_tab_bar_scrim_start">#F5000000</color>
   <color name="dialer_tab_bar_scrim_center">#B0000000</color>
   <color name="dialer_tab_bar_scrim_end">#00000000</color>
-  <color name="dialer_glass_tint">#1FFFFFFF</color>
+  <color name="dialer_glass_tint">@android:color/transparent</color>
   <color name="dialer_glass_stroke">#33CCCCCC</color>
   <color name="dialer_fill_tertiary">#3D767680</color>
 </resources>
