@@ -34,7 +34,7 @@
       android:layout_height="@dimen/photo_size"
       android:src="@drawable/quantum_ic_person_add_vd_theme_24"
       android:scaleType="center"
-      app:tint="@color/dialer_link_color" />
+      app:tint="?colorIcon" />
 
   <TextView
       android:id="@+id/contact_name"
@@ -44,6 +44,5 @@
       android:paddingEnd="@dimen/text_padding_end"
       android:gravity="center_vertical"
       android:text="@string/all_contacts_empty_add_contact_action"
-      android:textAppearance="@style/Dialer.TextAppearance.Hig.Body"
-      android:textColor="@color/dialer_link_color"/>
+      style="@style/Dialer.TextAppearance.Primary"/>
 </LinearLayout>
