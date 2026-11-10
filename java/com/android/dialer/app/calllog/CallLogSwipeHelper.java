@@ -22,8 +22,7 @@ import com.android.dialer.widget.SwipeAndDragHelper;
 
 public class CallLogSwipeHelper extends SwipeAndDragHelper {
 
-    private static final float CARD_CORNER_RADIUS_DP = 0f;
-    private static final float CARD_INNER_CORNER_RADIUS_DP = 0f;
+    private static final float SWIPE_CORNER_RADIUS_DP = 18f;
 
     private static final float SWIPE_THRESHOLD = 0.4f;
     private static final float SWIPE_ESCAPE_VELOCITY_MULTIPLIER = 1.5f;
@@ -86,10 +85,9 @@ public class CallLogSwipeHelper extends SwipeAndDragHelper {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && dX != 0) {
             boolean isSwipingRight = dX > 0;
 
-            float backgroundLeft = isSwipingRight ? cardLeft : cardLeft + dX;
-            float backgroundRight = isSwipingRight ? cardRight + dX : cardRight;
+            float backgroundLeft = isSwipingRight ? cardLeft : cardRight + dX;
+            float backgroundRight = isSwipingRight ? cardLeft + dX : cardRight;
 
-            // Clip so that drawing cannot bleed onto neighbouring rows.
             c.save();
             c.clipRect(backgroundLeft, cardTop, backgroundRight, cardBottom);
 
@@ -98,7 +96,7 @@ public class CallLogSwipeHelper extends SwipeAndDragHelper {
                     : R.color.dialer_end_call_button_color));
 
             background.set(backgroundLeft, cardTop, backgroundRight, cardBottom);
-            setCornerRadii(context, holder);
+            setCornerRadii(context, background);
             backgroundPath.rewind();
             backgroundPath.addRoundRect(background, radii, Path.Direction.CW);
             c.drawPath(backgroundPath, paint);
@@ -111,19 +109,15 @@ public class CallLogSwipeHelper extends SwipeAndDragHelper {
         float progress = Math.min(1f, Math.abs(dX) / (float) cardView.getWidth());
         cardView.setAlpha(1f - (1f - MIN_SWIPE_ALPHA) * progress);
         cardView.setTranslationX(dX);
+        holder.callLogEntryView.setRadius(
+                dX != 0 ? dpToPx(context, SWIPE_CORNER_RADIUS_DP) : 0f);
     }
 
-    private void setCornerRadii(Context context, CallLogListItemViewHolder holder) {
-        float outer = dpToPx(context, CARD_CORNER_RADIUS_DP);
-        float inner = dpToPx(context, CARD_INNER_CORNER_RADIUS_DP);
-
-        float top = holder.isFirstInDateGroup ? outer : inner;
-        float bottom = holder.isLastInDateGroup ? outer : inner;
-
-        radii[0] = radii[1] = top;
-        radii[2] = radii[3] = top;
-        radii[4] = radii[5] = bottom;
-        radii[6] = radii[7] = bottom;
+    private void setCornerRadii(Context context, RectF rect) {
+        float radius = Math.min(
+                dpToPx(context, SWIPE_CORNER_RADIUS_DP),
+                Math.min(rect.width(), rect.height()) / 2f);
+        java.util.Arrays.fill(radii, radius);
     }
 
     private void drawActionIcon(Canvas c, Context context, View cardView, View itemView,
@@ -170,6 +164,7 @@ public class CallLogSwipeHelper extends SwipeAndDragHelper {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         if (viewHolder instanceof CallLogListItemViewHolder) {
             View cardView = ((CallLogListItemViewHolder) viewHolder).callLogEntryView;
+            ((CallLogListItemViewHolder) viewHolder).callLogEntryView.setRadius(0f);
             cardView.setTranslationX(0f);
             cardView.setAlpha(1.0f);
         }

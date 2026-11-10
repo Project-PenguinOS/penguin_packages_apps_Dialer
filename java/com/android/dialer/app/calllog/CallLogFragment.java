@@ -295,6 +295,20 @@ public class CallLogFragment extends Fragment
   protected void setupView(View view) {
     recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
     recyclerView.setHasFixedSize(true);
+    float listCornerRadius = 28f * getResources().getDisplayMetrics().density;
+    recyclerView.setOutlineProvider(
+        new ViewOutlineProvider() {
+          @Override
+          public void getOutline(View v, android.graphics.Outline outline) {
+            outline.setRoundRect(
+                v.getPaddingLeft(),
+                v.getPaddingTop(),
+                v.getWidth() - v.getPaddingRight(),
+                v.getHeight() + Math.round(listCornerRadius),
+                listCornerRadius);
+          }
+        });
+    recyclerView.setClipToOutline(true);
     layoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.addItemDecoration(
@@ -386,13 +400,9 @@ public class CallLogFragment extends Fragment
     eightbitlab.com.blurview.BlurView blurView = requireActivity().findViewById(R.id.search_background_main);
     eightbitlab.com.blurview.BlurTarget target = requireActivity().findViewById(R.id.main_content_blur_target);
     RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-
-    float blurRadius = 10f;
     Drawable windowBackground = requireActivity().getWindow().getDecorView().getBackground();
     if (blurView != null && !LiquidGlass.apply(blurView)) {
-      blurView.setupWith(target)
-              .setFrameClearDrawable(windowBackground)
-              .setBlurRadius(blurRadius);
+      LiquidGlass.blur(blurView, target, windowBackground);
       blurView.setBackgroundResource(R.drawable.bottom_nav_background_glass);
       blurView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
       blurView.setClipToOutline(true);
